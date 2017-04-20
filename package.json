@@ -1,13 +1,12 @@
 {
   "name": "xyl-base",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": "https://github.com/finefun55/xyl-base.git",
-  "author": "luyangzhe <luyangzhe@xinyunlian.com>",
+  "author": "runzz <finefun55@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "debug": "webpack",
-    "prepublish": "tsc"
+    "debug": "webpack"
   },
   "dependencies": {
     "add-dom-event-listener": "^1.0.2",

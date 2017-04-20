@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "jsx": "react",
     "alwaysStrict": true,
     "baseUrl": "src",
@@ -40,7 +40,8 @@
     "src/**/__tests__",
     "src/**/demo",
     "src/**/examples",
-    "src/**/tests"
+    "src/**/tests",
+    "lib"
   ],
   "awesomeTypescriptLoaderOptions": {
     "useBabel": false,

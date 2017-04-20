@@ -1,0 +1,52 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "jsx": "react",
+    "alwaysStrict": true,
+    "baseUrl": "src",
+    "rootDirs": [
+      "src",
+      "does-not-exist"
+    ],
+    "outDir": "lib",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "removeComments": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "noEmitHelpers": true,
+    "sourceMap": true,
+    "declaration": true,
+    "lib": [
+      "dom",
+      "es2015.promise",
+      "es5",
+      "es6",
+      "es2015.symbol"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "test",
+    "externals",
+    "Temporary",
+    "src/**/__tests__",
+    "src/**/demo",
+    "src/**/examples",
+    "src/**/tests"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "useBabel": false,
+    "useCache": false
+  },
+  "files": [
+    "typings/index.d.ts"
+  ]
+}

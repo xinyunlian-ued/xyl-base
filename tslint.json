@@ -1,0 +1,79 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-react"
+  ],
+  "rules": {
+    "typedef-whitespace": [
+      true
+    ],
+    "prefer-for-of": false,
+    "member-access": false,
+    "object-literal-sort-keys": false,
+    "eofline": false,
+    "no-invalid-this": false,
+    "jsx-no-string-ref": false,
+    "jsx-no-multiline-js": false,
+    "jsx-wrap-multiline": false,
+    "jsx-boolean-value": false,
+    "no-conditional-assignment": false,
+    "object-literal-shorthand": false,
+    "ban-types": false,
+    "no-unsafe-finally": false,
+    "prefer-const": false,
+    "jsx-no-lambda": false,
+    "member-ordering": [
+      false
+    ],
+    "interface-name": [
+      false
+    ],
+    "trailing-comma": [
+      false
+    ],
+    "ban": [
+      true,
+      [
+        "Object",
+        "assign",
+        "use TS2.1 object spread { ...a, ...b }"
+      ],
+      [
+        "Object",
+        "getOwnPropertyNames",
+        "use Object.keys()"
+      ],
+      [
+        "describe",
+        "only"
+      ],
+      [
+        "it",
+        "only"
+      ]
+    ],
+    "quotemark": [
+      "single"
+    ],
+    "ordered-imports": [
+      false
+    ],
+    "variable-name": [
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case"
+    ]
+  },
+  "jsRules": {
+    "object-literal-shorthand": true,
+    "trailing-comma": [
+      false
+    ],
+    "triple-equals": [
+      true,
+      "allow-null-check"
+    ]
+  },
+  "defaultSeverity": "warning"
+}

@@ -1,0 +1,53 @@
+{
+  "name": "xyl-base",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/finefun55/xyl-base.git",
+  "author": "luyangzhe <luyangzhe@xinyunlian.com>",
+  "license": "MIT",
+  "scripts": {
+    "debug": "webpack",
+    "prepublish": "tsc"
+  },
+  "dependencies": {
+    "add-dom-event-listener": "^1.0.2",
+    "async-validator": "^1.6.8",
+    "autobind-decorator": "^1.4.0",
+    "classnames": "^2.2.5",
+    "component-classes": "^1.2.6",
+    "css-animation": "^1.3.2",
+    "dom-align": "^1.5.3",
+    "dom-scroll-into-view": "^1.2.1",
+    "hoist-non-react-statics": "^1.2.0",
+    "lodash.debounce": "^4.0.8",
+    "lodash.get": "^4.4.2",
+    "lodash.has": "^4.5.2",
+    "lodash.set": "^4.3.2",
+    "mobx": "^3.1.9",
+    "mobx-react": "^4.1.8",
+    "moment": "^2.18.1",
+    "normalize.css": "^6.0.0",
+    "nuka-carousel": "^2.0.4",
+    "object-assign": "^4.1.1",
+    "object.omit": "^2.0.1",
+    "omit.js": "^0.1.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-hammerjs": "^0.5.0",
+    "react-mixin": "^3.0.5",
+    "react-sticky": "^5.0.5",
+    "react-timer-mixin": "^0.13.3",
+    "shallowequal": "^0.2.2",
+    "tslib": "^1.6.0",
+    "warning": "^3.0.0",
+    "zscroller": "^0.2.5"
+  },
+  "devDependencies": {
+    "@types/moment": "^2.13.0",
+    "@types/react": "^15.0.21",
+    "@types/react-dom": "^0.14.23",
+    "tslint": "^5.1.0",
+    "tslint-react": "^2.5.0",
+    "typescript": "^2.2.2"
+  }
+}

@@ -22,6 +22,9 @@
     "no-unsafe-finally": false,
     "prefer-const": false,
     "jsx-no-lambda": false,
+    "no-consecutive-blank-lines": [
+      false
+    ],
     "member-ordering": [
       false
     ],

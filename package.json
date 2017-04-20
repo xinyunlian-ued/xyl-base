@@ -2,14 +2,16 @@
   "name": "xyl-base",
   "version": "1.0.1",
   "main": "index.js",
-  "repository": "https://github.com/finefun55/xyl-base.git",
+  "repository": "https://github.com/xinyunlian-ued/xyl-base.git",
   "author": "runzz <finefun55@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "debug": "webpack"
+    "build": "tsc --p tsconfig.json",
+    "tslint": "gulp tslint"
   },
   "dependencies": {
     "add-dom-event-listener": "^1.0.2",
+    "array-tree-filter": "^1.0.1",
     "async-validator": "^1.6.8",
     "autobind-decorator": "^1.4.0",
     "classnames": "^2.2.5",
@@ -45,6 +47,9 @@
     "@types/moment": "^2.13.0",
     "@types/react": "^15.0.21",
     "@types/react-dom": "^0.14.23",
+    "gulp": "^3.9.1",
+    "gulp-tslint": "^8.0.0",
+    "gulp-typescript": "^3.1.6",
     "tslint": "^5.1.0",
     "tslint-react": "^2.5.0",
     "typescript": "^2.2.2"

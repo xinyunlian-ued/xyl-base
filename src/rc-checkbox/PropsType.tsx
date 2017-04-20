@@ -9,10 +9,10 @@ export interface CheckboxPropTypes {
     defaultChecked?: boolean;
     checked?: boolean;
     disabled?: boolean;
-    onFocus?: Function;
-    onBlur?: Function;
-    onChange?: Function;
-    onClick?: Function;
+    onFocus?: any;
+    onBlur?: any;
+    onChange?: any;
+    onClick?: any;
     tabIndex?: number;
     readOnly?: boolean;
 }

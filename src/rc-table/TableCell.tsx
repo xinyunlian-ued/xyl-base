@@ -16,7 +16,7 @@ export default class TableCell extends React.Component<ITableCellPropTypes, any>
         if (onCellClick) {
             onCellClick(record, e);
         }
-    };
+    }
 
     render() {
         const {

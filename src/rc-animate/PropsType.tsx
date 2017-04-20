@@ -1,7 +1,7 @@
 export interface TransitionMap {
-    enter: 'transitionEnter';
-    appear: 'transitionAppear';
-    leave: 'transitionLeave';
+    enter?: 'transitionEnter';
+    appear?: 'transitionAppear';
+    leave?: 'transitionLeave';
 }
 
 export interface AnimateChildPropTypes {

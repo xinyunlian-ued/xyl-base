@@ -22,4 +22,4 @@ export default class LazyRenderBox extends React.Component<ILazyRenderBox, any> 
 
         return React.Children.only(props.children);
     }
-};
+}

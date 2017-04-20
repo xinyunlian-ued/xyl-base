@@ -25,7 +25,7 @@ function preventDefault(e) {
     e.preventDefault();
 }
 
-interface State {
+export interface State {
     inputValue?: number;
     value?: number;
     focused?: boolean;

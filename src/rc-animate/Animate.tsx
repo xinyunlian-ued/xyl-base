@@ -5,12 +5,12 @@ import {
     findShownChildInChildrenByKey,
     findChildInChildrenByKey,
     isSameChildren,
-    noop,
     getChildrenFromProps
 } from './ChildrenUtils';
 import AnimateChild from './AnimateChild';
 import animUtil from './util';
 import {AnimatePropTypes} from './PropsType';
+import noop from "../rc-util/noop";
 
 export default class Animate extends React.Component<AnimatePropTypes, any> {
 
@@ -273,7 +273,7 @@ export default class Animate extends React.Component<AnimatePropTypes, any> {
         const stateChildren = this.state.children;
         let children = null;
         if (stateChildren) {
-            children = stateChildren.map((child) => {
+            children = stateChildren.map((child: any) => {
                 if (child === null || child === undefined) {
                     return child;
                 }

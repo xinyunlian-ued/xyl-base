@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2015",
+    "target": "es5",
     "jsx": "react",
     "alwaysStrict": true,
     "baseUrl": "src",
@@ -41,12 +41,9 @@
     "src/**/demo",
     "src/**/examples",
     "src/**/tests",
-    "lib"
+    "lib",
+    "typings"
   ],
-  "awesomeTypescriptLoaderOptions": {
-    "useBabel": false,
-    "useCache": false
-  },
   "files": [
     "typings/index.d.ts"
   ]

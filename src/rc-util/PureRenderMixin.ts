@@ -47,4 +47,4 @@ const ReactComponentWithPureRenderMixin = {
     },
 };
 
-export default ReactComponentWithPureRenderMixin
+export default ReactComponentWithPureRenderMixin;

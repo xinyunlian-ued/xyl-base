@@ -1,6 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-import {Touchable} from '../rc-touchable/index';
+import Touchable from '../rc-touchable/index';
 
 @observer
 export default class InputHandler extends React.Component<any, any> {

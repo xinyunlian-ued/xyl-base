@@ -2,7 +2,7 @@ import React, {isValidElement, ReactChild} from 'react';
 import assign from 'object-assign';
 import ReactDOM from 'react-dom';
 import {observer} from 'mobx-react';
-import {action, observable, toJS} from 'mobx';
+import {observable} from 'mobx';
 import Component from 'rc-base';
 
 function keyMirror(obj) {
@@ -204,7 +204,7 @@ function isAllowPress() {
     return Date.now() - lastClickTime >= pressDelay;
 }
 
-interface State {
+export interface State {
     active: boolean;
 }
 

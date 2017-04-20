@@ -145,7 +145,3 @@ export function getChildrenFromProps(props?): ReactChildElement {
     }
     return children;
 }
-
-export function noop() {
-    return;
-}

@@ -1,121 +1,83 @@
-import React, {cloneElement, isValidElement, ReactElement} from 'react';
+import {Children} from 'react';
 
-export type Key = string | number;
-
-export type ReactChildElement = ReactElement<{
-    [x: string]: any;
-    key: string
-}>;
-
-export function toArrayChildren(children: ReactChildElement): ReactChildElement[] {
-
-    const ret: ReactChildElement[] = [];
-
-    React
-        .Children
-        .forEach(children, each);
-
-    function each(child: ReactChildElement): void {
+export function toArrayChildren(children) {
+    const ret = [];
+    Children.forEach(children, (child) => {
         ret.push(child);
-    }
-
+    });
     return ret;
 }
 
-export function findChildInChildrenByKey(children?: ReactChildElement[], key?: Key): ReactChildElement {
+export function findChildInChildrenByKey(children, key) {
     let ret = null;
     if (children) {
-        const each = (child: ReactChildElement): void => {
+        children.forEach((child) => {
             if (ret) {
                 return;
             }
-            if (child && child[`${key}`] === key) {
+            if (child && child.key === key) {
                 ret = child;
             }
-        };
-        children.forEach(each);
+        });
     }
     return ret;
 }
 
-export function findShownChildInChildrenByKey(children?: ReactChildElement[],
-                                              key?: Key,
-                                              showProp?: string): ReactChildElement {
+export function findShownChildInChildrenByKey(children, key, showProp) {
     let ret = null;
     if (children) {
-        const each = (child: ReactChildElement): void => {
-            if (isValidElement(child)) {
-                if (child && child[`${key}`] === key && child.props[showProp]) {
-                    if (ret) {
-                        throw new Error('two child with same key for <rc-animate> children');
-                    }
-                    ret = child;
+        children.forEach((child) => {
+            if (child && child.key === key && child.props[showProp]) {
+                if (ret) {
+                    throw new Error('two child with same key for <rc-animate> children');
                 }
+                ret = child;
             }
-        };
-        children.forEach(each);
+        });
     }
     return ret;
 }
 
-export function findHiddenChildInChildrenByKey(children: ReactChildElement[],
-                                               key: Key,
-                                               showProp: string): number | boolean {
-    let found: number | boolean = 0;
+export function findHiddenChildInChildrenByKey(children, key, showProp) {
+    let found: any = 0;
     if (children) {
-        const each = (child: ReactChildElement): void => {
+        children.forEach((child) => {
             if (found) {
                 return;
             }
-            if (isValidElement(child)) {
-                found = child && child[`${key}`] === key && !child.props[showProp];
-            }
-        };
-        children.forEach(each);
+            found = child && child.key === key && !child.props[showProp];
+        });
     }
     return found;
 }
 
-export function isSameChildren(c1: ReactChildElement[],
-                               c2: ReactChildElement[],
-                               showProp: string): boolean {
+export function isSameChildren(c1, c2, showProp) {
     let same = c1.length === c2.length;
     if (same) {
-        const each = (child: ReactChildElement, index: number): void => {
-            if (isValidElement(child)) {
-                const child2: ReactChildElement = c2[index];
-                if (child && child2) {
-                    if ((child && !child2) || (!child && child2)) {
-                        same = false;
-                    } else if (child.key !== child2.key) {
-                        same = false;
-                    } else if (showProp && isValidElement(child2) && child.props[showProp] !== child2.props[showProp]) {
-                        same = false;
-                    }
+        c1.forEach((child, index) => {
+            const child2 = c2[index];
+            if (child && child2) {
+                if ((child && !child2) || (!child && child2)) {
+                    same = false;
+                } else if (child.key !== child2.key) {
+                    same = false;
+                } else if (showProp && child.props[showProp] !== child2.props[showProp]) {
+                    same = false;
                 }
             }
-        };
-        c1.forEach(each);
+        });
     }
     return same;
 }
 
-export function mergeChildren(prev: ReactChildElement[], next: ReactChildElement[]): ReactChildElement[] {
-    let ret: ReactChildElement[] = [];
+export function mergeChildren(prev, next) {
+    let ret = [];
 
-    // For each key of `next`, the list of keys to insert before that key in the
-    // combined list
+    // For each key of `next`, the list of keys to insert before that key in
+    // the combined list
     const nextChildrenPending = {};
     let pendingChildren = [];
-    prev.forEach(prevEach);
-
-    next.forEach(nextEach);
-
-    ret = ret.concat(pendingChildren);
-
-    return ret;
-
-    function prevEach(child) {
+    prev.forEach((child) => {
         if (child && findChildInChildrenByKey(next, child.key)) {
             if (pendingChildren.length) {
                 nextChildrenPending[child.key] = pendingChildren;
@@ -124,24 +86,16 @@ export function mergeChildren(prev: ReactChildElement[], next: ReactChildElement
         } else {
             pendingChildren.push(child);
         }
-    }
+    });
 
-    function nextEach(child) {
+    next.forEach((child) => {
         if (child && nextChildrenPending.hasOwnProperty(child.key)) {
             ret = ret.concat(nextChildrenPending[child.key]);
         }
         ret.push(child);
-    }
-}
+    });
 
-const defaultKey = `rc_animate_${Date.now()}`;
+    ret = ret.concat(pendingChildren);
 
-export function getChildrenFromProps(props?): ReactChildElement {
-    const children: ReactChildElement = props.children;
-    if (isValidElement(children)) {
-        if (!children.key) {
-            return cloneElement(children, {key: defaultKey});
-        }
-    }
-    return children;
+    return ret;
 }

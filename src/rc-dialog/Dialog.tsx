@@ -1,16 +1,19 @@
-import React, {Component} from 'react';
-import {findDOMNode} from 'react-dom';
-import {observer} from 'mobx-react';
-import noop from '../rc-util/noop';
+import React from 'react';
+import createClass from 'create-react-class';
+import ReactDOM from 'react-dom';
 import KeyCode from '../rc-util/KeyCode';
-import Animate from '../rc-animate/Animate';
+import Animate from '../rc-animate';
 import LazyRenderBox from './LazyRenderBox';
 import getScrollBarSize from '../rc-util/getScrollBarSize';
 import IDialogPropTypes from './IDialogPropTypes';
-import * as assign from 'object-assign';
+import assign from 'object-assign';
+import noop from "../rc-util/noop";
+import {observer} from "mobx-react";
 
 let uuid = 0;
 let openCount = 0;
+
+/* eslint react/no-is-mounted:0 */
 
 function getScroll(w, top?: boolean) {
     let ret = w[`page${top ? 'Y' : 'X'}Offset`];
@@ -46,37 +49,29 @@ function offset(el) {
     return pos;
 }
 
-@observer
-export default class Dialog extends Component<IDialogPropTypes, any> {
-
-    static defaultProps = {
-        afterClose: noop,
-        className: '',
-        mask: true,
-        visible: false,
-        keyboard: true,
-        closable: true,
-        maskClosable: true,
-        prefixCls: 'rc-dialog',
-        onClose: noop
-    };
-
-    inTransition;
-    titleId;
-    openTime;
-    lastOutSideFocusNode;
-    bodyIsOverflowing;
-    scrollbarWidth;
-    refs;
+const Dialog = observer(createClass<IDialogPropTypes, any>({
+    getDefaultProps() {
+        return {
+            afterClose: noop,
+            className: '',
+            mask: true,
+            visible: false,
+            keyboard: true,
+            closable: true,
+            maskClosable: true,
+            prefixCls: 'rc-dialog',
+            onClose: noop,
+        };
+    },
 
     componentWillMount() {
         this.inTransition = false;
         this.titleId = `rcDialogTitle${uuid++}`;
-    }
+    },
 
     componentDidMount() {
         this.componentDidUpdate({});
-    }
+    },
 
     componentDidUpdate(prevProps) {
         const props = this.props;
@@ -88,7 +83,7 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
                 this.lastOutSideFocusNode = document.activeElement;
                 this.addScrollingEffect();
                 this.refs.wrap.focus();
-                const dialogNode = findDOMNode(this.refs.dialog);
+                const dialogNode = ReactDOM.findDOMNode(this.refs.dialog);
                 if (mousePosition) {
                     const elOffset = offset(dialogNode);
                     setTransformOrigin(dialogNode,
@@ -108,13 +103,13 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
                 this.lastOutSideFocusNode = null;
             }
         }
-    }
+    },
 
     componentWillUnmount() {
         if (this.props.visible || this.inTransition) {
             this.removeScrollingEffect();
         }
-    }
+    },
 
     onAnimateLeave() {
         // need demo?
@@ -125,7 +120,7 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
         this.inTransition = false;
         this.removeScrollingEffect();
         this.props.afterClose();
-    }
+    },
 
     onMaskClick(e) {
         // android trigger click on open (fastclick??)
@@ -135,7 +130,7 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
         if (e.target === e.currentTarget) {
             this.close(e);
         }
-    }
+    },
 
     onKeyDown(e) {
         const props = this.props;
@@ -157,7 +152,7 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
                 }
             }
         }
-    }
+    },
 
     getDialogElement() {
         const props = this.props;
@@ -239,12 +234,12 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
                 onLeave={this.onAnimateLeave}
                 transitionName={transitionName}
                 component=""
-                transitionAppear={true}
+                transitionAppear
             >
                 {dialogElement}
             </Animate>
         );
-    }
+    },
 
     getZIndexStyle() {
         const style: any = {};
@@ -253,15 +248,15 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
             style.zIndex = props.zIndex;
         }
         return style;
-    }
+    },
 
     getWrapStyle(): any {
         return assign({}, this.getZIndexStyle(), this.props.wrapStyle);
-    }
+    },
 
     getMaskStyle() {
         return assign({}, this.getZIndexStyle(), this.props.maskStyle);
-    }
+    },
 
     getMaskElement() {
         const props = this.props;
@@ -283,7 +278,7 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
                     <Animate
                         key="mask"
                         showProp="visible"
-                        transitionAppear={true}
+                        transitionAppear
                         component=""
                         transitionName={maskTransition}
                     >
@@ -293,7 +288,7 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
             }
         }
         return maskElement;
-    }
+    },
 
     getMaskTransitionName() {
         const props = this.props;
@@ -303,7 +298,7 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
             transitionName = `${props.prefixCls}-${animation}`;
         }
         return transitionName;
-    }
+    },
 
     getTransitionName() {
         const props = this.props;
@@ -313,17 +308,17 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
             transitionName = `${props.prefixCls}-${animation}`;
         }
         return transitionName;
-    }
+    },
 
     getElement(part) {
         return this.refs[part];
-    }
+    },
 
     setScrollbar() {
         if (this.bodyIsOverflowing && this.scrollbarWidth !== undefined) {
             document.body.style.paddingRight = `${this.scrollbarWidth}px`;
         }
-    }
+    },
 
     addScrollingEffect() {
         openCount++;
@@ -334,7 +329,7 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
         this.setScrollbar();
         document.body.style.overflow = 'hidden';
         // this.adjustDialog();
-    }
+    },
 
     removeScrollingEffect() {
         openCount--;
@@ -344,11 +339,11 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
         document.body.style.overflow = '';
         this.resetScrollbar();
         // this.resetAdjustments();
-    }
+    },
 
     close(e) {
         this.props.onClose(e);
-    }
+    },
 
     checkScrollbar() {
         let fullWindowWidth = window.innerWidth;
@@ -360,12 +355,10 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
         if (this.bodyIsOverflowing) {
             this.scrollbarWidth = getScrollBarSize();
         }
-    }
-
+    },
     resetScrollbar() {
         document.body.style.paddingRight = '';
-    }
-
+    },
     adjustDialog() {
         if (this.refs.wrap && this.scrollbarWidth !== undefined) {
             const modalIsOverflowing =
@@ -375,13 +368,13 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
             this.refs.wrap.style.paddingRight =
                 `${this.bodyIsOverflowing && !modalIsOverflowing ? this.scrollbarWidth : ''}px`;
         }
-    }
+    },
 
     resetAdjustments() {
         if (this.refs.wrap) {
             this.refs.wrap.style.paddingLeft = this.refs.wrap.style.paddingLeft = '';
         }
-    }
+    },
 
     render() {
         const {props} = this;
@@ -410,5 +403,7 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
                 </div>
             </div>
         );
-    }
-}
+    },
+}));
+
+export default Dialog;

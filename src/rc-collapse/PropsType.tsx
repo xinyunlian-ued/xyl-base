@@ -4,6 +4,7 @@ export interface PanelContentPropTypes {
     prefixCls?: string;
     isActive?: boolean;
     children?: ReactChild;
+    destroyInactivePanel?;
 }
 
 export interface CollapsePanelPropTypes {
@@ -17,6 +18,7 @@ export interface CollapsePanelPropTypes {
     onItemClick?: (event?: any) => void;
     style?: ObjectConstructor;
     key?: string;
+    destroyInactivePanel?;
 }
 
 export type ChildrenType = ReactElement<CollapsePanelPropTypes>;
@@ -30,5 +32,6 @@ export interface CollapsePropTypes {
     accordion?: boolean;
     className?: string;
     style?: CSSProperties;
+    [key: string]: any;
 }
 

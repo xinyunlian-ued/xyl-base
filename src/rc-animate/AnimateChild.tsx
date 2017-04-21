@@ -1,11 +1,11 @@
 import React, {Children, Component} from 'react';
 import {findDOMNode} from 'react-dom';
-import {observer} from 'mobx-react';
 import cssAnimate, {isCssAnimationSupported} from 'css-animation';
 import animUtil from './util';
-import {AnimateChildPropTypes, TransitionMap} from './PropsType';
+import {AnimateChildPropTypes} from "./PropsType";
+import {observer} from "mobx-react";
 
-const transitionMap: TransitionMap = {
+const transitionMap = {
     enter: 'transitionEnter',
     appear: 'transitionAppear',
     leave: 'transitionLeave',
@@ -13,12 +13,6 @@ const transitionMap: TransitionMap = {
 
 @observer
 export default class AnimateChild extends Component<AnimateChildPropTypes, any> {
-
-    static defaultProps = {
-        transitionName: ''
-    };
-
-    stopper;
 
     componentWillUnmount() {
         this.stop();
@@ -44,9 +38,14 @@ export default class AnimateChild extends Component<AnimateChildPropTypes, any> 
         if (animUtil.isLeaveSupported(this.props)) {
             this.transition('leave', done);
         } else {
+            // always sync, do not interupt with react component life cycle
+            // update hidden -> animate hidden ->
+            // didUpdate -> animate leave -> unmount (if animate is none)
             done();
         }
     }
+
+    stopper;
 
     transition(animationType, finishCallback) {
         const node = findDOMNode(this);

@@ -1,17 +1,29 @@
-import React, {Children, cloneElement, Component} from 'react';
+import React, {cloneElement, Component, isValidElement, Children} from 'react';
 import {
     toArrayChildren,
     mergeChildren,
     findShownChildInChildrenByKey,
     findChildInChildrenByKey,
     isSameChildren,
-    getChildrenFromProps
 } from './ChildrenUtils';
 import AnimateChild from './AnimateChild';
+const defaultKey = `rc_animate_${Date.now()}`;
 import animUtil from './util';
-import {AnimatePropTypes} from './PropsType';
+import {AnimatePropTypes} from "./PropsType";
 import noop from "../rc-util/noop";
 import {observer} from "mobx-react";
+
+function getChildrenFromProps(props) {
+    const children: any = props.children;
+    if (isValidElement(children)) {
+        if (!children.key) {
+            return cloneElement(children as any, {
+                key: defaultKey,
+            });
+        }
+    }
+    return children;
+}
 
 @observer
 export default class Animate extends Component<AnimatePropTypes, any> {
@@ -26,24 +38,24 @@ export default class Animate extends Component<AnimatePropTypes, any> {
         onEnd: noop,
         onEnter: noop,
         onLeave: noop,
-        onAppear: noop
+        onAppear: noop,
     };
 
     currentlyAnimatingKeys = {};
     keysToEnter = [];
     keysToLeave = [];
-    nextProps;
-    refs = {};
-    mounted = false;
 
-    state = {
-        children: toArrayChildren(getChildrenFromProps(this.props))
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            children: toArrayChildren(getChildrenFromProps(this.props)),
+        };
+    }
 
     componentDidMount() {
         const showProp = this.props.showProp;
         let children = this.state.children;
-        this.mounted = true;
         if (showProp) {
             children = children.filter((child) => {
                 return !!child.props[showProp];
@@ -56,9 +68,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
         });
     }
 
-    componentWillUnmount() {
-        this.mounted = false;
-    }
+    nextProps;
 
     componentWillReceiveProps(nextProps) {
         this.nextProps = nextProps;
@@ -66,18 +76,16 @@ export default class Animate extends Component<AnimatePropTypes, any> {
         const props = this.props;
         // exclusive needs immediate response
         if (props.exclusive) {
-            Object
-                .keys(this.currentlyAnimatingKeys)
-                .forEach((key) => {
-                    this.stop(key);
-                });
+            Object.keys(this.currentlyAnimatingKeys).forEach((key) => {
+                this.stop(key);
+            });
         }
         const showProp = props.showProp;
         const currentlyAnimatingKeys = this.currentlyAnimatingKeys;
         // last props children if exclusive
-        const currentChildren = props.exclusive
-            ? toArrayChildren(getChildrenFromProps(props))
-            : this.state.children;
+        const currentChildren = props.exclusive ?
+            toArrayChildren(getChildrenFromProps(props)) :
+            this.state.children;
         // in case destroy in showProp mode
         let newChildren = [];
         if (showProp) {
@@ -85,7 +93,9 @@ export default class Animate extends Component<AnimatePropTypes, any> {
                 const nextChild = currentChild && findChildInChildrenByKey(nextChildren, currentChild.key);
                 let newChild;
                 if ((!nextChild || !nextChild.props[showProp]) && currentChild.props[showProp]) {
-                    newChild = cloneElement(nextChild || currentChild, {[showProp]: true});
+                    newChild = cloneElement(nextChild || currentChild, {
+                        [showProp]: true,
+                    });
                 } else {
                     newChild = nextChild;
                 }
@@ -99,11 +109,16 @@ export default class Animate extends Component<AnimatePropTypes, any> {
                 }
             });
         } else {
-            newChildren = mergeChildren(currentChildren, nextChildren);
+            newChildren = mergeChildren(
+                currentChildren,
+                nextChildren
+            );
         }
 
         // need render to avoid update
-        this.setState({children: newChildren});
+        this.setState({
+            children: newChildren,
+        });
 
         nextChildren.forEach((child) => {
             const key = child && child.key;
@@ -116,19 +131,13 @@ export default class Animate extends Component<AnimatePropTypes, any> {
                 if (hasPrev) {
                     const showInNow = findShownChildInChildrenByKey(currentChildren, key, showProp);
                     if (!showInNow && showInNext) {
-                        this
-                            .keysToEnter
-                            .push(key);
+                        this.keysToEnter.push(key);
                     }
                 } else if (showInNext) {
-                    this
-                        .keysToEnter
-                        .push(key);
+                    this.keysToEnter.push(key);
                 }
             } else if (!hasPrev) {
-                this
-                    .keysToEnter
-                    .push(key);
+                this.keysToEnter.push(key);
             }
         });
 
@@ -143,19 +152,13 @@ export default class Animate extends Component<AnimatePropTypes, any> {
                 if (hasNext) {
                     const showInNext = findShownChildInChildrenByKey(nextChildren, key, showProp);
                     if (!showInNext && showInNow) {
-                        this
-                            .keysToLeave
-                            .push(key);
+                        this.keysToLeave.push(key);
                     }
                 } else if (showInNow) {
-                    this
-                        .keysToLeave
-                        .push(key);
+                    this.keysToLeave.push(key);
                 }
             } else if (!hasNext) {
-                this
-                    .keysToLeave
-                    .push(key);
+                this.keysToLeave.push(key);
             }
         });
     }
@@ -163,32 +166,35 @@ export default class Animate extends Component<AnimatePropTypes, any> {
     componentDidUpdate() {
         const keysToEnter = this.keysToEnter;
         this.keysToEnter = [];
-        keysToEnter.forEach(this.performEnter);
+        keysToEnter.forEach(this.performEnter.bind(this));
         const keysToLeave = this.keysToLeave;
         this.keysToLeave = [];
-        keysToLeave.forEach(this.performLeave);
+        keysToLeave.forEach(this.performLeave.bind(this));
     }
 
-    performEnter(key) {
+    performEnter = (key) => {
+
+        let refs: any = this.refs[key];
         // may already remove by exclusive
-        if (this.refs[key]) {
+        if (refs) {
             this.currentlyAnimatingKeys[key] = true;
-            this
-                .refs[key]
-                .componentWillEnter(this.handleDoneAdding.bind(this, key, 'enter'));
+            refs.componentWillEnter(
+                this.handleDoneAdding.bind(this, key, 'enter')
+            );
         }
     }
 
-    performAppear(key) {
-        if (this.refs[key]) {
+    performAppear = (key) => {
+        let refs: any = this.refs[key];
+        if (refs) {
             this.currentlyAnimatingKeys[key] = true;
-            this
-                .refs[key]
-                .componentWillAppear(this.handleDoneAdding.bind(this, key, 'appear'));
+            refs.componentWillAppear(
+                this.handleDoneAdding.bind(this, key, 'appear')
+            );
         }
     }
 
-    handleDoneAdding(key, type) {
+    handleDoneAdding = (key, type) => {
         const props = this.props;
         delete this.currentlyAnimatingKeys[key];
         // if update on exclusive mode, skip check
@@ -214,17 +220,16 @@ export default class Animate extends Component<AnimatePropTypes, any> {
         }
     }
 
-    performLeave(key) {
+    performLeave = (key) => {
+        let refs: any = this.refs[key];
         // may already remove by exclusive
-        if (this.refs[key]) {
+        if (refs) {
             this.currentlyAnimatingKeys[key] = true;
-            this
-                .refs[key]
-                .componentWillLeave(this.handleDoneLeaving.bind(this, key));
+            refs.componentWillLeave(this.handleDoneLeaving.bind(this, key));
         }
     }
 
-    handleDoneLeaving(key) {
+    handleDoneLeaving = (key) => {
         const props = this.props;
         delete this.currentlyAnimatingKeys[key];
         // if update on exclusive mode, skip check
@@ -242,10 +247,10 @@ export default class Animate extends Component<AnimatePropTypes, any> {
                     props.onEnd(key, false);
                 }
             };
-            /* eslint react/no-is-mounted:0 */
-            if (this.mounted && !isSameChildren(this.state.children, currentChildren, props.showProp)) {
+            if (!isSameChildren(this.state.children,
+                    currentChildren, props.showProp)) {
                 this.setState({
-                    children: currentChildren
+                    children: currentChildren,
                 }, end);
             } else {
                 end();
@@ -263,7 +268,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
 
     stop(key) {
         delete this.currentlyAnimatingKeys[key];
-        const component = this.refs[key];
+        const component: any = this.refs[key];
         if (component) {
             component.stop();
         }
@@ -275,7 +280,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
         const stateChildren = this.state.children;
         let children = null;
         if (stateChildren) {
-            children = stateChildren.map((child: any) => {
+            children = stateChildren.map((child) => {
                 if (child === null || child === undefined) {
                     return child;
                 }
@@ -304,7 +309,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
                 passedProps = {
                     className: props.className,
                     style: props.style,
-                    ...props.componentProps
+                    ...props.componentProps,
                 };
             }
             return <Component {...passedProps}>{children}</Component>;

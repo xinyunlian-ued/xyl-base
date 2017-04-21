@@ -1,11 +1,18 @@
-import React, {Children, cloneElement, Component} from 'react';
-import {observable} from 'mobx';
-import {observer} from 'mobx-react';
-import * as classNames from 'classnames';
-import noop from '../rc-util/noop';
+import React, {Component, Children} from 'react';
 import CollapsePanel from './Panel';
 import openAnimationFactory from './openAnimationFactory';
-import {CollapsePropTypes} from './PropsType';
+import classNames from 'classnames';
+import {CollapsePropTypes} from "./PropsType";
+import noop from "../rc-util/noop";
+import {observer} from "mobx-react";
+
+function toArray(activeKey) {
+    let currentActiveKey = activeKey;
+    if (!Array.isArray(currentActiveKey)) {
+        currentActiveKey = currentActiveKey ? [currentActiveKey] : [];
+    }
+    return currentActiveKey;
+}
 
 @observer
 export default class Collapse extends Component<CollapsePropTypes, any> {
@@ -14,14 +21,25 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
         prefixCls: 'rc-collapse',
         onChange: noop,
         accordion: false,
+        destroyInactivePanel: false,
     };
 
-    static Panel = CollapsePanel;
+    Panel = CollapsePanel;
 
-    state = {
-        openAnimation: this.props.openAnimation || openAnimationFactory(this.props.prefixCls),
-        activeKey: toArray('activeKey' in this.props ? this.props.activeKey : this.props.defaultActiveKey)
-    };
+    constructor(props) {
+        super(props);
+
+        const {activeKey, defaultActiveKey} = this.props;
+        let currentActiveKey = defaultActiveKey;
+        if ('activeKey' in this.props) {
+            currentActiveKey = activeKey;
+        }
+
+        this.state = {
+            openAnimation: this.props.openAnimation || openAnimationFactory(this.props.prefixCls),
+            activeKey: toArray(currentActiveKey),
+        };
+    }
 
     componentWillReceiveProps(nextProps) {
         if ('activeKey' in nextProps) {
@@ -59,11 +77,14 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
     getItems() {
 
         const activeKey = this.state.activeKey;
-        const {prefixCls, accordion, children} = this.props;
+        const {prefixCls, accordion, destroyInactivePanel} = this.props;
         const newChildren = [];
 
-        Children.forEach(children, (child: any, index) => {
-
+        Children.forEach(this.props.children, (child: any, index) => {
+            if (!child) {
+                return;
+            }
+            // If there is no key provide, use the panel order as default key
             const key = child.key || String(index);
             const header = child.props.header;
             let isActive = false;
@@ -78,12 +99,13 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
                 header,
                 isActive,
                 prefixCls,
+                destroyInactivePanel,
                 openAnimation: this.state.openAnimation,
                 children: child.props.children,
                 onItemClick: this.onClickItem(key).bind(this),
             };
 
-            newChildren.push(cloneElement(child, props));
+            newChildren.push(React.cloneElement(child, props));
         });
 
         return newChildren;
@@ -108,12 +130,4 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
             </div>
         );
     }
-}
-
-function toArray(activeKey) {
-    let currentActiveKey = activeKey;
-    if (!Array.isArray(currentActiveKey)) {
-        currentActiveKey = currentActiveKey ? [currentActiveKey] : [];
-    }
-    return currentActiveKey;
 }

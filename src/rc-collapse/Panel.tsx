@@ -1,26 +1,35 @@
 import React, {Component} from 'react';
-import {observer} from 'mobx-react';
-import * as classNames from 'classnames';
-import noop from '../rc-util/noop';
-import Animate from '../rc-animate/Animate';
+import classNames from 'classnames';
 import PanelContent from './PanelContent';
-import {CollapsePanelPropTypes} from './PropsType';
+import Animate from '../rc-animate';
+import {CollapsePanelPropTypes} from "./PropsType";
+import noop from "../rc-util/noop";
+import {observer} from "mobx-react";
 
 @observer
 export default class CollapsePanel extends Component<CollapsePanelPropTypes, any> {
-
-    static defaultProps = {
-        showArrow: true,
-        isActive: false,
-        onItemClick: noop,
-    };
-
     handleItemClick() {
         this.props.onItemClick();
     }
 
+    static defaultProps = {
+        showArrow: true,
+        isActive: false,
+        destroyInactivePanel: false,
+        onItemClick: noop,
+    };
+
     render() {
-        const {className, style, prefixCls, header, children, isActive, showArrow} = this.props;
+        const {
+            className,
+            style,
+            prefixCls,
+            header,
+            children,
+            isActive,
+            showArrow,
+            destroyInactivePanel,
+        } = this.props;
         const headerCls = `${prefixCls}-header`;
         const itemCls = classNames({
             [`${prefixCls}-item`]: true,
@@ -30,7 +39,7 @@ export default class CollapsePanel extends Component<CollapsePanelPropTypes, any
             <div className={itemCls} style={style}>
                 <div
                     className={headerCls}
-                    onClick={this.handleItemClick}
+                    onClick={this.handleItemClick.bind(this)}
                     role="tab"
                     aria-expanded={isActive}
                 >
@@ -39,11 +48,15 @@ export default class CollapsePanel extends Component<CollapsePanelPropTypes, any
                 </div>
                 <Animate
                     showProp="isActive"
-                    exclusive={true}
+                    exclusive
                     component=""
                     animation={this.props.openAnimation}
                 >
-                    <PanelContent prefixCls={prefixCls} isActive={isActive}>
+                    <PanelContent
+                        prefixCls={prefixCls}
+                        isActive={isActive}
+                        destroyInactivePanel={destroyInactivePanel}
+                    >
                         {children}
                     </PanelContent>
                 </Animate>

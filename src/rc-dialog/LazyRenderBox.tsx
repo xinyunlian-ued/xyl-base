@@ -1,14 +1,18 @@
-import React, {Component} from 'react';
-import * as assign from 'object-assign';
-import {observer} from 'mobx-react';
-import {ILazyRenderBoxPropTypes} from './IDialogPropTypes';
+import React from 'react';
+import assign from 'object-assign';
 
-@observer
-export default class LazyRenderBox extends Component<ILazyRenderBoxPropTypes, any> {
+export interface ILazyRenderBoxPropTypes {
+    className?: string;
+    visible?: boolean;
+    hiddenClassName?: string;
+    role?: string;
+    style?: {};
+}
 
+const LazyRenderBox = React.createClass<ILazyRenderBoxPropTypes, any>({
     shouldComponentUpdate(nextProps) {
         return !!nextProps.hiddenClassName || !!nextProps.visible;
-    }
+    },
 
     render() {
         let className = this.props.className;
@@ -20,5 +24,7 @@ export default class LazyRenderBox extends Component<ILazyRenderBoxPropTypes, an
         delete props.visible;
         props.className = className;
         return <div {...props} />;
-    }
-}
+    },
+});
+
+export default LazyRenderBox;

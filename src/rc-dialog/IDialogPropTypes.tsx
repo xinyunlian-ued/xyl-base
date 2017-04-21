@@ -6,12 +6,12 @@ interface IDialogPropTypes {
     style?: {};
     mask?: boolean;
     children?: any;
-    afterClose?: (e?: any) => void;
-    onClose?: (e?: any) => void;
+    afterClose?: () => void;
+    onClose?: () => void;
     closable?: boolean;
     maskClosable?: boolean;
     visible?: boolean;
-    mousePosition?: { x?: number, y?: number };
+    mousePosition?: {};
     title?: ReactNode;
     footer?: ReactNode;
     transitionName?: string;
@@ -23,20 +23,6 @@ interface IDialogPropTypes {
     maskStyle?: {};
     prefixCls?: string;
     wrapClassName?: string;
-    width?: number;
-    height?: number;
-    bodyProps?: any;
-    zIndex?: number;
-    maskProps?: any;
-    wrapProps?: any;
-}
-
-export interface ILazyRenderBoxPropTypes {
-    className?: string;
-    visible?: boolean;
-    hiddenClassName?: string;
-    role?: string;
-    style?: {};
 }
 
 export default IDialogPropTypes;

@@ -1,16 +1,5 @@
 import cssAnimation from 'css-animation';
 
-export default function animation(prefixCls) {
-    return {
-        enter(node, done) {
-            return animate(node, true, `${prefixCls}-anim`, done);
-        },
-        leave(node, done) {
-            return animate(node, false, `${prefixCls}-anim`, done);
-        },
-    };
-}
-
 function animate(node, show, transitionName, done) {
     let height;
     return cssAnimation(node, transitionName, {
@@ -31,3 +20,16 @@ function animate(node, show, transitionName, done) {
         },
     });
 }
+
+function animation(prefixCls) {
+    return {
+        enter(node, done) {
+            return animate(node, true, `${prefixCls}-anim`, done);
+        },
+        leave(node, done) {
+            return animate(node, false, `${prefixCls}-anim`, done);
+        },
+    };
+}
+
+export default animation;

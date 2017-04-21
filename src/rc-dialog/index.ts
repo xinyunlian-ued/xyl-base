@@ -1,2 +1,2 @@
-import Dialog from './Dialog';
-export default Dialog;
+import DialogWrap from './DialogWrap';
+export default DialogWrap;

@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {observer} from 'mobx-react';
-import classNames from 'classnames';
-import noop from 'rc-util/noop';
-import Animate from 'rc-animate/Animate';
+import * as classNames from 'classnames';
+import noop from '../rc-util/noop';
+import Animate from '../rc-animate/Animate';
 import PanelContent from './PanelContent';
 import {CollapsePanelPropTypes} from './PropsType';
 
 @observer
-export default class CollapsePanel extends React.Component<CollapsePanelPropTypes, any> {
+export default class CollapsePanel extends Component<CollapsePanelPropTypes, any> {
 
     static defaultProps = {
         showArrow: true,

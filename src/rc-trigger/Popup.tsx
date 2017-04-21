@@ -1,14 +1,14 @@
-import React, {CSSProperties} from 'react';
-import ReactDOM from 'react-dom';
-import Align from 'rc-align';
-import Animate from 'rc-animate';
+import React, {Component, CSSProperties} from 'react';
+import {findDOMNode} from 'react-dom';
+import Align from '../rc-align';
+import Animate from '../rc-animate';
 import PopupInner from './PopupInner';
 import LazyRenderBox from './LazyRenderBox';
 import {IPopup} from "./PropsType";
 import {observer} from "mobx-react";
 
 @observer
-export default class Popup extends React.Component<IPopup, any> {
+export default class Popup extends Component<IPopup, any> {
     rootNode;
 
     componentDidMount() {
@@ -29,7 +29,7 @@ export default class Popup extends React.Component<IPopup, any> {
     }
 
     getPopupDomNode() {
-        return ReactDOM.findDOMNode(this.refs.popup);
+        return findDOMNode(this.refs.popup);
     }
 
     getTarget() {

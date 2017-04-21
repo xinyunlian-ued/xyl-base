@@ -1,6 +1,5 @@
-import React from 'react';
-import classNames from 'classnames';
-import Component from "../rc-base/index";
+import React, {Component} from 'react';
+import * as classNames from 'classnames';
 import {IRefreshControl} from "./PropsType";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
@@ -23,7 +22,7 @@ export default class RefreshControl extends Component<IRefreshControl, any> {
         loading: <div>loading...</div>,
     };
 
-    @observable store = {
+    state = {
         active: false,
         deactive: false,
         loadingState: false,
@@ -33,7 +32,7 @@ export default class RefreshControl extends Component<IRefreshControl, any> {
         const {
             prefixCls, className = '', style, icon, loading, refreshing,
         } = this.props;
-        const {active, deactive, loadingState} = this.store;
+        const {active, deactive, loadingState} = this.state;
         const wrapCls = classNames({
             [className]: className,
             [`${prefixCls}-ptr`]: true,

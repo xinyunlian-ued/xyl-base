@@ -1,10 +1,10 @@
-import React from 'react';
-import assign from 'object-assign';
+import React, {Component} from 'react';
+import * as assign from 'object-assign';
 import {observer} from 'mobx-react';
 import {ILazyRenderBoxPropTypes} from './IDialogPropTypes';
 
 @observer
-export default class LazyRenderBox extends React.Component<ILazyRenderBoxPropTypes, any> {
+export default class LazyRenderBox extends Component<ILazyRenderBoxPropTypes, any> {
 
     shouldComponentUpdate(nextProps) {
         return !!nextProps.hiddenClassName || !!nextProps.visible;

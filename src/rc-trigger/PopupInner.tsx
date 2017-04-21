@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {Component} from 'react';
 import LazyRenderBox from './LazyRenderBox';
 import {IPopupInner} from "./PropsType";
 import {observer} from "mobx-react";
 
 @observer
-export default class PopupInner extends React.Component<IPopupInner, any> {
+export default class PopupInner extends Component<IPopupInner, any> {
     render() {
         const props = this.props;
         let className = props.className;

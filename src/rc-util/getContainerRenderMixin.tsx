@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import {unmountComponentAtNode, unstable_renderSubtreeIntoContainer} from 'react-dom';
 
 export function defaultGetContainer(instance?) {
     const container = document.createElement('div');
@@ -28,7 +28,7 @@ export default function getContainerRenderMixin(config) {
             } else {
                 component = getComponent(instance, componentArg);
             }
-            ReactDOM.unstable_renderSubtreeIntoContainer(instance,
+            unstable_renderSubtreeIntoContainer(instance,
                 component, instance._container,
                 function callback() {
                     instance._component = this;
@@ -63,7 +63,7 @@ export default function getContainerRenderMixin(config) {
     function removeContainer(instance) {
         if (instance._container) {
             const container = instance._container;
-            ReactDOM.unmountComponentAtNode(container);
+            unmountComponentAtNode(container);
             container.parentNode.removeChild(container);
             instance._container = null;
         }

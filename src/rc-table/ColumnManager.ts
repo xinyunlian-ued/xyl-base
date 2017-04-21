@@ -1,4 +1,4 @@
-import React from 'react';
+import {Children, isValidElement} from 'react';
 
 export default class ColumnManager {
     _cached = {};
@@ -109,8 +109,8 @@ export default class ColumnManager {
 
     normalize(elements) {
         const columns = [];
-        React.Children.forEach(elements, (element) => {
-            if (!React.isValidElement<{
+        Children.forEach(elements, (element) => {
+            if (!isValidElement<{
                     type: {
                         isTableColumnGroup?: boolean
                     }

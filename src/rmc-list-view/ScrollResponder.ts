@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import {findDOMNode} from 'react-dom';
 import warning from 'fbjs/lib/warning';
 
 /**
@@ -368,7 +367,7 @@ const ScrollResponderMixin = {
      */
     scrollResponderScrollWithouthAnimationTo: (offsetX, offsetY) => {
 
-        const node: any = ReactDOM.findDOMNode(this);
+        const node: any = findDOMNode(this);
         node.offsetX = offsetX;
         node.offsetY = offsetY;
     },

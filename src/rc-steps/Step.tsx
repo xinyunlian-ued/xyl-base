@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {observer} from 'mobx-react';
-import classNames from 'classnames';
+import * as classNames from 'classnames';
 import {IStepPropTypes} from "./PropsType";
 
 function isString(str) {
@@ -8,7 +8,7 @@ function isString(str) {
 }
 
 @observer
-export default class Step extends React.Component<IStepPropTypes, any> {
+export default class Step extends Component<IStepPropTypes, any> {
     render() {
         const {
             className, prefixCls, style, itemWidth,

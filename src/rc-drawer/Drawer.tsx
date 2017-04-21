@@ -1,10 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
+import {findDOMNode} from 'react-dom';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
-import classNames from 'classnames';
-import Component from '../rc-base';
-import noop from 'rc-util/noop';
+import * as classNames from 'classnames';
+
+import noop from '../rc-util/noop';
 import {DrawerPropTypes} from './PropsType';
 
 const CANCEL_DISTANCE_ON_SCROLL = 20;
@@ -30,7 +30,7 @@ export default class Drawer extends Component<DrawerPropTypes, any> {
 
     notTouch;
 
-    @observable store = {
+    state = {
         sidebarWidth: 0,
         sidebarHeight: 0,
         sidebarTop: 0,
@@ -68,7 +68,7 @@ export default class Drawer extends Component<DrawerPropTypes, any> {
         // filter out if a user starts swiping with a second finger
         if (!this.isTouching()) {
             const touch = ev.targetTouches[0];
-            this.changeStore({
+            this.setState({
                 touchIdentifier: !this.notTouch ? touch.identifier : null,
                 touchStartX: touch.clientX,
                 touchStartY: touch.clientY,
@@ -84,7 +84,7 @@ export default class Drawer extends Component<DrawerPropTypes, any> {
             for (let ind = 0; ind < ev.targetTouches.length; ind++) {
                 // we only care about the finger that we are tracking
                 if (ev.targetTouches[ind].identifier === this.state.touchIdentifier) {
-                    this.changeStore({
+                    this.setState({
                         touchCurrentX: ev.targetTouches[ind].clientX,
                         touchCurrentY: ev.targetTouches[ind].clientY,
                     });
@@ -113,7 +113,7 @@ export default class Drawer extends Component<DrawerPropTypes, any> {
                 this.props.onOpenChange(!this.props.open);
             }
 
-            this.changeStore({
+            this.setState({
                 touchIdentifier: null,
                 touchStartX: null,
                 touchStartY: null,
@@ -128,7 +128,7 @@ export default class Drawer extends Component<DrawerPropTypes, any> {
     // cancelling the ongoing gesture if it did not move horizontally much.
     onScroll = () => {
         if (this.isTouching() && this.inCancelDistanceOnScroll()) {
-            this.changeStore({
+            this.setState({
                 touchIdentifier: null,
                 touchStartX: null,
                 touchStartY: null,
@@ -167,23 +167,23 @@ export default class Drawer extends Component<DrawerPropTypes, any> {
     }
 
     saveSidebarSize = () => {
-        const sidebar = ReactDOM.findDOMNode(this.refs.sidebar) as HTMLElement;
+        const sidebar = findDOMNode(this.refs.sidebar) as HTMLElement;
         const width = sidebar.offsetWidth;
         const height = sidebar.offsetHeight;
-        const sidebarTop = getOffset(ReactDOM.findDOMNode(this.refs.sidebar)).top;
-        const dragHandleTop = getOffset(ReactDOM.findDOMNode(this.refs.dragHandle)).top;
+        const sidebarTop = getOffset(findDOMNode(this.refs.sidebar)).top;
+        const dragHandleTop = getOffset(findDOMNode(this.refs.dragHandle)).top;
 
         if (width !== this.state.sidebarWidth) {
-            this.changeStore({sidebarWidth: width});
+            this.setState({sidebarWidth: width});
         }
         if (height !== this.state.sidebarHeight) {
-            this.changeStore({sidebarHeight: height});
+            this.setState({sidebarHeight: height});
         }
         if (sidebarTop !== this.state.sidebarTop) {
-            this.changeStore({sidebarTop});
+            this.setState({sidebarTop});
         }
         if (dragHandleTop !== this.state.dragHandleTop) {
-            this.changeStore({dragHandleTop});
+            this.setState({dragHandleTop});
         }
     }
 
@@ -363,7 +363,7 @@ export default class Drawer extends Component<DrawerPropTypes, any> {
         //   };
         //   evt.onTouchEnd = () => {
         //     this.notTouch = false;
-        //     this.changeStore({
+        //     this.setState({
         //       touchIdentifier: null,
         //     });
         //   };

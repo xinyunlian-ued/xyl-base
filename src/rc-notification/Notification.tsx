@@ -1,9 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
+import {unmountComponentAtNode, render} from 'react-dom';
 import {observer} from 'mobx-react';
 import {observable, action} from 'mobx';
-import classnames from 'classnames';
-import Component from '../rc-base';
+import * as classNames from 'classnames';
+
 import Animate from '../rc-animate/Animate';
 import createChainedFunction from '../rc-util/createChainedFunction';
 import Notice from './Notice';
@@ -28,20 +28,20 @@ export default class Notification extends Component<NotificationPropTypes, { not
         }
     };
 
-    @observable store = {
+    state = {
         notices: []
     };
 
-    @action addNotice(notice: Notice) {
+    addNotice(notice: Notice) {
         const key = notice.key = notice.key || getUuid();
-        const notices = this.store.notices;
+        const notices = this.state.notices;
         if (!notices.filter((v) => v.key === key).length) {
-            return this.store.notices = notices.concat(notice);
+            return this.state.notices = notices.concat(notice);
         }
     }
 
     @action removeNotice(key) {
-        return this.store.notices = this.store.notices.filter((notice) => notice.key !== key);
+        return this.state.notices = this.state.notices.filter((notice) => notice.key !== key);
     }
 
     getTransitionName() {
@@ -70,7 +70,7 @@ export default class Notification extends Component<NotificationPropTypes, { not
             [props.className]: !!props.className,
         };
         return (
-            <div className={classnames(className)} style={props.style}>
+            <div className={classNames(className)} style={props.style}>
                 <Animate transitionName={this.getTransitionName()}>{noticeNodes}</Animate>
             </div>
         );
@@ -85,7 +85,7 @@ export default class Notification extends Component<NotificationPropTypes, { not
             div = document.createElement('div');
             document.body.appendChild(div);
         }
-        const notification = ReactDOM.render(<Notification {...props} />, div) as Notification;
+        const notification = render(<Notification {...props} />, div) as Notification;
         return {
             notice(noticeProps) {
                 notification.addNotice(noticeProps);
@@ -95,7 +95,7 @@ export default class Notification extends Component<NotificationPropTypes, { not
             },
             component: notification,
             destroy() {
-                ReactDOM.unmountComponentAtNode(div);
+                unmountComponentAtNode(div);
                 document.body.removeChild(div);
             },
         };

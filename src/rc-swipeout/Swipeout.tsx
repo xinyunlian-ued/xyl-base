@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 import Hammer from 'react-hammerjs';
 import omit from 'object.omit';
 import splitObject from './util/splitObject';
-import {ISwipeoutPropTypes} from "rc-swipeout/PropsType";
-import noop from "rc-util/noop";
+import {ISwipeoutPropTypes} from "./PropsType";
+import noop from "../rc-util/noop";
 
 @observer
-export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
+export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
 
     static defaultProps: ISwipeoutPropTypes = {
         prefixCls: 'rc-swipeout',

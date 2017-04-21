@@ -1,10 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import classNames from 'classnames';
+import React, {Children, cloneElement, Component} from 'react';
+import {findDOMNode} from 'react-dom';
+import * as classNames from 'classnames';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import debounce from 'lodash.debounce';
-import Component from 'rc-base';
+
 import {IStepsPropTypes} from "./PropsType";
 import Step from './Step';
 
@@ -31,7 +31,7 @@ export default class Steps extends Component<IStepsPropTypes, { lastStepOffsetWi
 
     calcTimeout;
 
-    @observable store = {
+    state = {
         lastStepOffsetWidth: 0
     };
 
@@ -50,7 +50,7 @@ export default class Steps extends Component<IStepsPropTypes, { lastStepOffsetWi
     }
 
     calcStepOffsetWidth = () => {
-        const domNode = ReactDOM.findDOMNode(this);
+        const domNode = findDOMNode(this);
         if (domNode.children.length > 0) {
             if (this.calcTimeout) {
                 clearTimeout(this.calcTimeout);
@@ -64,7 +64,7 @@ export default class Steps extends Component<IStepsPropTypes, { lastStepOffsetWi
                     Math.abs(this.state.lastStepOffsetWidth - lastStepOffsetWidth) <= 3) {
                     return;
                 }
-                this.changeStore({lastStepOffsetWidth});
+                this.setState({lastStepOffsetWidth});
             });
         }
     }
@@ -91,7 +91,7 @@ export default class Steps extends Component<IStepsPropTypes, { lastStepOffsetWi
         return (
             <div className={classString} style={style} {...restProps}>
                 {
-                    React.Children.map(children, (ele: any, idx) => {
+                    Children.map(children, (ele: any, idx) => {
                         const itemWidth = (direction === 'vertical' || idx === lastIndex || !reLayouted)
                             ? null : `${100 / lastIndex}%`;
                         const adjustMarginRight = (direction === 'vertical' || idx === lastIndex)
@@ -122,7 +122,7 @@ export default class Steps extends Component<IStepsPropTypes, { lastStepOffsetWi
                                 np.status = 'wait';
                             }
                         }
-                        return React.cloneElement(ele, np);
+                        return cloneElement(ele, np);
                     })
                 }
             </div>

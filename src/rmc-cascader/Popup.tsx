@@ -1,6 +1,6 @@
-import React from 'react';
-import PopupPicker from 'rmc-picker/Popup';
-import {IPopupPickerProps} from 'rmc-picker/PopupPickerTypes';
+import React, {Component} from 'react';
+import PopupPicker from '../rmc-picker/Popup';
+import {IPopupPickerProps} from '../rmc-picker/PopupPickerTypes';
 import {ICascaderProps, CascaderValue} from './CascaderTypes';
 import {observer} from "mobx-react";
 
@@ -10,7 +10,7 @@ export interface IPopupCascaderProps extends IPopupPickerProps {
 }
 
 @observer
-export default class PopupCascader extends React.Component<IPopupCascaderProps, any> {
+export default class PopupCascader extends Component<IPopupCascaderProps, any> {
     static defaultProps = {
         pickerValueProp: 'value',
         pickerValueChangeProp: 'onChange',

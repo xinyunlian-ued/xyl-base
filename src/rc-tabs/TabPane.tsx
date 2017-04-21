@@ -1,10 +1,10 @@
-import React from 'react';
-import classnames from 'classnames';
+import React, {Component} from 'react';
+import * as classNames from 'classnames';
 import {ITabPane} from "./PropsType";
 import {observer} from "mobx-react";
 
 @observer
-export default class TabPane extends React.Component<ITabPane, any> {
+export default class TabPane extends Component<ITabPane, any> {
 
     static defaultProps = {placeholder: null};
     _isActived;
@@ -14,7 +14,7 @@ export default class TabPane extends React.Component<ITabPane, any> {
         const {className, destroyInactiveTabPane, active, forceRender} = props;
         this._isActived = this._isActived || active;
         const prefixCls = `${props.rootPrefixCls}-tabpane`;
-        const cls = classnames({
+        const cls = classNames({
             [prefixCls]: 1,
             [`${prefixCls}-inactive`]: !active,
             [`${prefixCls}-active`]: active,

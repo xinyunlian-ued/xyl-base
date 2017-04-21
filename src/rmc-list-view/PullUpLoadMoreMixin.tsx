@@ -1,6 +1,6 @@
 /* eslint no-unused-vars: 0 */
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
+import {findDOMNode} from 'react-dom';
 
 export default {
     bindEvt() {
@@ -23,7 +23,7 @@ export default {
         if (stickyHeader || useBodyScroll) {
             ele = document.body;
         } else {
-            ele = ReactDOM.findDOMNode(this.refs.listviewscroll.refs.ScrollView);
+            ele = findDOMNode(this.refs.listviewscroll.refs.ScrollView);
         }
         return ele;
     },

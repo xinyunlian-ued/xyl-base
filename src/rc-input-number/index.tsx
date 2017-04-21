@@ -1,9 +1,9 @@
-import React from 'react';
-import classNames from 'classnames';
+import React, {Component} from 'react';
+import * as classNames from 'classnames';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
-import Component from '../rc-base';
-import noop from 'rc-util/noop';
+
+import noop from '../rc-util/noop';
 import InputHandler from './InputHandler';
 import {InputNumberPropTypes} from './PropsType';
 
@@ -54,7 +54,7 @@ export default class InputNumber extends Component<InputNumberPropTypes, State> 
         parser: defaultParser,
     };
 
-    @observable store = ((me) => {
+    state = ((me) => {
         let value;
         const props = me.props;
         if ('value' in props) {
@@ -80,7 +80,7 @@ export default class InputNumber extends Component<InputNumberPropTypes, State> 
     }
 
     componentDidUpdate() {
-        if (this.props.focusOnUpDown && this.store.focused) {
+        if (this.props.focusOnUpDown && this.state.focused) {
             const selectionRange = this.refs.input.setSelectionRange;
             if (selectionRange &&
                 typeof selectionRange === 'function' &&
@@ -145,22 +145,22 @@ export default class InputNumber extends Component<InputNumberPropTypes, State> 
 
     onChange(e) {
         const input = this.props.parser(this.getValueFromEvent(e).trim());
-        this.changeStore({inputValue: input});
+        this.setState({inputValue: input});
         this.props.onChange(this.toNumberWhenUserInput(input)); // valid number or invalid string
     }
 
     onFocus(...args) {
-        this.changeStore({
+        this.setState({
             focused: true,
         });
         this.props.onFocus(...args);
     }
 
     onBlur(e, ...args) {
-        this.changeStore({
+        this.setState({
             focused: false,
         });
-        const value = this.getCurrentValidValue(this.store.inputValue);
+        const value = this.getCurrentValidValue(this.state.inputValue);
         e.persist();  // fix https://github.com/react-component/input-number/issues/51
         this.setValue(value, () => {
             this.props.onBlur(e, ...args);
@@ -181,7 +181,7 @@ export default class InputNumber extends Component<InputNumberPropTypes, State> 
                 val = props.max;
             }
         } else {
-            val = this.store.value;
+            val = this.state.value;
         }
         return this.toNumber(val);
     }
@@ -189,16 +189,16 @@ export default class InputNumber extends Component<InputNumberPropTypes, State> 
     setValue(v, callback?) {
         // trigger onChange
         const newValue = this.isNotCompleteNumber(parseFloat(v)) ? undefined : parseFloat(v);
-        const changed = newValue !== this.store.value;
+        const changed = newValue !== this.state.value;
         if (!('value' in this.props)) {
-            this.changeStore({
+            this.setState({
                 value: newValue,
                 inputValue: this.toPrecisionAsStep(v),
             }, callback);
         } else {
             // always set input value same as value
-            this.changeStore({
-                inputValue: this.toPrecisionAsStep(this.store.value),
+            this.setState({
+                inputValue: this.toPrecisionAsStep(this.state.value),
             }, callback);
         }
         if (changed) {
@@ -269,7 +269,7 @@ export default class InputNumber extends Component<InputNumberPropTypes, State> 
     // '1.0' '1.00'  => may be a inputing number
     toNumberWhenUserInput(num) {
         // num.length > 16 => prevent input large number will became Infinity
-        if ((/\.0+$/.test(num) || num.length > 16) && this.store.focused) {
+        if ((/\.0+$/.test(num) || num.length > 16) && this.state.focused) {
             return num;
         }
         return this.toNumber(num);
@@ -283,7 +283,7 @@ export default class InputNumber extends Component<InputNumberPropTypes, State> 
         if (props.disabled) {
             return;
         }
-        const value = this.getCurrentValidValue(this.store.inputValue) || 0;
+        const value = this.getCurrentValidValue(this.state.inputValue) || 0;
         if (this.isNotCompleteNumber(value)) {
             return;
         }
@@ -294,7 +294,7 @@ export default class InputNumber extends Component<InputNumberPropTypes, State> 
             val = props.min;
         }
         this.setValue(val);
-        this.changeStore({
+        this.setState({
             focused: true,
         });
     }
@@ -334,11 +334,11 @@ export default class InputNumber extends Component<InputNumberPropTypes, State> 
             [prefixCls]: true,
             [props.className]: !!props.className,
             [`${prefixCls}-disabled`]: disabled,
-            [`${prefixCls}-focused`]: this.store.focused,
+            [`${prefixCls}-focused`]: this.state.focused,
         });
         let upDisabledClass = '';
         let downDisabledClass = '';
-        const {value} = this.store;
+        const {value} = this.state;
         if (value) {
             if (!isNaN(value)) {
                 const val = Number(value);
@@ -359,10 +359,10 @@ export default class InputNumber extends Component<InputNumberPropTypes, State> 
         // focus state, show input value
         // unfocus state, show valid value
         let inputDisplayValue;
-        if (this.store.focused) {
-            inputDisplayValue = this.store.inputValue;
+        if (this.state.focused) {
+            inputDisplayValue = this.state.inputValue;
         } else {
-            inputDisplayValue = this.toPrecisionAsStep(this.store.value);
+            inputDisplayValue = this.toPrecisionAsStep(this.state.value);
         }
 
         if (inputDisplayValue === undefined || inputDisplayValue === null) {

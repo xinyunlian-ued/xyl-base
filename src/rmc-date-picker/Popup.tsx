@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import IDatePickerProps from './IDatePickerProps';
-import PopupPicker from 'rmc-picker/Popup';
-import {IPopupPickerProps} from 'rmc-picker/PopupPickerTypes';
+import PopupPicker from '../rmc-picker/Popup';
+import {IPopupPickerProps} from '../rmc-picker/PopupPickerTypes';
 import {observer} from "mobx-react";
 
 export interface IPopupDatePickerProps extends IPopupPickerProps {
@@ -11,7 +11,7 @@ export interface IPopupDatePickerProps extends IPopupPickerProps {
 }
 
 @observer
-export default class PopupDatePicker extends React.Component<IPopupDatePickerProps, any> {
+export default class PopupDatePicker extends Component<IPopupDatePickerProps, any> {
 
     static defaultProps = {
         pickerValueProp: 'date',

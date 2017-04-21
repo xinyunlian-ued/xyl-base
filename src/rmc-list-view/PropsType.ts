@@ -1,4 +1,4 @@
-import {CSSProperties, ReactElement, ReactNode} from "react";
+import {CSSProperties, ReactElement} from "react";
 import ListViewDataSource from './ListViewDataSource';
 export interface IStaticRenderer {
     shouldUpdate: boolean;

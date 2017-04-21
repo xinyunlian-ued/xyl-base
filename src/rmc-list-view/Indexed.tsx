@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import classNames from 'classnames';
+import React, {cloneElement, Component} from 'react';
+import {findDOMNode} from 'react-dom';
+import * as classNames from 'classnames';
 import ListView from './ListView';
 import {getOffsetTop, _event} from './util';
 import {IIndexedList} from "./PropsType";
@@ -9,7 +9,7 @@ import noop from "../rc-util/noop";
 
 /* eslint react/prop-types: 0 */
 @observer
-export default class IndexedList extends React.Component<IIndexedList, any> {
+export default class IndexedList extends Component<IIndexedList, any> {
 
     static defaultProps = {
         prefixCls: 'rmc-indexed-list',
@@ -60,20 +60,20 @@ export default class IndexedList extends React.Component<IIndexedList, any> {
             window.document.body.scrollTop = 0;
         } else {
             const indexedListView: any = this.refs.indexedListView;
-            ReactDOM.findDOMNode(indexedListView.refs.listviewscroll).scrollTop = 0;
+            findDOMNode(indexedListView.refs.listviewscroll).scrollTop = 0;
         }
         this.props.onQuickSearch(sectionID, topId);
     }
 
     onQuickSearch(sectionID) {
         const indexedListView: any = this.refs.indexedListView;
-        const lv = ReactDOM.findDOMNode(indexedListView.refs.listviewscroll);
-        let sec = ReactDOM.findDOMNode(this.sectionComponents[sectionID]);
+        const lv = findDOMNode(indexedListView.refs.listviewscroll);
+        let sec = findDOMNode(this.sectionComponents[sectionID]);
         if (this.props.stickyHeader) {
             // react-sticky 会把 header 设置为 fixed ，但提供了 placeholder 记忆原来位置
             const stickyComponent = indexedListView.stickyRefs[sectionID];
             if (stickyComponent && stickyComponent.refs.placeholder) {
-                sec = ReactDOM.findDOMNode(stickyComponent.refs.placeholder);
+                sec = findDOMNode(stickyComponent.refs.placeholder);
             }
             window.document.body.scrollTop =
                 sec.getBoundingClientRect().top - lv.getBoundingClientRect().top + getOffsetTop(lv);
@@ -305,7 +305,7 @@ export default class IndexedList extends React.Component<IIndexedList, any> {
 
     onRenderSectionHeader(renderSectionHeader, sectionHeaderClassName, prefixCls) {
         return (sectionData, sectionID) => {
-            return React.cloneElement(
+            return cloneElement(
                 renderSectionHeader(sectionData, sectionID), {
                     ref: this.sectionComponentsBySectionID(this, sectionID),
                     className: sectionHeaderClassName || `${prefixCls}-section-header`,

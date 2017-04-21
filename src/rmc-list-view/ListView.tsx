@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {cloneElement, Component} from 'react';
+import {findDOMNode} from 'react-dom';
 import ListViewDataSource from './ListViewDataSource';
 import ScrollView from './ScrollView';
 import ScrollResponder from './ScrollResponder';
@@ -11,8 +11,6 @@ import {StickyContainer, Sticky} from 'react-sticky';
 import PullUpLoadMoreMixin from './PullUpLoadMoreMixin';
 import {IListView} from "./PropsType";
 import {observer} from "mobx-react";
-import Component from "../rc-base/index";
-import {observable} from "mobx";
 import IndexedList from './Indexed';
 import RefreshControl from './RefreshControl';
 
@@ -48,9 +46,12 @@ class ListView extends Component<IListView, any> {
         stickyContainerProps: {},
     };
 
-    @observable store = {
+    state = {
         curRenderedRowsCount: this.props.initialListSize,
-        highlightedRow: {},
+        highlightedRow: {
+            sectionID: undefined,
+            rowID: undefined
+        },
     };
 
     scrollProperties;
@@ -247,7 +248,7 @@ class ListView extends Component<IListView, any> {
                     break;
                 }
             }
-            bodyComponents.push(React.cloneElement(this.props.renderSectionBodyWrapper(sectionID), {
+            bodyComponents.push(cloneElement(this.props.renderSectionBodyWrapper(sectionID), {
                 className: this.props.sectionBodyClassName,
             }, sectionBody));
             if (rowCount >= this.state.curRenderedRowsCount) {
@@ -260,14 +261,14 @@ class ListView extends Component<IListView, any> {
             ...props,
         } = this.props;
 
-        bodyComponents = React.cloneElement(props.renderBodyComponent(), {}, bodyComponents);
+        bodyComponents = cloneElement(props.renderBodyComponent(), {}, bodyComponents);
         if (props.stickyHeader) {
             bodyComponents = (<StickyContainer {...props.stickyContainerProps}>
                 {bodyComponents}
             </StickyContainer>);
         }
 
-        this._sc = React.cloneElement(renderScrollComponent({...props, onScroll: this._onScroll}), {
+        this._sc = cloneElement(renderScrollComponent({...props, onScroll: this._onScroll}), {
             ref: SCROLLVIEW_REF,
             onContentSizeChange: this._onContentSizeChange,
             onLayout: this._onLayout,
@@ -451,7 +452,7 @@ class ListView extends Component<IListView, any> {
         //   isVertical ? 'y' : 'x'
         // ];
         let ev = e;
-        const target = ReactDOM.findDOMNode(this.refs[SCROLLVIEW_REF]);
+        const target = findDOMNode(this.refs[SCROLLVIEW_REF]);
         if (this.props.stickyHeader || this.props.useBodyScroll) {
             this.scrollProperties.visibleLength = window[
                 isVertical ? 'innerHeight' : 'innerWidth'

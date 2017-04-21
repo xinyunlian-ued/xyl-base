@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
+import {unmountComponentAtNode, unstable_renderSubtreeIntoContainer} from 'react-dom';
 import {observer} from 'mobx-react';
 import Dialog from './Dialog';
 import IDialogPropTypes from './IDialogPropTypes';
@@ -8,14 +8,14 @@ import noop from "../rc-util/noop";
 function removeContainer(instance) {
     if (instance._container) {
         const container = instance._container;
-        ReactDOM.unmountComponentAtNode(container);
+        unmountComponentAtNode(container);
         container.parentNode.removeChild(container);
         instance._container = null;
     }
 }
 
 @observer
-export default class DialogWrap extends React.Component<IDialogPropTypes, any> {
+export default class DialogWrap extends Component<IDialogPropTypes, any> {
 
     static defaultProps = {
         visible: false,
@@ -68,7 +68,7 @@ function renderComponent(instance, componentArg?, ready?) {
         } else {
             component = getComponent(instance, componentArg);
         }
-        ReactDOM.unstable_renderSubtreeIntoContainer(instance,
+        unstable_renderSubtreeIntoContainer(instance,
             component, instance._container,
             function callback() {
                 instance._component = this;

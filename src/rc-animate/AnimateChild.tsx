@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {Children, Component} from 'react';
+import {findDOMNode} from 'react-dom';
 import {observer} from 'mobx-react';
 import cssAnimate, {isCssAnimationSupported} from 'css-animation';
 import animUtil from './util';
@@ -12,7 +12,7 @@ const transitionMap: TransitionMap = {
 };
 
 @observer
-export default class AnimateChild extends React.Component<AnimateChildPropTypes, any> {
+export default class AnimateChild extends Component<AnimateChildPropTypes, any> {
 
     static defaultProps = {
         transitionName: ''
@@ -49,7 +49,7 @@ export default class AnimateChild extends React.Component<AnimateChildPropTypes,
     }
 
     transition(animationType, finishCallback) {
-        const node = ReactDOM.findDOMNode(this);
+        const node = findDOMNode(this);
         const props = this.props;
         const transitionName = props.transitionName;
         const nameIsObj = typeof transitionName === 'object';
@@ -83,6 +83,6 @@ export default class AnimateChild extends React.Component<AnimateChildPropTypes,
     }
 
     render() {
-        return React.Children.only(this.props.children);
+        return Children.only(this.props.children);
     }
 }

@@ -1,11 +1,8 @@
-import React from 'react';
-import {action, observable, toJS} from 'mobx';
+import React, {Component} from 'react';
 import {observer} from 'mobx-react';
-import classNames from 'classnames';
-import assign from 'object-assign';
-import PureRenderMixin from 'rc-util/PureRenderMixin';
-import noop from 'rc-util/noop';
-import Component from 'rc-base';
+import * as classNames from 'classnames';
+import PureRenderMixin from '../rc-util/PureRenderMixin';
+import noop from '../rc-util/noop';
 import {CheckboxPropTypes, State} from './PropsType';
 
 @observer
@@ -21,17 +18,13 @@ export default class Checkbox extends Component<CheckboxPropTypes, State> {
         onChange: noop
     };
 
-    @observable store = {
+    state = {
         checked: 'checked' in this.props ? this.props.checked : this.props.defaultChecked
     };
 
-    @action changeStore(state: State) {
-        return this.store = assign(toJS(this.store), state);
-    }
-
     componentWillReceiveProps(nextProps) {
         if ('checked' in nextProps) {
-            this.changeStore({
+            this.setState({
                 checked: nextProps.checked
             });
         }
@@ -47,7 +40,7 @@ export default class Checkbox extends Component<CheckboxPropTypes, State> {
             return;
         }
         if (!('checked' in props)) {
-            this.changeStore({
+            this.setState({
                 checked: e.target.checked
             });
         }
@@ -79,7 +72,7 @@ export default class Checkbox extends Component<CheckboxPropTypes, State> {
             onFocus,
             onBlur,
         } = this.props;
-        const {checked} = this.store;
+        const {checked} = this.state;
         const classString = classNames(prefixCls, className, {
             [`${prefixCls}-checked`]: checked,
             [`${prefixCls}-disabled`]: disabled,

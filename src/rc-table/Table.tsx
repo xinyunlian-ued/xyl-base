@@ -1,13 +1,12 @@
-import React, {CSSProperties} from 'react';
+import React, {Component, CSSProperties} from 'react';
 import TableRow from './TableRow';
 import TableHeader from './TableHeader';
 import {measureScrollbar, debounce, warningOnce} from './utils';
 import shallowequal from 'shallowequal';
-import addEventListener from 'rc-util/Dom/addEventListener';
+import addEventListener from '../rc-util/Dom/addEventListener';
 import ColumnManager from './ColumnManager';
 import createStore from './createStore';
 import classes from 'component-classes';
-import Component from "rc-base/index";
 import {ITablePropTypes} from "./PropsType";
 import noop from "../rc-util/noop";
 import Column from './Column';
@@ -45,6 +44,8 @@ export default class Table extends Component<ITablePropTypes, any> {
     };
 
     columnManager;
+
+    store;
 
     constructor(props) {
         super(props);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Children, cloneElement, Component} from 'react';
 import {
     toArrayChildren,
     mergeChildren,
@@ -11,8 +11,10 @@ import AnimateChild from './AnimateChild';
 import animUtil from './util';
 import {AnimatePropTypes} from './PropsType';
 import noop from "../rc-util/noop";
+import {observer} from "mobx-react";
 
-export default class Animate extends React.Component<AnimatePropTypes, any> {
+@observer
+export default class Animate extends Component<AnimatePropTypes, any> {
 
     static defaultProps = {
         animation: {},
@@ -83,7 +85,7 @@ export default class Animate extends React.Component<AnimatePropTypes, any> {
                 const nextChild = currentChild && findChildInChildrenByKey(nextChildren, currentChild.key);
                 let newChild;
                 if ((!nextChild || !nextChild.props[showProp]) && currentChild.props[showProp]) {
-                    newChild = React.cloneElement(nextChild || currentChild, {[showProp]: true});
+                    newChild = cloneElement(nextChild || currentChild, {[showProp]: true});
                 } else {
                     newChild = nextChild;
                 }
@@ -307,6 +309,6 @@ export default class Animate extends React.Component<AnimatePropTypes, any> {
             }
             return <Component {...passedProps}>{children}</Component>;
         }
-        return React.Children.only(children[0] || null);
+        return Children.only(children[0] || null);
     }
 }

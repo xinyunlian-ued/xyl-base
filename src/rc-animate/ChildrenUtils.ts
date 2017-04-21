@@ -1,4 +1,4 @@
-import React, {isValidElement, ReactElement} from 'react';
+import React, {cloneElement, isValidElement, ReactElement} from 'react';
 
 export type Key = string | number;
 
@@ -138,9 +138,9 @@ const defaultKey = `rc_animate_${Date.now()}`;
 
 export function getChildrenFromProps(props?): ReactChildElement {
     const children: ReactChildElement = props.children;
-    if (React.isValidElement(children)) {
+    if (isValidElement(children)) {
         if (!children.key) {
-            return React.cloneElement(children, {key: defaultKey});
+            return cloneElement(children, {key: defaultKey});
         }
     }
     return children;

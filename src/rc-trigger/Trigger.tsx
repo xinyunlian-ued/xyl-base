@@ -1,13 +1,14 @@
-import React from 'react';
-import ReactDOM, {findDOMNode} from 'react-dom';
-import contains from 'rc-util/Dom/contains';
-import addEventListener from 'rc-util/Dom/addEventListener';
+import React, {Component, cloneElement, Children} from 'react';
+import {findDOMNode, unstable_renderSubtreeIntoContainer} from 'react-dom';
+import contains from '../rc-util/Dom/contains';
+import addEventListener from '../rc-util/Dom/addEventListener';
 import Popup from './Popup';
 import {getAlignFromPlacement, getPopupClassNameFromAlign} from './utils';
-import {defaultGetContainer} from 'rc-util/getContainerRenderMixin';
+import {defaultGetContainer} from '../rc-util/getContainerRenderMixin';
 import noop from "../rc-util/noop";
 import {observable} from "mobx";
 import {ITrigger} from "./PropsType";
+import {observer} from "mobx-react";
 
 function returnEmptyString() {
     return '';
@@ -63,7 +64,7 @@ function renderComponent(instance, componentArg?, ready?) {
         } else {
             component = getComponent(instance, componentArg);
         }
-        ReactDOM.unstable_renderSubtreeIntoContainer(instance,
+        unstable_renderSubtreeIntoContainer(instance,
             component, instance._container,
             function callback() {
                 instance._component = this;
@@ -74,7 +75,8 @@ function renderComponent(instance, componentArg?, ready?) {
     }
 }
 
-export default class Trigger extends React.Component<ITrigger, any> {
+@observer
+export default class Trigger extends Component<ITrigger, any> {
 
     static defaultProps = {
         prefixCls: 'rc-trigger-popup',
@@ -99,7 +101,7 @@ export default class Trigger extends React.Component<ITrigger, any> {
         hideAction: [],
     };
 
-    @observable store = ((props) => {
+    state = ((props) => {
         let popupVisible;
         if ('popupVisible' in props) {
             popupVisible = !!props.popupVisible;
@@ -262,7 +264,7 @@ export default class Trigger extends React.Component<ITrigger, any> {
     }
 
     getRootDomNode() {
-        return ReactDOM.findDOMNode(this);
+        return findDOMNode(this);
     }
 
     getPopupClassNameFromAlign(align) {
@@ -427,7 +429,7 @@ export default class Trigger extends React.Component<ITrigger, any> {
     render() {
         const props = this.props;
         const children = props.children;
-        const child = React.Children.only(children);
+        const child = Children.only(children);
         const newChildProps: any = {};
         if (this.isClickToHide() || this.isClickToShow()) {
             newChildProps.onClick = this.onClick;
@@ -454,6 +456,6 @@ export default class Trigger extends React.Component<ITrigger, any> {
             newChildProps.onBlur = this.createTwoChains('onBlur');
         }
 
-        return React.cloneElement(child, newChildProps);
+        return cloneElement(child, newChildProps);
     }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {cloneElement, Component} from 'react';
 import noop from "../rc-util/noop";
 
 export default {
@@ -82,7 +82,7 @@ export default {
             newChildProps[props.triggerType] = this.onTriggerClick;
         }
         return (<WrapComponent style={props.wrapStyle}>
-            {React.cloneElement(child, newChildProps)}
+            {cloneElement(child, newChildProps)}
             {this.getModal()}
         </WrapComponent>);
     },
@@ -107,7 +107,7 @@ export default {
             if (pickerValue === null) {
                 pickerValue = this.props.value;
             }
-            return React.cloneElement(this.props.picker, ({
+            return cloneElement(this.props.picker, ({
                 [this.props.pickerValueProp]: pickerValue,
                 [this.props.pickerValueChangeProp]: this.onPickerChange,
                 ref: this.saveRef,

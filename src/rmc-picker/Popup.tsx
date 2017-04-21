@@ -1,10 +1,8 @@
-import React from 'react';
-import Modal from 'rc-dialog';
+import React, {cloneElement, Component} from 'react';
+import Modal from '../rc-dialog';
 import {IPopupPickerProps} from './PopupPickerTypes';
-import Touchable from 'rc-touchable';
-import Component from "../rc-base/index";
+import Touchable from '../rc-touchable';
 import {observer} from "mobx-react";
-import {observable} from "mobx";
 
 @observer
 export default class PopupPicker extends Component<IPopupPickerProps, any> {
@@ -15,14 +13,14 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
         WrapComponent: 'span',
     };
 
-    @observable store = {
+    state = {
         pickerValue: 'value' in this.props ? this.props.value : null,
         visible: this.props.visible || false,
     };
 
     componentWillReceiveProps(nextProps) {
         if ('value' in nextProps) {
-            this.changeStore({
+            this.setState({
                 pickerValue: nextProps.value,
             });
         }
@@ -32,8 +30,8 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
     }
 
     onPickerChange(pickerValue) {
-        if (this.store.pickerValue !== pickerValue) {
-            this.changeStore({
+        if (this.state.pickerValue !== pickerValue) {
+            this.setState({
                 pickerValue,
             });
             const {picker, pickerValueChangeProp} = this.props;
@@ -50,18 +48,18 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
     }
 
     setVisibleState(visible) {
-        this.changeStore({
+        this.setState({
             visible,
         });
         if (!visible) {
-            this.changeStore({
+            this.setState({
                 pickerValue: null,
             });
         }
     }
 
     fireVisibleChange(visible) {
-        if (this.store.visible !== visible) {
+        if (this.state.visible !== visible) {
             if (!('visible' in this.props)) {
                 this.setVisibleState(visible);
             }
@@ -82,7 +80,7 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
             newChildProps[props.triggerType] = this.onTriggerClick;
         }
         return (<WrapComponent style={props.wrapStyle}>
-            {React.cloneElement(child, newChildProps)}
+            {cloneElement(child, newChildProps)}
             {this.getModal()}
         </WrapComponent>);
     }
@@ -93,7 +91,7 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
         if (childProps[this.props.triggerType]) {
             childProps[this.props.triggerType](e);
         }
-        this.fireVisibleChange(!this.store.visible);
+        this.fireVisibleChange(!this.state.visible);
     }
 
     onOk() {
@@ -103,11 +101,11 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
 
     getContent() {
         if (this.props.picker) {
-            let {pickerValue} = this.store;
+            let {pickerValue} = this.state;
             if (pickerValue === null) {
                 pickerValue = this.props.value;
             }
-            return React.cloneElement(this.props.picker, ({
+            return cloneElement(this.props.picker, ({
                 [this.props.pickerValueProp]: pickerValue,
                 [this.props.pickerValueChangeProp]: this.onPickerChange,
                 ref: this.saveRef,
@@ -128,7 +126,7 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
 
     getModal() {
         const props = this.props;
-        if (!this.store.visible) {
+        if (!this.state.visible) {
             return null;
         }
         const {prefixCls} = props;

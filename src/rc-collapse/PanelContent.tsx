@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {observer} from 'mobx-react';
-import classnames from 'classnames';
+import * as classNames from 'classnames';
 import {PanelContentPropTypes} from './PropsType';
 
 @observer
-export default class PanelContent extends React.Component<PanelContentPropTypes, any> {
+export default class PanelContent extends Component<PanelContentPropTypes, any> {
 
     _isActived;
 
@@ -18,7 +18,7 @@ export default class PanelContent extends React.Component<PanelContentPropTypes,
             return null;
         }
         const {prefixCls, isActive, children} = this.props;
-        const contentCls = classnames({
+        const contentCls = classNames({
             [`${prefixCls}-content`]: true,
             [`${prefixCls}-content-active`]: isActive,
             [`${prefixCls}-content-inactive`]: !isActive,

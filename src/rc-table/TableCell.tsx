@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {Component, isValidElement} from 'react';
 import get from 'lodash.get';
 import {observer} from "mobx-react";
 import {ITableCellPropTypes} from "./PropsType";
 
 @observer
-export default class TableCell extends React.Component<ITableCellPropTypes, any> {
+export default class TableCell extends Component<ITableCellPropTypes, any> {
 
     isInvalidRenderCellText(text) {
-        return text && !React.isValidElement(text) &&
+        return text && !isValidElement(text) &&
             Object.prototype.toString.call(text) === '[object Object]';
     }
 

@@ -1,12 +1,10 @@
-import React from 'react';
-import classNames from 'classnames';
+import React, {Children, Component} from 'react';
+import * as classNames from 'classnames';
 import ZScroller from 'zscroller';
 import {IPickerProps} from './PickerTypes';
 import isChildrenEqual from './isChildrenEqual';
 import noop from "../rc-util/noop";
 import {observer} from "mobx-react";
-import Component from "../rc-base/index";
-import {observable} from "mobx";
 
 @observer
 export default class Picker extends Component<IPickerProps, any> {
@@ -19,7 +17,7 @@ export default class Picker extends Component<IPickerProps, any> {
         };
     }
 
-    @observable store = ((me) => {
+    state = ((me) => {
         let selectedValueState;
         const {selectedValue, defaultSelectedValue, children} = me.props;
         if (selectedValue !== undefined) {
@@ -52,7 +50,7 @@ export default class Picker extends Component<IPickerProps, any> {
         });
         this.zscroller.setDisabled(this.props.disabled);
         this.zscroller.scroller.setSnapSize(0, this.itemHeight);
-        this.select(this.store.selectedValue);
+        this.select(this.state.selectedValue);
     }
 
     select(value) {
@@ -96,7 +94,7 @@ export default class Picker extends Component<IPickerProps, any> {
 
     componentWillReceiveProps(nextProps) {
         if ('selectedValue' in nextProps) {
-            this.changeStore({
+            this.setState({
                 selectedValue: nextProps.selectedValue,
             });
         }
@@ -104,13 +102,13 @@ export default class Picker extends Component<IPickerProps, any> {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.store.selectedValue !== nextState.selectedValue
+        return this.state.selectedValue !== nextState.selectedValue
             || !isChildrenEqual(this.props.children, nextProps.children, this.props.pure);
     }
 
     componentDidUpdate() {
         this.zscroller.reflow();
-        this.select(this.store.selectedValue);
+        this.select(this.state.selectedValue);
     }
 
     componentWillUnmount() {
@@ -122,9 +120,9 @@ export default class Picker extends Component<IPickerProps, any> {
     }
 
     fireValueChange(selectedValue) {
-        if (selectedValue !== this.store.selectedValue) {
+        if (selectedValue !== this.state.selectedValue) {
             if (!('selectedValue' in this.props)) {
-                this.changeStore({
+                this.setState({
                     selectedValue,
                 });
             }
@@ -159,10 +157,10 @@ export default class Picker extends Component<IPickerProps, any> {
             className, itemStyle,
             indicatorStyle,
         } = this.props;
-        const {selectedValue} = this.store;
+        const {selectedValue} = this.state;
         const itemClassName = `${prefixCls}-item`;
         const selectedItemClassName = `${itemClassName} ${prefixCls}-item-selected`;
-        const items = React.Children.map(children, (item: any) => {
+        const items = Children.map(children, (item: any) => {
             return (
                 <div
                     style={itemStyle}

@@ -1,13 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
+import {findDOMNode} from 'react-dom';
 import {observer} from 'mobx-react';
-import noop from 'rc-util/noop';
-import KeyCode from 'rc-util/KeyCode';
-import Animate from 'rc-animate/Animate';
+import noop from '../rc-util/noop';
+import KeyCode from '../rc-util/KeyCode';
+import Animate from '../rc-animate/Animate';
 import LazyRenderBox from './LazyRenderBox';
-import getScrollBarSize from 'rc-util/getScrollBarSize';
+import getScrollBarSize from '../rc-util/getScrollBarSize';
 import IDialogPropTypes from './IDialogPropTypes';
-import assign from 'object-assign';
+import * as assign from 'object-assign';
 
 let uuid = 0;
 let openCount = 0;
@@ -47,7 +47,7 @@ function offset(el) {
 }
 
 @observer
-export default class Dialog extends React.Component<IDialogPropTypes, any> {
+export default class Dialog extends Component<IDialogPropTypes, any> {
 
     static defaultProps = {
         afterClose: noop,
@@ -88,7 +88,7 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
                 this.lastOutSideFocusNode = document.activeElement;
                 this.addScrollingEffect();
                 this.refs.wrap.focus();
-                const dialogNode = ReactDOM.findDOMNode(this.refs.dialog);
+                const dialogNode = findDOMNode(this.refs.dialog);
                 if (mousePosition) {
                     const elOffset = offset(dialogNode);
                     setTransformOrigin(dialogNode,

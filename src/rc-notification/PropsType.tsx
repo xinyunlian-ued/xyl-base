@@ -1,4 +1,4 @@
-import { CSSProperties, ReactChildren } from 'react';
+import {CSSProperties, ReactChildren} from 'react';
 
 export interface NoticePropTypes {
     duration?: number;

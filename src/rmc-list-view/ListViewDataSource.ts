@@ -110,7 +110,7 @@ class ListViewDataSource {
      * this function as the `dataBlob`.
      */
     cloneWithRows(dataBlob,
-                  rowIdentities) {
+                  rowIdentities?) {
         const rowIds = rowIdentities ? [rowIdentities] : null;
         if (!this._sectionHeaderHasChanged) {
             this._sectionHeaderHasChanged = () => false;

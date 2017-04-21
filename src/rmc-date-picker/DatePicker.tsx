@@ -1,9 +1,8 @@
-import React from 'react';
-import MultiPicker from 'rmc-picker/MultiPicker';
+import React, {Component} from 'react';
+import MultiPicker from '../rmc-picker/MultiPicker';
 import IDatePickerProps from './IDatePickerProps';
 import moment from 'moment';
 import defaultLocale from './locale/en_US';
-import Component from "../rc-base/index";
 import noop from "../rc-util/noop";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
@@ -37,13 +36,13 @@ export default class DatePicker extends Component<IDatePickerProps, any> {
         onDateChange: noop
     };
 
-    @observable store = {
+    state = {
         date: this.props.date || this.props.defaultDate,
     };
 
     componentWillReceiveProps(nextProps) {
         if ('date' in nextProps) {
-            this.changeStore({
+            this.setState({
                 date: nextProps.date || nextProps.defaultDate,
             });
         }
@@ -88,7 +87,7 @@ export default class DatePicker extends Component<IDatePickerProps, any> {
         }
         newValue = this.clipDate(newValue);
         if (!('date' in props)) {
-            this.changeStore({
+            this.setState({
                 date: newValue,
             });
         }
@@ -114,7 +113,7 @@ export default class DatePicker extends Component<IDatePickerProps, any> {
     }
 
     getDate() {
-        return this.store.date || this.getDefaultMinDate();
+        return this.state.date || this.getDefaultMinDate();
     }
 
     getValue() {

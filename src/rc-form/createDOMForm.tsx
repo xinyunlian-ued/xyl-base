@@ -1,7 +1,7 @@
 import createBaseForm from './createBaseForm';
 import {mixin as formMixin} from './createForm';
 import {getParams} from './utils';
-import ReactDOM from 'react-dom';
+import {findDOMNode} from 'react-dom';
 import scrollIntoView from 'dom-scroll-into-view';
 
 function computedStyle(el, prop) {
@@ -63,7 +63,7 @@ const mixin = {
                     if (error.hasOwnProperty(name)) {
                         const instance = this.getFieldInstance(name);
                         if (instance) {
-                            const node = ReactDOM.findDOMNode(instance);
+                            const node = findDOMNode(instance);
                             const top = node.getBoundingClientRect().top;
                             if (firstTop === undefined || firstTop > top) {
                                 firstTop = top;

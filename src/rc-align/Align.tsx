@@ -1,7 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {Children, cloneElement, Component} from 'react';
+import {findDOMNode} from 'react-dom';
 import align from 'dom-align';
-import addEventListener from 'rc-util/Dom/addEventListener';
+import addEventListener from '../rc-util/Dom/addEventListener';
 import isWindow from './isWindow';
 import {IAlign} from "./PropsType";
 import noop from "../rc-util/noop";
@@ -28,7 +28,7 @@ function buffer(fn, ms) {
 }
 
 @observer
-export default class Align extends React.Component<IAlign, any> {
+export default class Align extends Component<IAlign, any> {
 
     static defaultProps() {
         return {
@@ -105,14 +105,14 @@ export default class Align extends React.Component<IAlign, any> {
     forceAlign() {
         const props = this.props;
         if (!props.disabled) {
-            const source = ReactDOM.findDOMNode(this);
+            const source = findDOMNode(this);
             props.onAlign(source, align(source, props.target(), props.align));
         }
     }
 
     render() {
         const {childrenProps, children} = this.props;
-        const child = React.Children.only(children);
+        const child = Children.only(children);
         if (childrenProps) {
             const newProps = {};
             for (const prop in childrenProps) {
@@ -120,7 +120,7 @@ export default class Align extends React.Component<IAlign, any> {
                     newProps[prop] = this.props[childrenProps[prop]];
                 }
             }
-            return React.cloneElement(child, newProps);
+            return cloneElement(child, newProps);
         }
         return child;
     }

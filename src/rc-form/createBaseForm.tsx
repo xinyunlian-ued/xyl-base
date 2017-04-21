@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {cloneElement} from 'react';
+import * as createClass from 'create-react-class';
 import {
     argumentContainer, mirror,
     getValueFromEvent, getErrorStrs,
@@ -14,9 +15,7 @@ import warning from 'warning';
 import get from 'lodash.get';
 import has from 'lodash.has';
 import set from 'lodash.set';
-import {action, observable, toJS} from 'mobx';
 import {observer} from 'mobx-react';
-import assign from 'object-assign';
 
 const DEFAULT_VALIDATE_TRIGGER = 'onChange';
 const DEFAULT_TRIGGER = DEFAULT_VALIDATE_TRIGGER;
@@ -31,20 +30,8 @@ function createBaseForm(option: any = {}, mixins: any = []) {
     } = option;
 
     function decorate(WrappedComponent: any) {
-        const Form = observer(React.createClass<any, any>({
+        const Form = observer(createClass<any, any>({
             mixins,
-
-            store: observable({
-                submitting: false
-            }),
-
-            changeStore: action((store, callback?: () => void) => {
-                this.store = assign({}, toJS(this.store), store);
-                if (typeof callback === 'function') {
-                    callback.call(this);
-                }
-                return this.store;
-            }),
 
             getInitialState() {
                 let fields;
@@ -155,7 +142,7 @@ function createBaseForm(option: any = {}, mixins: any = []) {
                     }
                     fieldMeta.originalProps = originalProps;
                     fieldMeta.ref = fieldElem.ref;
-                    return React.cloneElement(fieldElem, {
+                    return cloneElement(fieldElem, {
                         ...props,
                         ...this.getFieldValuePropValue(fieldMeta),
                     });
@@ -598,16 +585,16 @@ function createBaseForm(option: any = {}, mixins: any = []) {
             },
 
             isSubmitting() {
-                return this.store.submitting;
+                return this.state.submitting;
             },
 
             submit(callback) {
                 const fn = () => {
-                    this.changeStore({
+                    this.setState({
                         submitting: false,
                     });
                 };
-                this.changeStore({
+                this.setState({
                     submitting: true,
                 });
                 callback(fn);

@@ -1,11 +1,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
+    "module": "es2015",
+    "target": "es2017",
     "jsx": "react",
     "alwaysStrict": true,
-    "baseUrl": "src",
     "rootDirs": [
       "src",
       "does-not-exist"

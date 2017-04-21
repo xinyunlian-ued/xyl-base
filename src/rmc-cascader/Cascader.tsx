@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import arrayTreeFilter from 'array-tree-filter';
-import MultiPicker from 'rmc-picker/MultiPicker';
+import MultiPicker from '../rmc-picker/MultiPicker';
 import {ICascaderProps} from './CascaderTypes';
-import Component from "../rc-base/index";
 import {observer} from "mobx-react";
 import {observable} from "mobx";
 
@@ -17,13 +16,13 @@ export default class Cascader extends Component<ICascaderProps, any> {
         disabled: false,
     };
 
-    @observable store = {
+    state = {
         value: this.getValue(this.props.data, this.props.defaultValue || this.props.value),
     };
 
     componentWillReceiveProps(nextProps) {
         if ('value' in nextProps) {
-            this.changeStore({
+            this.setState({
                 value: this.getValue(nextProps.data, nextProps.value),
             });
         }
@@ -41,7 +40,7 @@ export default class Cascader extends Component<ICascaderProps, any> {
         }
         value.length = i;
         if (!('value' in this.props)) {
-            this.changeStore({
+            this.setState({
                 value,
             });
         }
@@ -65,7 +64,7 @@ export default class Cascader extends Component<ICascaderProps, any> {
 
     getCols() {
         const {data, cols} = this.props;
-        const value = this.store.value;
+        const value = this.state.value;
         const childrenTree = arrayTreeFilter(data, (c, level) => {
             return c.value === value[level];
         }).map((c) => c.children);
@@ -93,7 +92,7 @@ export default class Cascader extends Component<ICascaderProps, any> {
                 pickerPrefixCls={pickerPrefixCls}
                 disabled={disabled}
                 className={className}
-                selectedValue={this.store.value}
+                selectedValue={this.state.value}
                 rootNativeProps={rootNativeProps}
                 pickerItemStyle={pickerItemStyle}
                 onValueChange={this.onValueChange}

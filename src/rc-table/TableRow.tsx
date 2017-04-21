@@ -1,8 +1,7 @@
-import React, {CSSProperties} from 'react';
+import React, {Component, CSSProperties} from 'react';
 import {observer} from "mobx-react";
 import {observable} from "mobx";
-import Component from "rc-base/index";
-import noop from "rc-util/noop";
+import noop from "../rc-util/noop";
 import TableCell from './TableCell';
 import ExpandIcon from './ExpandIcon';
 import {ITableRowPropTypes} from "./PropsType";
@@ -19,7 +18,7 @@ export default class TableRow extends Component<ITableRowPropTypes, any> {
         onHover: noop,
     };
 
-    @observable store = {
+    state = {
         hovered: false,
         height: null,
     };
@@ -79,9 +78,9 @@ export default class TableRow extends Component<ITableRowPropTypes, any> {
         const {store, hoverKey} = this.props;
         const {currentHoverKey} = store.getState();
         if (currentHoverKey === hoverKey) {
-            this.changeStore({hovered: true});
+            this.setState({hovered: true});
         } else if (this.state.hovered === true) {
-            this.changeStore({hovered: false});
+            this.setState({hovered: false});
         }
     }
 
@@ -89,7 +88,7 @@ export default class TableRow extends Component<ITableRowPropTypes, any> {
         const {store, expandedRow, fixed, rowKey} = this.props;
         const {expandedRowsHeight} = store.getState();
         if (expandedRow && fixed && expandedRowsHeight[rowKey]) {
-            this.changeStore({height: expandedRowsHeight[rowKey]});
+            this.setState({height: expandedRowsHeight[rowKey]});
         }
     }
 

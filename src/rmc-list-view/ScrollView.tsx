@@ -1,10 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {cloneElement, Component} from 'react';
+import {findDOMNode} from 'react-dom';
 import DOMScroller from 'zscroller';
-import assign from 'object-assign';
-import classNames from 'classnames';
+import * as assign from 'object-assign';
+import * as classNames from 'classnames';
 import {throttle} from './util';
 import {IScrollView} from "./PropsType";
+import {observer} from "mobx-react";
 
 const SCROLLVIEW = 'ScrollView';
 const INNERVIEW = 'InnerScrollView';
@@ -26,7 +27,8 @@ const styles = {
     },
 };
 
-export default class ScrollView extends React.Component<IScrollView, any> {
+@observer
+export default class ScrollView extends Component<IScrollView, any> {
 
     refreshControlRefresh;
     manuallyRefresh;
@@ -54,7 +56,7 @@ export default class ScrollView extends React.Component<IScrollView, any> {
         this.onLayout = () => this.props.onLayout({
             nativeEvent: {layout: {width: window.innerWidth, height: window.innerHeight}},
         });
-        const ele = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+        const ele = findDOMNode(this.refs[SCROLLVIEW]);
 
         if (this.props.stickyHeader || this.props.useBodyScroll) {
             window.addEventListener('scroll', this.tsExec);
@@ -64,7 +66,7 @@ export default class ScrollView extends React.Component<IScrollView, any> {
         } else {
             // todo
             // ele.addEventListener('resize', this.onLayout);
-            // ReactDOM.findDOMNode(this.refs[INNERVIEW])
+            // findDOMNode(this.refs[INNERVIEW])
             // .addEventListener('resize', this.onContentSizeChange);
             if (this.props.useZscroller) {
                 this.renderZscroller();
@@ -81,7 +83,7 @@ export default class ScrollView extends React.Component<IScrollView, any> {
         } else if (this.props.useZscroller) {
             this.domScroller.destroy();
         } else {
-            ReactDOM.findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
+            findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
         }
     }
 
@@ -91,7 +93,7 @@ export default class ScrollView extends React.Component<IScrollView, any> {
         } else if (this.props.useZscroller) {
             this.domScroller.scroller.scrollTo(...args);
         } else {
-            const ele = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+            const ele = findDOMNode(this.refs[SCROLLVIEW]);
             ele.scrollLeft = args[0];
             ele.scrollTop = args[1];
         }
@@ -120,7 +122,7 @@ export default class ScrollView extends React.Component<IScrollView, any> {
     renderZscroller() {
         const {scrollerOptions, refreshControl} = this.props;
 
-        this.domScroller = new DOMScroller(ReactDOM.findDOMNode(this.refs[INNERVIEW]), assign({}, {
+        this.domScroller = new DOMScroller(findDOMNode(this.refs[INNERVIEW]), assign({}, {
             scrollingX: false,
             onScroll: this.tsExec,
             scrollingComplete: this.scrollingComplete,
@@ -196,7 +198,7 @@ export default class ScrollView extends React.Component<IScrollView, any> {
             return (
                 <div {...containerProps}>
                     <div {...contentContainerProps}>
-                        {React.cloneElement(refreshControl, {ref: 'refreshControl'})}
+                        {cloneElement(refreshControl, {ref: 'refreshControl'})}
                         {children}
                     </div>
                 </div>

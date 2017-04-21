@@ -1,12 +1,12 @@
-import React from 'react';
-import classnames from 'classnames';
+import React, {Children, Component} from 'react';
+import * as classNames from 'classnames';
 import Picker from './Picker';
 import MultiPickerProps from './MultiPickerProps';
 import {observer} from "mobx-react";
 import noop from "../rc-util/noop";
 
 @observer
-export default class MultiPicker extends React.Component<MultiPickerProps, any> {
+export default class MultiPicker extends Component<MultiPickerProps, any> {
 
     static defaultProps = {
         prefixCls: 'rmc-multi-picker',
@@ -23,7 +23,7 @@ export default class MultiPicker extends React.Component<MultiPickerProps, any> 
             if (!children) {
                 return [];
             }
-            return React.Children.map(children, (c: any) => {
+            return Children.map(children, (c: any) => {
                 const cc = c.props.children;
                 return cc && cc[0] && cc[0].value;
             });
@@ -46,7 +46,7 @@ export default class MultiPicker extends React.Component<MultiPickerProps, any> 
             pure, children,
         } = props;
         const selectedValue = this.getValue();
-        const colElements = React.Children.map(children, (col: any, i) => {
+        const colElements = Children.map(children, (col: any, i) => {
             return (
                 <div key={col.key || i} className={`${prefixCls}-item`}>
                     <Picker
@@ -63,7 +63,7 @@ export default class MultiPicker extends React.Component<MultiPickerProps, any> 
             );
         });
         return (
-            <div {...rootNativeProps} className={classnames(className, prefixCls)}>
+            <div {...rootNativeProps} className={classNames(className, prefixCls)}>
                 {colElements}
             </div>
         );

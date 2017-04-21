@@ -1,9 +1,8 @@
-import React, {Children} from 'react';
+import React, {Children, cloneElement, Component} from 'react';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
-import classNames from 'classnames';
-import noop from 'rc-util/noop';
-import Component from 'rc-base';
+import * as classNames from 'classnames';
+import noop from '../rc-util/noop';
 import CollapsePanel from './Panel';
 import openAnimationFactory from './openAnimationFactory';
 import {CollapsePropTypes} from './PropsType';
@@ -19,19 +18,19 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
 
     static Panel = CollapsePanel;
 
-    @observable store = {
+    state = {
         openAnimation: this.props.openAnimation || openAnimationFactory(this.props.prefixCls),
         activeKey: toArray('activeKey' in this.props ? this.props.activeKey : this.props.defaultActiveKey)
     };
 
     componentWillReceiveProps(nextProps) {
         if ('activeKey' in nextProps) {
-            this.changeStore({
+            this.setState({
                 activeKey: toArray(nextProps.activeKey),
             });
         }
         if ('openAnimation' in nextProps) {
-            this.changeStore({
+            this.setState({
                 openAnimation: nextProps.openAnimation,
             });
         }
@@ -84,7 +83,7 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
                 onItemClick: this.onClickItem(key).bind(this),
             };
 
-            newChildren.push(React.cloneElement(child, props));
+            newChildren.push(cloneElement(child, props));
         });
 
         return newChildren;
@@ -92,7 +91,7 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
 
     setActiveKey(activeKey) {
         if (!('activeKey' in this.props)) {
-            this.changeStore({activeKey});
+            this.setState({activeKey});
         }
         this.props.onChange(this.props.accordion ? activeKey[0] : activeKey);
     }

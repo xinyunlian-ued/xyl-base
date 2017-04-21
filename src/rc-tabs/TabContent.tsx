@@ -1,5 +1,5 @@
-import React from 'react';
-import classnames from 'classnames';
+import React, {Children, cloneElement, Component} from 'react';
+import * as classNames from 'classnames';
 import {
     getTransformByIndex,
     getActiveIndex,
@@ -10,7 +10,7 @@ import {ITabContent} from "./PropsType";
 import {observer} from "mobx-react";
 
 @observer
-export default class TabContent extends React.Component<ITabContent, any> {
+export default class TabContent extends Component<ITabContent, any> {
 
     static defaultProps = {
         animated: true,
@@ -22,13 +22,13 @@ export default class TabContent extends React.Component<ITabContent, any> {
         const children = props.children;
         const newChildren = [];
 
-        React.Children.forEach(children, (child: any) => {
+        Children.forEach(children, (child: any) => {
             if (!child) {
                 return;
             }
             const key = child.key;
             const active = activeKey === key;
-            newChildren.push(React.cloneElement(child, {
+            newChildren.push(cloneElement(child, {
                 active,
                 destroyInactiveTabPane: props.destroyInactiveTabPane,
                 rootPrefixCls: props.prefixCls,
@@ -45,7 +45,7 @@ export default class TabContent extends React.Component<ITabContent, any> {
             tabBarPosition, animated, animatedWithMargin,
         } = props;
         let {style} = props;
-        const classes = classnames({
+        const classes = classNames({
             [`${prefixCls}-content`]: true,
             [animated ?
                 `${prefixCls}-content-animated` :

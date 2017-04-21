@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {Children, Component} from 'react';
 import {observer} from "mobx-react";
-import classnames from 'classnames';
+import * as classNames from 'classnames';
 import {ITabBarMixinPropTypes} from "./PropsType";
 
 const tabBarExtraContentStyle = {
@@ -8,7 +8,7 @@ const tabBarExtraContentStyle = {
 };
 
 @observer
-export default class TabBar extends React.Component<ITabBarMixinPropTypes, any> {
+export default class TabBar extends Component<ITabBarMixinPropTypes, any> {
     static defaultProps = {
         styles: {}
     };
@@ -24,7 +24,7 @@ export default class TabBar extends React.Component<ITabBarMixinPropTypes, any> 
         const rst = [];
         const prefixCls = props.prefixCls;
 
-        React.Children.forEach(children, (child: any) => {
+        Children.forEach(children, (child: any) => {
             if (!child) {
                 return;
             }
@@ -61,7 +61,7 @@ export default class TabBar extends React.Component<ITabBarMixinPropTypes, any> 
 
     getRootNode(contents) {
         const {prefixCls, onKeyDown, className, extraContent, style} = this.props;
-        const cls = classnames({
+        const cls = classNames({
             [`${prefixCls}-bar`]: 1,
             [`${className}`]: !!className,
         });

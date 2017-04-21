@@ -26,7 +26,7 @@ function shallowCompare(instance, nextProps, nextState) {
  *
  *   var ReactComponentWithPureRenderMixin =
  *     require('ReactComponentWithPureRenderMixin');
- *   React.createClass({
+ *   createClass({
  *     mixins: [ReactComponentWithPureRenderMixin],
  *
  *     render: function() {

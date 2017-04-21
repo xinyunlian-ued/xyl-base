@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {observer} from 'mobx-react';
-import classNames from 'classnames';
-import Component from 'rc-base';
-import noop from 'rc-util/noop';
+import * as classNames from 'classnames';
+
+import noop from '../rc-util/noop';
 import {NoticePropTypes} from './PropsType';
 
 @observer

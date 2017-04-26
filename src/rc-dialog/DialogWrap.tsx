@@ -6,7 +6,7 @@ import IDialogPropTypes from './IDialogPropTypes';
 import noop from "../rc-util/noop";
 import {observer} from "mobx-react";
 
-const DialogWrap = observer(createClass<IDialogPropTypes, any>({
+const DialogWrap = observer(createClass({
     mixins: [
         getContainerRenderMixin({
             isVisible(instance) {

@@ -24,6 +24,7 @@
     "prefer-const": false,
     "jsx-no-lambda": false,
     "arrow-parens": false,
+    "max-line-length": 200,
     "no-consecutive-blank-lines": [
       false
     ],

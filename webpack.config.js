@@ -14,10 +14,23 @@ module.exports = function (env) {
         },
         module: {
             rules: [{
+                test: /\.less$/,
+                use: [
+                    'style-loader', {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1
+                        }
+                    },
+                    'less-loader'
+                ]
+            }, {
                 test: /\.tsx?$/,
                 loader: "awesome-typescript-loader",
                 exclude: [/node_modules/, /build/]
-            }]
+            }
+            ]
         }
-    };
+    }
+        ;
 }

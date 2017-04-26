@@ -5,3 +5,4 @@ Thumbs.db
 .DS_Store
 lib
 yarn-error.log
+src/App.tsx

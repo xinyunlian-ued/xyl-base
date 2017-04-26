@@ -49,7 +49,7 @@ function offset(el) {
     return pos;
 }
 
-const Dialog = observer(createClass<IDialogPropTypes, any>({
+const Dialog = observer(createClass({
     getDefaultProps() {
         return {
             afterClose: noop,

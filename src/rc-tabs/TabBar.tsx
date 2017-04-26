@@ -2,6 +2,7 @@ import React, {Children, Component} from 'react';
 import {observer} from "mobx-react";
 import * as classNames from 'classnames';
 import {ITabBarMixinPropTypes} from "./PropsType";
+import * as waring from 'warning';
 
 const tabBarExtraContentStyle = {
     float: 'right',
@@ -43,6 +44,7 @@ export default class TabBar extends Component<ITabBarMixinPropTypes, any> {
             if (activeKey === key) {
                 ref.ref = 'activeTab';
             }
+            warning('tab' in child.props, 'There must be `tab` property on children of Tabs.');
             rst.push(<div
                 role="tab"
                 aria-disabled={child.props.disabled ? 'true' : 'false'}

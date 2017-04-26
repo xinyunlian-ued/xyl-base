@@ -23,6 +23,7 @@
     "no-unsafe-finally": false,
     "prefer-const": false,
     "jsx-no-lambda": false,
+    "arrow-parens": false,
     "no-consecutive-blank-lines": [
       false
     ],

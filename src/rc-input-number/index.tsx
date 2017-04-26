@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import * as classNames from 'classnames';
 import {observer} from 'mobx-react';
-import {observable} from 'mobx';
 
 import noop from '../rc-util/noop';
 import InputHandler from './InputHandler';

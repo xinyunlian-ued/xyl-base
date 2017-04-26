@@ -6,11 +6,11 @@ import {observer} from "mobx-react";
 @observer
 export default class PanelContent extends Component<PanelContentPropTypes, any> {
 
+    _isActived;
+
     shouldComponentUpdate(nextProps) {
         return this.props.isActive || nextProps.isActive;
     }
-
-    _isActived;
 
     render() {
         this._isActived = this._isActived || this.props.isActive;
@@ -29,9 +29,7 @@ export default class PanelContent extends Component<PanelContentPropTypes, any> 
             <div
                 className={contentCls}
                 role="tabpanel"
-            >
-                {child}
-            </div>
+            >{child}</div>
         );
     }
 }

@@ -258,7 +258,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
         }
     }
 
-    isValidChildByKey(currentChildren, key) {
+    isValidChildByKey = (currentChildren, key) => {
         const showProp = this.props.showProp;
         if (showProp) {
             return findShownChildInChildrenByKey(currentChildren, key, showProp);
@@ -266,7 +266,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
         return findChildInChildrenByKey(currentChildren, key);
     }
 
-    stop(key) {
+    stop = (key) => {
         delete this.currentlyAnimatingKeys[key];
         const component: any = this.refs[key];
         if (component) {

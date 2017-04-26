@@ -1,4 +1,4 @@
-import React, {Component, Children} from 'react';
+import React, {Component, Children, cloneElement} from 'react';
 import CollapsePanel from './Panel';
 import openAnimationFactory from './openAnimationFactory';
 import classNames from 'classnames';
@@ -54,7 +54,7 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
         }
     }
 
-    onClickItem(key) {
+    onClickItem = (key) => {
         return () => {
             let activeKey = this.state.activeKey;
             if (this.props.accordion) {
@@ -74,8 +74,7 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
         };
     }
 
-    getItems() {
-
+    getItems = () => {
         const activeKey = this.state.activeKey;
         const {prefixCls, accordion, destroyInactivePanel} = this.props;
         const newChildren = [];
@@ -86,6 +85,7 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
             }
             // If there is no key provide, use the panel order as default key
             const key = child.key || String(index);
+            const headerClass = child.props.headerClass;
             const header = child.props.header;
             let isActive = false;
             if (accordion) {
@@ -97,6 +97,7 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
             const props = {
                 key,
                 header,
+                headerClass,
                 isActive,
                 prefixCls,
                 destroyInactivePanel,
@@ -105,13 +106,13 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
                 onItemClick: this.onClickItem(key).bind(this),
             };
 
-            newChildren.push(React.cloneElement(child, props));
+            newChildren.push(cloneElement(child, props));
         });
 
         return newChildren;
     }
 
-    setActiveKey(activeKey) {
+    setActiveKey = (activeKey) => {
         if (!('activeKey' in this.props)) {
             this.setState({activeKey});
         }

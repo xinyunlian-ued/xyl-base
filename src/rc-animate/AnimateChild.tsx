@@ -47,7 +47,7 @@ export default class AnimateChild extends Component<AnimateChildPropTypes, any> 
 
     stopper;
 
-    transition(animationType, finishCallback) {
+    transition = (animationType, finishCallback) => {
         const node = findDOMNode(this);
         const props = this.props;
         const transitionName = props.transitionName;
@@ -73,7 +73,7 @@ export default class AnimateChild extends Component<AnimateChildPropTypes, any> 
         }
     }
 
-    stop() {
+    stop = () => {
         const stopper = this.stopper;
         if (stopper) {
             this.stopper = null;

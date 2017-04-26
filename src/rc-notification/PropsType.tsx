@@ -16,6 +16,7 @@ export interface NotificationPropTypes {
     animation?: string | object;
     style?: object;
     className?: string;
+    [key: string]: any;
 }
 
 export interface NotificationInstancePropTypes {

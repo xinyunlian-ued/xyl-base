@@ -30,17 +30,15 @@ function buffer(fn, ms) {
 @observer
 export default class Align extends Component<IAlign, any> {
 
-    static defaultProps() {
-        return {
-            target() {
-                return window;
-            },
-            onAlign: noop,
-            monitorBufferTime: 50,
-            monitorWindowResize: false,
-            disabled: false,
-        };
-    }
+    static defaultProps = {
+        target() {
+            return window;
+        },
+        onAlign: noop,
+        monitorBufferTime: 50,
+        monitorWindowResize: false,
+        disabled: false,
+    };
 
     componentDidMount() {
         const props = this.props;
@@ -87,14 +85,14 @@ export default class Align extends Component<IAlign, any> {
     resizeHandler;
     bufferMonitor;
 
-    startMonitorWindowResize() {
+    startMonitorWindowResize = () => {
         if (!this.resizeHandler) {
             this.bufferMonitor = buffer(this.forceAlign, this.props.monitorBufferTime);
             this.resizeHandler = addEventListener(window, 'resize', this.bufferMonitor);
         }
     }
 
-    stopMonitorWindowResize() {
+    stopMonitorWindowResize = () => {
         if (this.resizeHandler) {
             this.bufferMonitor.clear();
             this.resizeHandler.remove();
@@ -102,7 +100,7 @@ export default class Align extends Component<IAlign, any> {
         }
     }
 
-    forceAlign() {
+    forceAlign = () => {
         const props = this.props;
         if (!props.disabled) {
             const source = findDOMNode(this);

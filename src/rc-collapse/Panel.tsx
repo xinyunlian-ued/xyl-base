@@ -8,9 +8,6 @@ import {observer} from "mobx-react";
 
 @observer
 export default class CollapsePanel extends Component<CollapsePanelPropTypes, any> {
-    handleItemClick() {
-        this.props.onItemClick();
-    }
 
     static defaultProps = {
         showArrow: true,
@@ -19,18 +16,23 @@ export default class CollapsePanel extends Component<CollapsePanelPropTypes, any
         onItemClick: noop,
     };
 
+    handleItemClick = () => {
+        this.props.onItemClick();
+    }
+
     render() {
         const {
             className,
             style,
             prefixCls,
+            headerClass,
             header,
             children,
             isActive,
             showArrow,
             destroyInactivePanel,
         } = this.props;
-        const headerCls = `${prefixCls}-header`;
+        const headerCls = `${prefixCls}-header ${headerClass}`;
         const itemCls = classNames({
             [`${prefixCls}-item`]: true,
             [`${prefixCls}-item-active`]: isActive,

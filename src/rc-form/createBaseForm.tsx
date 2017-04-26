@@ -30,7 +30,7 @@ function createBaseForm(option: any = {}, mixins: any = []) {
     } = option;
 
     function decorate(WrappedComponent: any) {
-        const Form = observer(createClass<any, any>({
+        const Form = observer(createClass({
             mixins,
 
             getInitialState() {
@@ -42,6 +42,9 @@ function createBaseForm(option: any = {}, mixins: any = []) {
                 this.instances = {};
                 this.fieldsMeta = {};
                 this.cachedBind = {};
+                return {
+                    submitting: false,
+                };
             },
 
             componentWillReceiveProps(nextProps) {
@@ -267,9 +270,8 @@ function createBaseForm(option: any = {}, mixins: any = []) {
             getValidFieldsName() {
                 const fieldsMeta = this.fieldsMeta;
                 return fieldsMeta ?
-                    Object.keys(fieldsMeta).filter((name) => {
-                        return !fieldsMeta[name].hidden;
-                    }) : [];
+                    Object.keys(fieldsMeta).filter((name) => !fieldsMeta[name].hidden) :
+                    [];
             },
 
             getFieldsValue(names) {
@@ -399,7 +401,7 @@ function createBaseForm(option: any = {}, mixins: any = []) {
             setFieldsInitialValue(initialValues) {
                 const fieldsMeta = this.fieldsMeta;
                 const virtualPaths = getVirtualPaths(fieldsMeta);
-                Object.keys(initialValues).forEach((name) => {
+                Object.keys(initialValues).forEach(name => {
                     if (fieldsMeta[name] && fieldsMeta[name].virtual) {
                         for (let i = 0, len = virtualPaths[name].length; i < len; i++) {
                             const path = virtualPaths[name][i];
@@ -441,7 +443,7 @@ function createBaseForm(option: any = {}, mixins: any = []) {
                 this.instances[name] = component;
             },
 
-            validateFieldsInternal(fields, {fieldNames, action, options = {force: undefined}}, callback) {
+            validateFieldsInternal(fields, {fieldNames, action, options = {} as any}, callback) {
                 const allRules = {};
                 const allValues = {};
                 const allFields = {};
@@ -536,7 +538,7 @@ function createBaseForm(option: any = {}, mixins: any = []) {
                 const {names, callback, options} = getParams(ns, opt, cb);
                 const fieldNames = names || this.getValidFieldsName();
                 const fields = fieldNames
-                    .filter((name) => {
+                    .filter(name => {
                         const fieldMeta = this.getFieldMeta(name);
                         return hasRules(fieldMeta.validate);
                     }).map((name) => {
@@ -628,7 +630,7 @@ function createBaseForm(option: any = {}, mixins: any = []) {
                     ...formProps,
                     ...this.props,
                 });
-                return <WrappedComponent {...props} />;
+                return <WrappedComponent {...props}/>;
             },
         }));
 

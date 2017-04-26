@@ -19,6 +19,7 @@ export interface CollapsePanelPropTypes {
     style?: ObjectConstructor;
     key?: string;
     destroyInactivePanel?;
+    headerClass?: string;
 }
 
 export type ChildrenType = ReactElement<CollapsePanelPropTypes>;

@@ -8,9 +8,13 @@
   "scripts": {
     "build": "gulp copy && tsc --p tsconfig.json",
     "tslint": "gulp tslint",
-    "rename": "gulp rename"
+    "rename": "gulp rename",
+    "test:build": "webpack --config ./webpack.config.js",
+    "test:server": "node server.js"
   },
   "dependencies": {
+    "@types/react": "^15.0.22",
+    "@types/react-dom": "^15.5.0",
     "add-dom-event-listener": "^1.0.2",
     "array-tree-filter": "^1.0.1",
     "async-validator": "^1.6.8",
@@ -47,14 +51,16 @@
   },
   "devDependencies": {
     "@types/moment": "^2.13.0",
-    "@types/react": "^15.0.22",
-    "@types/react-dom": "^0.14.23",
+    "awesome-typescript-loader": "^3.1.2",
+    "finalhandler": "^1.0.2",
     "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
     "gulp-tslint": "^8.0.0",
     "gulp-typescript": "^3.1.6",
+    "serve-static": "^1.12.1",
     "tslint": "^5.1.0",
     "tslint-react": "^2.5.0",
-    "typescript": "^2.2.2"
+    "typescript": "rc",
+    "webpack": "^2.4.1"
   }
 }

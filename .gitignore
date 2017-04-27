@@ -6,3 +6,5 @@ Thumbs.db
 lib
 yarn-error.log
 src/App.tsx
+src/*/test/test.js
+src/*/test/test.js.map

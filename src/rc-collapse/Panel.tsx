@@ -25,14 +25,16 @@ export default class CollapsePanel extends Component<CollapsePanelPropTypes, any
             className,
             style,
             prefixCls,
-            headerClass,
             header,
+            headerClass,
             children,
             isActive,
             showArrow,
             destroyInactivePanel,
         } = this.props;
-        const headerCls = `${prefixCls}-header ${headerClass}`;
+        const headerCls = classNames(`${prefixCls}-header`, {
+            [headerClass]: headerClass,
+        });
         const itemCls = classNames({
             [`${prefixCls}-item`]: true,
             [`${prefixCls}-item-active`]: isActive,

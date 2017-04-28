@@ -31,9 +31,7 @@ function buffer(fn, ms) {
 export default class Align extends Component<IAlign, any> {
 
     static defaultProps = {
-        target() {
-            return window;
-        },
+        target: () => window,
         onAlign: noop,
         monitorBufferTime: 50,
         monitorWindowResize: false,

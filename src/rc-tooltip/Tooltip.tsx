@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import {placements} from './placements';
 import Trigger from '../rc-trigger';
 import {ITooltip} from './PropsType';
-import {observer} from "mobx-react";
 
 @observer
 export default class Tooltip extends Component<ITooltip, any> {
@@ -18,7 +19,12 @@ export default class Tooltip extends Component<ITooltip, any> {
         arrowContent: null,
     };
 
-    getPopupElement() {
+    trigger;
+    triggerBind = (trigger) => {
+        this.trigger = trigger;
+    }
+
+    getPopupElement = () => {
         const {arrowContent, overlay, prefixCls} = this.props;
         return ([
             <div className={`${prefixCls}-arrow`} key="arrow">
@@ -30,8 +36,8 @@ export default class Tooltip extends Component<ITooltip, any> {
         ]);
     }
 
-    getPopupDomNode() {
-        const trigger: any = this.refs.trigger;
+    getPopupDomNode = () => {
+        const trigger: any = this.trigger;
         return trigger.getPopupDomNode();
     }
 
@@ -54,7 +60,7 @@ export default class Tooltip extends Component<ITooltip, any> {
         return (
             <Trigger
                 popupClassName={overlayClassName}
-                ref="trigger"
+                ref={this.triggerBind}
                 prefixCls={prefixCls}
                 popup={this.getPopupElement}
                 action={trigger}

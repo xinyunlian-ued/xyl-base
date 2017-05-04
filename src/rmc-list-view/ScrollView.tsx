@@ -1,17 +1,15 @@
-import React, {cloneElement, Component} from 'react';
-import {findDOMNode} from 'react-dom';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {cloneElement, findDOMNode} from "inferno-compat";
 import DOMScroller from 'zscroller';
 import * as assign from 'object-assign';
 import * as classNames from 'classnames';
 import {throttle} from './util';
 import {IScrollView} from "./PropsType";
-import {observer} from "mobx-react";
 
 const SCROLLVIEW = 'ScrollView';
 const INNERVIEW = 'InnerScrollView';
-
-// https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollView/ScrollView.js
-// https://facebook.github.io/react-native/docs/refreshcontrol.html
 
 const styles = {
     base: {
@@ -49,6 +47,21 @@ export default class ScrollView extends Component<IScrollView, any> {
     tsExec;
     onLayout;
 
+    ScrollView;
+    InnerScrollView;
+    refreshControl;
+    bindScrollView = (ScrollView) => {
+        this.ScrollView = ScrollView;
+    }
+
+    bindInnerScrollView = (InnerScrollView) => {
+        this.InnerScrollView = InnerScrollView;
+    }
+
+    bindRefreshControl = (refreshControl) => {
+        this.refreshControl = refreshControl;
+    }
+
     componentDidMount() {
         this.tsExec = this.throttleScroll();
         // IE supports onresize on all HTML elements.
@@ -56,7 +69,7 @@ export default class ScrollView extends Component<IScrollView, any> {
         this.onLayout = () => this.props.onLayout({
             nativeEvent: {layout: {width: window.innerWidth, height: window.innerHeight}},
         });
-        const ele = findDOMNode(this.refs[SCROLLVIEW]);
+        const ele = findDOMNode(this[SCROLLVIEW]);
 
         if (this.props.stickyHeader || this.props.useBodyScroll) {
             window.addEventListener('scroll', this.tsExec);
@@ -83,17 +96,17 @@ export default class ScrollView extends Component<IScrollView, any> {
         } else if (this.props.useZscroller) {
             this.domScroller.destroy();
         } else {
-            findDOMNode(this.refs[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
+            findDOMNode(this[SCROLLVIEW]).removeEventListener('scroll', this.tsExec);
         }
     }
 
-    scrollTo(...args) {
+    scrollTo = (...args) => {
         if (this.props.stickyHeader || this.props.useBodyScroll) {
             window.scrollTo(args[0], args[1]);
         } else if (this.props.useZscroller) {
             this.domScroller.scroller.scrollTo(...args);
         } else {
-            const ele = findDOMNode(this.refs[SCROLLVIEW]);
+            const ele = findDOMNode(this[SCROLLVIEW]);
             ele.scrollLeft = args[0];
             ele.scrollTop = args[1];
         }
@@ -114,15 +127,16 @@ export default class ScrollView extends Component<IScrollView, any> {
 
     scrollingComplete = () => {
         const refreshControl: any = this.props.refreshControl;
-        if (refreshControl && refreshControl.state.deactive) {
+        if (this.props.refreshControl &&
+            this.refreshControl && this.refreshControl.state.deactive) {
             refreshControl.setState({deactive: false});
         }
     }
 
-    renderZscroller() {
+    renderZscroller = () => {
         const {scrollerOptions, refreshControl} = this.props;
 
-        this.domScroller = new DOMScroller(findDOMNode(this.refs[INNERVIEW]), assign({}, {
+        this.domScroller = new DOMScroller(findDOMNode(this[INNERVIEW]), assign({}, {
             scrollingX: false,
             onScroll: this.tsExec,
             scrollingComplete: this.scrollingComplete,
@@ -130,18 +144,27 @@ export default class ScrollView extends Component<IScrollView, any> {
         if (refreshControl) {
             const scroller = this.domScroller.scroller;
             const {distanceToRefresh, onRefresh} = refreshControl.props;
-            const refsRefreshControl: any = this.refs.refreshControl;
+            const refsRefreshControl: any = this.refreshControl;
             scroller.activatePullToRefresh(distanceToRefresh,
                 () => {
                     this.manuallyRefresh = true;
-                    refsRefreshControl.setState({active: true});
+                    refsRefreshControl && refsRefreshControl.setState({active: true});
                 },
                 () => {
                     this.manuallyRefresh = false;
-                    refsRefreshControl.setState({deactive: true, active: false, loadingState: false});
+                    refsRefreshControl && refsRefreshControl.setState({
+                        deactive: true,
+                        active: false,
+                        loadingState: false,
+                    });
+
                 },
                 () => {
-                    refsRefreshControl.setState({deactive: false, loadingState: true});
+                    refsRefreshControl && refsRefreshControl.setState({
+                        deactive: false,
+                        loadingState: true,
+                    });
+
                     const finishPullToRefresh = () => {
                         scroller.finishPullToRefresh();
                         this.refreshControlRefresh = null;
@@ -178,7 +201,7 @@ export default class ScrollView extends Component<IScrollView, any> {
         const preCls = prefixCls || listViewPrefixCls || '';
 
         const containerProps = {
-            ref: SCROLLVIEW,
+            ref: this.bindScrollView,
             style: assign({}, styleBase, style),
             className: classNames({
                 [className]: !!className,
@@ -186,7 +209,7 @@ export default class ScrollView extends Component<IScrollView, any> {
             }),
         };
         const contentContainerProps = {
-            ref: INNERVIEW,
+            ref: this.bindInnerScrollView,
             style: assign({}, {position: 'absolute', minWidth: '100%'}, contentContainerStyle),
             className: classNames({
                 [`${preCls}-scrollview-content`]: true,
@@ -198,7 +221,7 @@ export default class ScrollView extends Component<IScrollView, any> {
             return (
                 <div {...containerProps}>
                     <div {...contentContainerProps}>
-                        {cloneElement(refreshControl, {ref: 'refreshControl'})}
+                        {cloneElement(refreshControl, {ref: this.bindRefreshControl})}
                         {children}
                     </div>
                 </div>

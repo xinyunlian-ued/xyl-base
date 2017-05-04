@@ -1,11 +1,12 @@
-import React, {Component, CSSProperties} from 'react';
-import {findDOMNode} from 'react-dom';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {findDOMNode} from "inferno-compat";
 import Align from '../rc-align';
 import Animate from '../rc-animate';
 import PopupInner from './PopupInner';
 import LazyRenderBox from './LazyRenderBox';
 import {IPopup} from "./PropsType";
-import {observer} from "mobx-react";
 
 @observer
 export default class Popup extends Component<IPopup, any> {
@@ -17,7 +18,12 @@ export default class Popup extends Component<IPopup, any> {
 
     currentAlignClassName;
 
-    onAlign(popupDomNode, align) {
+    popup;
+    popupBind = (popup) => {
+        this.popup = popup;
+    }
+
+    onAlign = (popupDomNode, align) => {
         const props = this.props;
         const alignClassName = props.getClassNameFromAlign(props.align);
         const currentAlignClassName = props.getClassNameFromAlign(align);
@@ -28,15 +34,15 @@ export default class Popup extends Component<IPopup, any> {
         props.onAlign(popupDomNode, align);
     }
 
-    getPopupDomNode() {
-        return findDOMNode(this.refs.popup);
+    getPopupDomNode = () => {
+        return findDOMNode(this.popup);
     }
 
-    getTarget() {
+    getTarget = () => {
         return this.props.getRootDomNode();
     }
 
-    getMaskTransitionName() {
+    getMaskTransitionName = () => {
         const props = this.props;
         let transitionName = props.maskTransitionName;
         const animation = props.maskAnimation;
@@ -46,7 +52,7 @@ export default class Popup extends Component<IPopup, any> {
         return transitionName;
     }
 
-    getTransitionName() {
+    getTransitionName = () => {
         const props = this.props;
         let transitionName = props.transitionName;
         if (!transitionName && props.animation) {
@@ -55,11 +61,11 @@ export default class Popup extends Component<IPopup, any> {
         return transitionName;
     }
 
-    getClassName(currentAlignClassName) {
+    getClassName = (currentAlignClassName) => {
         return `${this.props.prefixCls} ${this.props.className} ${currentAlignClassName}`;
     }
 
-    getPopupElement() {
+    getPopupElement = () => {
         const props = this.props;
         const {align, style, visible, prefixCls, destroyPopupOnHide} = props;
         const className = this.getClassName(this.currentAlignClassName ||
@@ -75,7 +81,7 @@ export default class Popup extends Component<IPopup, any> {
         const popupInnerProps = {
             className,
             prefixCls,
-            ref: 'popup',
+            ref: this.popupBind,
             onMouseEnter: props.onMouseEnter,
             onMouseLeave: props.onMouseLeave,
             style: newStyle,
@@ -132,8 +138,8 @@ export default class Popup extends Component<IPopup, any> {
         </Animate>);
     }
 
-    getZIndexStyle(): CSSProperties {
-        const style: CSSProperties = {};
+    getZIndexStyle = (): any => {
+        const style: any = {};
         const props = this.props;
         if (props.zIndex !== undefined) {
             style.zIndex = props.zIndex;
@@ -141,7 +147,7 @@ export default class Popup extends Component<IPopup, any> {
         return style;
     }
 
-    getMaskElement() {
+    getMaskElement = () => {
         const props = this.props;
         let maskElement;
         if (props.mask) {
@@ -174,7 +180,7 @@ export default class Popup extends Component<IPopup, any> {
 
     alignInstance;
 
-    saveAlign(align) {
+    saveAlign = (align) => {
         this.alignInstance = align;
     }
 

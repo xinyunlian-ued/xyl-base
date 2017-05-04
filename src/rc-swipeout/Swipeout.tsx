@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
-import {observer} from 'mobx-react';
-import Hammer from 'react-hammerjs';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import omit from 'object.omit';
 import splitObject from './util/splitObject';
 import {ISwipeoutPropTypes} from "./PropsType";
 import noop from "../rc-util/noop";
+const Hammer = require('react-hammerjs/src/Hammer');
 
 @observer
 export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
@@ -33,11 +34,32 @@ export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
         this.openedRight = false;
     }
 
+    _content;
+    _cover;
+    _left;
+    _right;
+
+    bindRefContent = (content) => {
+        this._content = content;
+    }
+
+    bindRefCover = (cover) => {
+        this._cover = cover;
+    }
+
+    bindRefLeft = (left) => {
+        this._left = left;
+    }
+
+    bindRefRight = (right) => {
+        this._right = right;
+    }
+
     componentDidMount() {
 
         const {left, right} = this.props;
-        const content = this.refs.content as HTMLElement;
-        const cover = this.refs.cover as HTMLElement;
+        const content = this._content as HTMLElement;
+        const cover = this._cover as HTMLElement;
 
         const width = content.offsetWidth;
 
@@ -56,7 +78,7 @@ export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
         document.body.removeEventListener('touchstart', this.onCloseSwipe.bind(this));
     }
 
-    onCloseSwipe(ev) {
+    onCloseSwipe = (ev) => {
         if (this.openedLeft || this.openedRight) {
             const pNode = ((node) => {
                 while (node.parentNode && node.parentNode !== document.body) {
@@ -75,14 +97,14 @@ export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
 
     panStartX;
 
-    onPanStart(e) {
+    onPanStart = (e) => {
         if (this.props.disabled) {
             return;
         }
         this.panStartX = e.deltaX;
     }
 
-    onPan(e) {
+    onPan = (e) => {
         if (this.props.disabled) {
             return;
         }
@@ -99,7 +121,7 @@ export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
     btnsLeftWidth;
     btnsRightWidth;
 
-    onPanEnd(e) {
+    onPanEnd = (e) => {
         if (this.props.disabled) {
             return;
         }
@@ -123,7 +145,7 @@ export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
     }
 
     // left & right button click
-    onBtnClick(ev, btn) {
+    onBtnClick = (ev, btn) => {
         const onPress = btn.onPress;
         if (onPress) {
             onPress(ev);
@@ -133,7 +155,7 @@ export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
         }
     }
 
-    _getContentEasing(value, limit) {
+    _getContentEasing = (value, limit) => {
         // limit content style left when value > actions width
         if (value < 0 && value < limit) {
             return limit - Math.pow(limit - value, 0.85);
@@ -144,28 +166,28 @@ export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
     }
 
     // set content & actions style
-    _setStyle(value) {
+    _setStyle = (value) => {
         const {left, right} = this.props;
         const limit = value > 0 ? this.btnsLeftWidth : -this.btnsRightWidth;
         const contentLeft = this._getContentEasing(value, limit);
-        const content = this.refs.content as HTMLElement;
-        const cover = this.refs.cover as HTMLElement;
+        const content = this._content as HTMLElement;
+        const cover = this._cover as HTMLElement;
         content.style.left = `${contentLeft}px`;
         cover.style.display = Math.abs(value) > 0 ? 'block' : 'none';
         cover.style.left = `${contentLeft}px`;
         if (left.length) {
-            const refsLeft = this.refs.left as HTMLElement;
+            const refsLeft = this._left as HTMLElement;
             const leftWidth = Math.max(Math.min(value, Math.abs(limit)), 0);
             refsLeft.style.width = `${leftWidth}px`;
         }
         if (right.length) {
-            const refsRight = this.refs.right as HTMLElement;
+            const refsRight = this._right as HTMLElement;
             const rightWidth = Math.max(Math.min(-value, Math.abs(limit)), 0);
             refsRight.style.width = `${rightWidth}px`;
         }
     }
 
-    open(value, openedLeft, openedRight) {
+    open = (value, openedLeft, openedRight) => {
         if (!this.openedLeft && !this.openedRight) {
             this.props.onOpen();
         }
@@ -175,7 +197,7 @@ export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
         this._setStyle(value);
     }
 
-    close() {
+    close = () => {
         if (this.openedLeft || this.openedRight) {
             this.props.onClose();
         }
@@ -184,7 +206,7 @@ export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
         this.openedRight = false;
     }
 
-    renderButtons(buttons, ref) {
+    renderButtons = (buttons, ref) => {
         const prefixCls = this.props.prefixCls;
 
         return (buttons && buttons.length) ? (
@@ -226,22 +248,22 @@ export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
         return (left.length || right.length) ? (
             <div className={`${prefixCls}`} {...divProps}>s
                 {/* 保证 body touchStart 后不触发 pan */}
-                <div className={`${prefixCls}-cover`} ref="cover"/>
-                {this.renderButtons(left, 'left')}
-                {this.renderButtons(right, 'right')}
+                <div className={`${prefixCls}-cover`} ref={this.bindRefCover}/>
+                {this.renderButtons(left, this.bindRefLeft)}
+                {this.renderButtons(right, this.bindRefRight)}
                 <Hammer
                     direction="DIRECTION_HORIZONTAL"
                     onPanStart={this.onPanStart}
                     onPan={this.onPan}
                     onPanEnd={this.onPanEnd}
                 >
-                    <div className={`${prefixCls}-content`} ref="content">
+                    <div className={`${prefixCls}-content`} ref={this.bindRefContent}>
                         {children}
                     </div>
                 </Hammer>
             </div>
         ) : (
-            <div ref="content" {...divProps}>{children}</div>
+            <div ref={this.bindRefContent} {...divProps}>{children}</div>
         );
     }
 }

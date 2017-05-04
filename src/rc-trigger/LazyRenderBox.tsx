@@ -1,7 +1,10 @@
-import React, {Children, Component} from 'react';
-import {observer} from "mobx-react";
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {Children} from "inferno-compat";
 import * as assign from 'object-assign';
 import {ILazyRenderBox} from "./PropsType";
+
 
 @observer
 export default class LazyRenderBox extends Component<ILazyRenderBox, any> {

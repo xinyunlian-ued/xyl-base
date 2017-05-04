@@ -1,12 +1,14 @@
-import React, {Children, cloneElement, Component} from 'react';
-import {findDOMNode} from 'react-dom';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {Children, findDOMNode, cloneElement} from "inferno-compat";
 import * as classNames from 'classnames';
-import {observer} from 'mobx-react';
-import {observable} from 'mobx';
 import debounce from 'lodash.debounce';
 
 import {IStepsPropTypes} from "./PropsType";
 import Step from './Step';
+
+
 
 @observer
 export default class Steps extends Component<IStepsPropTypes, { lastStepOffsetWidth: number }> {
@@ -123,7 +125,7 @@ export default class Steps extends Component<IStepsPropTypes, { lastStepOffsetWi
                             }
                         }
                         return cloneElement(ele, np);
-                    })
+                    }, {})
                 }
             </div>
         );

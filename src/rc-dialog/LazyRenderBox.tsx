@@ -1,18 +1,15 @@
-import React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import assign from 'object-assign';
+import {ILazyRenderBoxPropTypes} from "./IDialogPropTypes";
 
-export interface ILazyRenderBoxPropTypes {
-    className?: string;
-    visible?: boolean;
-    hiddenClassName?: string;
-    role?: string;
-    style?: {};
-}
+@observer
+export default class LazyRenderBox extends Component<ILazyRenderBoxPropTypes, any> {
 
-const LazyRenderBox = React.createClass<ILazyRenderBoxPropTypes, any>({
     shouldComponentUpdate(nextProps) {
         return !!nextProps.hiddenClassName || !!nextProps.visible;
-    },
+    }
 
     render() {
         let className = this.props.className;
@@ -24,7 +21,5 @@ const LazyRenderBox = React.createClass<ILazyRenderBoxPropTypes, any>({
         delete props.visible;
         props.className = className;
         return <div {...props} />;
-    },
-});
-
-export default LazyRenderBox;
+    }
+}

@@ -1,25 +1,25 @@
-import React, {Children, Component} from 'react';
-import * as classNames from 'classnames';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import classNames from 'classnames';
 import ZScroller from 'zscroller';
 import {IPickerProps} from './PickerTypes';
 import isChildrenEqual from './isChildrenEqual';
 import noop from "../rc-util/noop";
-import {observer} from "mobx-react";
 
 @observer
 export default class Picker extends Component<IPickerProps, any> {
 
-    static defaultProps() {
-        return {
-            prefixCls: 'rmc-picker',
-            pure: true,
-            onValueChange: noop,
-        };
-    }
+    static defaultProps = {
+        prefixCls: 'rmc-picker',
+        pure: true,
+        onValueChange: noop
+    };
 
-    state = ((me) => {
+    constructor(props) {
+        super(props);
         let selectedValueState;
-        const {selectedValue, defaultSelectedValue, children} = me.props;
+        const {selectedValue, defaultSelectedValue, children} = props;
         if (selectedValue !== undefined) {
             selectedValueState = selectedValue;
         } else if (defaultSelectedValue !== undefined) {
@@ -27,33 +27,26 @@ export default class Picker extends Component<IPickerProps, any> {
         } else if (children && children.length) {
             selectedValueState = children[0].value;
         }
-        return {
+        this.state = {
             selectedValue: selectedValueState,
         };
-    })(this);
-
-    zscroller;
-
-    componentDidMount() {
-        // https://github.com/react-component/m-picker/issues/18
-        const indicator: any = this.refs.indicator;
-        const content: any = this.refs.content;
-        this.itemHeight = indicator.getBoundingClientRect().height;
-        // compact
-        content.style.padding = `${this.itemHeight * 3}px 0`;
-        this.zscroller = new ZScroller(this.refs.content, {
-            scrollingX: false,
-            snapping: true,
-            penetrationDeceleration: .1,
-            minVelocityToKeepDecelerating: 0.5,
-            scrollingComplete: this.scrollingComplete,
-        });
-        this.zscroller.setDisabled(this.props.disabled);
-        this.zscroller.scroller.setSnapSize(0, this.itemHeight);
-        this.select(this.state.selectedValue);
     }
 
-    select(value) {
+    itemHeight;
+    zscroller;
+
+    content;
+    indicator;
+
+    contentBind = (content) => {
+        this.content = content;
+    }
+
+    indicatorBind = (indicator) => {
+        this.indicator = indicator;
+    }
+
+    select = (value) => {
         const children: any = this.toChildrenArray(this.props.children);
         for (let i = 0, len = children.length; i < len; i++) {
             if (this.getChildMember(children[i], 'value') === value) {
@@ -64,17 +57,14 @@ export default class Picker extends Component<IPickerProps, any> {
         this.selectByIndex(0);
     }
 
-    itemHeight;
-
-    selectByIndex(index) {
-        if (index < 0 || index >= this.toChildrenArray(this.props.children).length
-            || !this.itemHeight) {
+    selectByIndex = (index) => {
+        if (index < 0 || index >= this.toChildrenArray(this.props.children).length || !this.itemHeight) {
             return;
         }
         this.scrollTo(index * this.itemHeight);
     }
 
-    doScrollingComplete(top) {
+    doScrollingComplete = (top) => {
         let index = top / this.itemHeight;
         const floor = Math.floor(index);
         if (index - floor > 0.5) {
@@ -90,6 +80,23 @@ export default class Picker extends Component<IPickerProps, any> {
         } else if (console.warn) {
             console.warn('child not found', children, index);
         }
+    }
+
+    componentDidMount() {
+        // https://github.com/react-component/m-picker/issues/18
+        this.itemHeight = this.indicator.getBoundingClientRect().height;
+        // compact
+        this.content.style.padding = `${this.itemHeight * 3}px 0`;
+        this.zscroller = new ZScroller(this.content, {
+            scrollingX: false,
+            snapping: true,
+            penetrationDeceleration: .1,
+            minVelocityToKeepDecelerating: 0.5,
+            scrollingComplete: this.scrollingComplete,
+        });
+        this.zscroller.setDisabled(this.props.disabled);
+        this.zscroller.scroller.setSnapSize(0, this.itemHeight);
+        this.select(this.state.selectedValue);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -115,11 +122,11 @@ export default class Picker extends Component<IPickerProps, any> {
         this.zscroller.destroy();
     }
 
-    scrollTo(top) {
+    scrollTo = (top) => {
         this.zscroller.scroller.scrollTo(0, top);
     }
 
-    fireValueChange(selectedValue) {
+    fireValueChange = (selectedValue) => {
         if (selectedValue !== this.state.selectedValue) {
             if (!('selectedValue' in this.props)) {
                 this.setState({
@@ -130,7 +137,7 @@ export default class Picker extends Component<IPickerProps, any> {
         }
     }
 
-    scrollingComplete() {
+    scrollingComplete = () => {
         const {top} = this.zscroller.scroller.getValues();
         if (top >= 0) {
             this.doScrollingComplete(top);
@@ -141,10 +148,8 @@ export default class Picker extends Component<IPickerProps, any> {
         return child[m];
     }
 
-    getValue() {
-        return this.props.selectedValue
-            || this.props.children && this.props.children[0]
-            && this.props.children[0].value;
+    getValue = () => {
+        return this.props.selectedValue || this.props.children && this.props.children[0] && this.props.children[0].value;
     }
 
     toChildrenArray(children) {
@@ -160,7 +165,7 @@ export default class Picker extends Component<IPickerProps, any> {
         const {selectedValue} = this.state;
         const itemClassName = `${prefixCls}-item`;
         const selectedItemClassName = `${itemClassName} ${prefixCls}-item-selected`;
-        const items = Children.map(children, (item: any) => {
+        const items = (children as any).map((item) => {
             return (
                 <div
                     style={itemStyle}
@@ -180,8 +185,8 @@ export default class Picker extends Component<IPickerProps, any> {
                 className={classNames(pickerCls)}
             >
                 <div className={`${prefixCls}-mask`}/>
-                <div className={`${prefixCls}-indicator`} ref="indicator" style={indicatorStyle}/>
-                <div className={`${prefixCls}-content`} ref="content">
+                <div className={`${prefixCls}-indicator`} ref={this.indicatorBind} style={indicatorStyle}/>
+                <div className={`${prefixCls}-content`} ref={this.contentBind}>
                     {items}
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import React, {Children} from 'react';
+import {Children} from "inferno-compat";
 
 export function toArray(children) {
     // allow [c,[a,b]]
@@ -7,7 +7,7 @@ export function toArray(children) {
         if (child) {
             c.push(child);
         }
-    });
+    }, null);
     return c;
 }
 

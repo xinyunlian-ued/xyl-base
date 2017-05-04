@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import {IRefreshControl} from "./PropsType";
-import {observer} from "mobx-react";
-import {observable} from "mobx";
 
 @observer
 export default class RefreshControl extends Component<IRefreshControl, any> {
@@ -28,6 +28,11 @@ export default class RefreshControl extends Component<IRefreshControl, any> {
         loadingState: false,
     };
 
+    ptr;
+    bindPtr = (ptr) => {
+        this.ptr = ptr;
+    }
+
     render() {
         const {
             prefixCls, className = '', style, icon, loading, refreshing,
@@ -41,7 +46,7 @@ export default class RefreshControl extends Component<IRefreshControl, any> {
             [`${prefixCls}-loading`]: loadingState || refreshing,
         });
         return (
-            <div ref="ptr" className={wrapCls} style={style}>
+            <div ref={this.bindPtr} className={wrapCls} style={style}>
                 <div className={`${prefixCls}-ptr-icon`}>{icon}</div>
                 <div className={`${prefixCls}-ptr-loading`}>{loading}</div>
             </div>

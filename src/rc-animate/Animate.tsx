@@ -1,4 +1,7 @@
-import React, {cloneElement, Component, isValidElement, Children} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {cloneElement, isValidElement, Children} from "inferno-compat";
 import {
     toArrayChildren,
     mergeChildren,
@@ -7,11 +10,11 @@ import {
     isSameChildren,
 } from './ChildrenUtils';
 import AnimateChild from './AnimateChild';
-const defaultKey = `rc_animate_${Date.now()}`;
 import animUtil from './util';
 import {AnimatePropTypes} from "./PropsType";
 import noop from "../rc-util/noop";
-import {observer} from "mobx-react";
+
+const defaultKey = `rc_animate_${Date.now()}`;
 
 function getChildrenFromProps(props) {
     const children: any = props.children;
@@ -44,6 +47,14 @@ export default class Animate extends Component<AnimatePropTypes, any> {
     currentlyAnimatingKeys = {};
     keysToEnter = [];
     keysToLeave = [];
+
+    _refs: any = {};
+
+    bindRef = (key) => {
+        return (ref) => {
+            this._refs[key] = ref;
+        }
+    }
 
     constructor(props) {
         super(props);
@@ -173,8 +184,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
     }
 
     performEnter = (key) => {
-
-        let refs: any = this.refs[key];
+        let refs: any = this._refs[key];
         // may already remove by exclusive
         if (refs) {
             this.currentlyAnimatingKeys[key] = true;
@@ -185,7 +195,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
     }
 
     performAppear = (key) => {
-        let refs: any = this.refs[key];
+        let refs: any = this._refs[key];
         if (refs) {
             this.currentlyAnimatingKeys[key] = true;
             refs.componentWillAppear(
@@ -221,7 +231,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
     }
 
     performLeave = (key) => {
-        let refs: any = this.refs[key];
+        let refs: any = this._refs[key];
         // may already remove by exclusive
         if (refs) {
             this.currentlyAnimatingKeys[key] = true;
@@ -268,7 +278,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
 
     stop = (key) => {
         delete this.currentlyAnimatingKeys[key];
-        const component: any = this.refs[key];
+        const component: any = this._refs[key];
         if (component) {
             component.stop();
         }
@@ -290,7 +300,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
                 return (
                     <AnimateChild
                         key={child.key}
-                        ref={child.key}
+                        ref={this.bindRef(child.key)}
                         animation={props.animation}
                         transitionName={props.transitionName}
                         transitionEnter={props.transitionEnter}

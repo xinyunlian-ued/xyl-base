@@ -1,4 +1,4 @@
-import {ReactNode, CSSProperties} from 'react';
+import {VNode} from 'inferno';
 
 export interface InputNumberPropTypes {
     focusOnUpDown?: boolean;
@@ -11,8 +11,8 @@ export interface InputNumberPropTypes {
     maxLength?: number;
     min?: number;
     step?: number | string;
-    upHandler?: ReactNode;
-    downHandler?: ReactNode;
+    upHandler?: VNode;
+    downHandler?: VNode;
     useTouch?: boolean;
     formatter?: any;
     parser?: any;
@@ -32,5 +32,5 @@ export interface InputNumberPropTypes {
     placeholder?: string;
     autoFocus?: boolean;
     name?: string;
-    style?: CSSProperties;
+    style?;
 }

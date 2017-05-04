@@ -1,10 +1,10 @@
-import {Children} from 'react';
+import {Children} from "inferno-compat";
 
 export function toArrayChildren(children) {
     const ret = [];
     Children.forEach(children, (child) => {
         ret.push(child);
-    });
+    }, null);
     return ret;
 }
 

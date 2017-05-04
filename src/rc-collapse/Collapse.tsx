@@ -1,10 +1,12 @@
-import React, {Component, Children, cloneElement} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import CollapsePanel from './Panel';
 import openAnimationFactory from './openAnimationFactory';
 import classNames from 'classnames';
 import {CollapsePropTypes} from "./PropsType";
 import noop from "../rc-util/noop";
-import {observer} from "mobx-react";
+import {Children, cloneElement} from "inferno-compat";
 
 function toArray(activeKey) {
     let currentActiveKey = activeKey;
@@ -79,7 +81,7 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
         const {prefixCls, accordion, destroyInactivePanel} = this.props;
         const newChildren = [];
 
-        Children.forEach(this.props.children, (child: any, index) => {
+        Children.forEach(this.props.children as any, (child: any, index) => {
             if (!child) {
                 return;
             }
@@ -107,7 +109,7 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
             };
 
             newChildren.push(cloneElement(child, props));
-        });
+        }, null);
 
         return newChildren;
     }

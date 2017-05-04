@@ -1,9 +1,8 @@
-import React, {Component} from 'react';
-import {findDOMNode} from 'react-dom';
-import {observable} from 'mobx';
-import {observer} from 'mobx-react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {findDOMNode} from "inferno-compat";
 import * as classNames from 'classnames';
-
 import noop from '../rc-util/noop';
 import {DrawerPropTypes} from './PropsType';
 
@@ -46,6 +45,17 @@ export default class Drawer extends Component<DrawerPropTypes, any> {
         // if touch is supported by the browser
         touchSupported: typeof window === 'object' && 'ontouchstart' in window,
     };
+
+    sidebar;
+    dragHandle;
+
+    sidebarBind = (sidebar) => {
+        this.sidebar = sidebar;
+    }
+
+    dragHandleBind = (dragHandle) => {
+        this.dragHandle = dragHandle;
+    }
 
     componentDidMount() {
         this.saveSidebarSize();
@@ -167,11 +177,11 @@ export default class Drawer extends Component<DrawerPropTypes, any> {
     }
 
     saveSidebarSize = () => {
-        const sidebar = findDOMNode(this.refs.sidebar) as HTMLElement;
+        const sidebar = findDOMNode(this.sidebar) as HTMLElement;
         const width = sidebar.offsetWidth;
         const height = sidebar.offsetHeight;
-        const sidebarTop = getOffset(findDOMNode(this.refs.sidebar)).top;
-        const dragHandleTop = getOffset(findDOMNode(this.refs.dragHandle)).top;
+        const sidebarTop = getOffset(findDOMNode(this.sidebar)).top;
+        const dragHandleTop = getOffset(findDOMNode(this.dragHandle)).top;
 
         if (width !== this.state.sidebarWidth) {
             this.setState({sidebarWidth: width});

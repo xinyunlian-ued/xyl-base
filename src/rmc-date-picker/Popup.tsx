@@ -1,11 +1,12 @@
-import React, {Component} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import IDatePickerProps from './IDatePickerProps';
 import PopupPicker from '../rmc-picker/Popup';
 import {IPopupPickerProps} from '../rmc-picker/PopupPickerTypes';
-import {observer} from "mobx-react";
 
 export interface IPopupDatePickerProps extends IPopupPickerProps {
-    datePicker: React.ReactElement<IDatePickerProps>;
+    datePicker: Component<IDatePickerProps, any>;
     onChange?: (date?) => void;
     date?: any;
 }
@@ -18,7 +19,7 @@ export default class PopupDatePicker extends Component<IPopupDatePickerProps, an
         pickerValueChangeProp: 'onDateChange',
     };
 
-    onOk(v) {
+    onOk = (v) => {
         const {onChange, onOk} = this.props;
         if (onChange) {
             onChange(v);

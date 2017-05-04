@@ -1,11 +1,13 @@
-import React, {Children, cloneElement, Component} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {Children, cloneElement} from "inferno-compat";
 import KeyCode from './KeyCode';
 import TabPane from './TabPane';
 import * as classNames from 'classnames';
 import {ITabs} from './PropsType';
 import noop from "../rc-util/noop";
-import {observable} from "mobx";
-import {observer} from "mobx-react";
+
 
 function getDefaultActiveKey(props) {
     let activeKey;
@@ -13,7 +15,7 @@ function getDefaultActiveKey(props) {
         if (child && !activeKey && !child.props.disabled) {
             activeKey = child.key;
         }
-    });
+    }, null);
     return activeKey;
 }
 
@@ -30,7 +32,9 @@ export default class Tabs extends Component<ITabs, any> {
         style: {},
     };
 
-    @observable store = ((props) => {
+    constructor(props) {
+        super(props);
+
         let activeKey;
         if ('activeKey' in props) {
             activeKey = props.activeKey;
@@ -39,10 +43,13 @@ export default class Tabs extends Component<ITabs, any> {
         } else {
             activeKey = getDefaultActiveKey(props);
         }
-        return {
+
+        this.state = {
             activeKey,
         };
-    })(this.props);
+    }
+
+    tabBar;
 
     componentWillReceiveProps(nextProps) {
         if ('activeKey' in nextProps) {
@@ -52,16 +59,14 @@ export default class Tabs extends Component<ITabs, any> {
         }
     }
 
-    tabBar;
-
-    onTabClick(activeKey) {
+    onTabClick = (activeKey) => {
         if (this.tabBar.props.onTabClick) {
             this.tabBar.props.onTabClick(activeKey);
         }
         this.setActiveKey(activeKey);
     }
 
-    onNavKeyDown(e) {
+    onNavKeyDown = (e) => {
         const eventKeyCode = e.keyCode;
         if (eventKeyCode === KeyCode.RIGHT || eventKeyCode === KeyCode.DOWN) {
             e.preventDefault();
@@ -74,7 +79,7 @@ export default class Tabs extends Component<ITabs, any> {
         }
     }
 
-    setActiveKey(activeKey) {
+    setActiveKey = (activeKey) => {
         if (this.state.activeKey !== activeKey) {
             if (!('activeKey' in this.props)) {
                 this.setState({
@@ -85,10 +90,10 @@ export default class Tabs extends Component<ITabs, any> {
         }
     }
 
-    getNextActiveKey(next) {
+    getNextActiveKey = (next) => {
         const activeKey = this.state.activeKey;
         const children = [];
-        Children.forEach(this.props.children, (c: any) => {
+        Children.forEach(this.props.children, (c) => {
             if (c && !c.props.disabled) {
                 if (next) {
                     children.push(c);
@@ -96,7 +101,7 @@ export default class Tabs extends Component<ITabs, any> {
                     children.unshift(c);
                 }
             }
-        });
+        }, null);
         const length = children.length;
         let ret = length && children[0].key;
         children.forEach((child, i) => {

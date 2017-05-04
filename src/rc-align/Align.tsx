@@ -1,11 +1,12 @@
-import React, {Children, cloneElement, Component} from 'react';
-import {findDOMNode} from 'react-dom';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {Children, cloneElement, findDOMNode} from 'inferno-compat';
 import align from 'dom-align';
 import addEventListener from '../rc-util/Dom/addEventListener';
 import isWindow from './isWindow';
 import {IAlign} from "./PropsType";
 import noop from "../rc-util/noop";
-import {observer} from "mobx-react";
 
 function buffer(fn, ms) {
     let timer;

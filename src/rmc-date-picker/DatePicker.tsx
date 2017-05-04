@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import MultiPicker from '../rmc-picker/MultiPicker';
 import IDatePickerProps from './IDatePickerProps';
 import moment from 'moment';
 import defaultLocale from './locale/en_US';
 import noop from "../rc-util/noop";
-import {observer} from "mobx-react";
-import {observable} from "mobx";
 
 function getDaysInMonth(now) {
     return now.clone().endOf('month').date();
@@ -48,7 +48,7 @@ export default class DatePicker extends Component<IDatePickerProps, any> {
         }
     }
 
-    onValueChange(values, index) {
+    onValueChange = (values, index) => {
         const value = parseInt(values[index], 10);
         const props = this.props;
         const {mode} = props;
@@ -96,7 +96,7 @@ export default class DatePicker extends Component<IDatePickerProps, any> {
 
     defaultMinDate;
 
-    getDefaultMinDate() {
+    getDefaultMinDate = () => {
         if (!this.defaultMinDate) {
             this.defaultMinDate = this.getGregorianCalendar([2000, 1, 1, 0, 0, 0]);
         }
@@ -105,70 +105,70 @@ export default class DatePicker extends Component<IDatePickerProps, any> {
 
     defaultMaxDate;
 
-    getDefaultMaxDate() {
+    getDefaultMaxDate = () => {
         if (!this.defaultMaxDate) {
             this.defaultMaxDate = this.getGregorianCalendar([2030, 1, 1, 23, 59, 59]);
         }
         return this.defaultMaxDate;
     }
 
-    getDate() {
+    getDate = () => {
         return this.state.date || this.getDefaultMinDate();
     }
 
-    getValue() {
+    getValue = () => {
         return this.getDate();
     }
 
-    getMinYear() {
+    getMinYear = () => {
         return this.getMinDate().year();
     }
 
-    getMaxYear() {
+    getMaxYear = () => {
         return this.getMaxDate().year();
     }
 
-    getMinMonth() {
+    getMinMonth = () => {
         return this.getMinDate().month();
     }
 
-    getMaxMonth() {
+    getMaxMonth = () => {
         return this.getMaxDate().month();
     }
 
-    getMinDay() {
+    getMinDay = () => {
         return this.getMinDate().date();
     }
 
-    getMaxDay() {
+    getMaxDay = () => {
         return this.getMaxDate().date();
     }
 
-    getMinHour() {
+    getMinHour = () => {
         return this.getMinDate().hour();
     }
 
-    getMaxHour() {
+    getMaxHour = () => {
         return this.getMaxDate().hour();
     }
 
-    getMinMinute() {
+    getMinMinute = () => {
         return this.getMinDate().minute();
     }
 
-    getMaxMinute() {
+    getMaxMinute = () => {
         return this.getMaxDate().minute();
     }
 
-    getMinDate() {
+    getMinDate = () => {
         return this.props.minDate || this.getDefaultMinDate();
     }
 
-    getMaxDate() {
+    getMaxDate = () => {
         return this.props.maxDate || this.getDefaultMaxDate();
     }
 
-    getDateData() {
+    getDateData = () => {
         const {locale, formatMonth, formatDay, mode} = this.props;
         const date = this.getDate();
         const selYear = date.year();
@@ -236,7 +236,7 @@ export default class DatePicker extends Component<IDatePickerProps, any> {
         ];
     }
 
-    getTimeData() {
+    getTimeData = () => {
         let minHour = 0;
         let maxHour = 23;
         let minMinute = 0;
@@ -302,11 +302,11 @@ export default class DatePicker extends Component<IDatePickerProps, any> {
         ];
     }
 
-    getGregorianCalendar(arg) {
+    getGregorianCalendar = (arg) => {
         return moment(arg);
     }
 
-    clipDate(date) {
+    clipDate = (date) => {
         const {mode} = this.props;
         const minDate = this.getMinDate();
         const maxDate = this.getMaxDate();
@@ -341,7 +341,7 @@ export default class DatePicker extends Component<IDatePickerProps, any> {
         return date;
     }
 
-    getValueCols() {
+    getValueCols = () => {
         const {mode} = this.props;
         const date = this.getDate();
         let cols: any[] = [];

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import arrayTreeFilter from 'array-tree-filter';
 import MultiPicker from '../rmc-picker/MultiPicker';
 import {ICascaderProps} from './CascaderTypes';
-import {observer} from "mobx-react";
-import {observable} from "mobx";
 
 @observer
 export default class Cascader extends Component<ICascaderProps, any> {

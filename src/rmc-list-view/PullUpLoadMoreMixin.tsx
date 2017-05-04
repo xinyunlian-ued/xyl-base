@@ -1,6 +1,5 @@
 /* eslint no-unused-vars: 0 */
-import React, {Component} from 'react';
-import {findDOMNode} from 'react-dom';
+import {findDOMNode} from "inferno-compat";
 
 export default {
     bindEvt() {

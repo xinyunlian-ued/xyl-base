@@ -1,6 +1,8 @@
-import React, {Component, isValidElement} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {isValidElement} from 'inferno-compat';
 import get from 'lodash.get';
-import {observer} from "mobx-react";
 import {ITableCellPropTypes} from "./PropsType";
 
 @observer

@@ -1,22 +1,30 @@
-import React, {cloneElement, Component} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {cloneElement} from "inferno-compat";
 import Modal from '../rc-dialog';
 import {IPopupPickerProps} from './PopupPickerTypes';
 import Touchable from '../rc-touchable';
-import {observer} from "mobx-react";
 
 @observer
 export default class PopupPicker extends Component<IPopupPickerProps, any> {
-
     static defaultProps = {
         prefixCls: 'rmc-picker-popup',
         triggerType: 'onClick',
         WrapComponent: 'span',
-    };
+    }
 
     state = {
         pickerValue: 'value' in this.props ? this.props.value : null,
         visible: this.props.visible || false,
-    };
+    }
+
+    picker
+
+    saveRef = (picker) => {
+        this.picker = picker;
+    }
+
 
     componentWillReceiveProps(nextProps) {
         if ('value' in nextProps) {
@@ -29,7 +37,7 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
         }
     }
 
-    onPickerChange(pickerValue) {
+    onPickerChange = (pickerValue) => {
         if (this.state.pickerValue !== pickerValue) {
             this.setState({
                 pickerValue,
@@ -41,13 +49,7 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
         }
     }
 
-    picker;
-
-    saveRef(picker) {
-        this.picker = picker;
-    }
-
-    setVisibleState(visible) {
+    setVisibleState = (visible) => {
         this.setState({
             visible,
         });
@@ -58,7 +60,7 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
         }
     }
 
-    fireVisibleChange(visible) {
+    fireVisibleChange = (visible) => {
         if (this.state.visible !== visible) {
             if (!('visible' in this.props)) {
                 this.setVisibleState(visible);
@@ -67,14 +69,14 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
         }
     }
 
-    getRender() {
+    getRender = () => {
         const props = this.props;
         const children = props.children;
         if (!children) {
             return this.getModal();
         }
         const {WrapComponent, disabled} = this.props;
-        const child: any = children;
+        const child = children;
         const newChildProps = {};
         if (!disabled) {
             newChildProps[props.triggerType] = this.onTriggerClick;
@@ -85,8 +87,8 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
         </WrapComponent>);
     }
 
-    onTriggerClick(e) {
-        const child: any = this.props.children;
+    onTriggerClick = (e) => {
+        const child = this.props.children as any;
         const childProps = child.props || {};
         if (childProps[this.props.triggerType]) {
             childProps[this.props.triggerType](e);
@@ -94,12 +96,12 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
         this.fireVisibleChange(!this.state.visible);
     }
 
-    onOk() {
+    onOk = () => {
         this.props.onOk(this.picker && this.picker.getValue());
         this.fireVisibleChange(false);
     }
 
-    getContent() {
+    getContent = () => {
         if (this.props.picker) {
             let {pickerValue} = this.state;
             if (pickerValue === null) {
@@ -115,16 +117,17 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
         }
     }
 
-    onDismiss() {
+    onDismiss = () => {
         this.props.onDismiss();
         this.fireVisibleChange(false);
     }
 
-    hide() {
+    hide = () => {
         this.fireVisibleChange(false);
     }
 
-    getModal() {
+
+    getModal = () => {
         const props = this.props;
         if (!this.state.visible) {
             return null;
@@ -164,4 +167,5 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
     render() {
         return this.getRender();
     }
+
 }

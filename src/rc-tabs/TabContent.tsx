@@ -1,4 +1,7 @@
-import React, {Children, cloneElement, Component} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {Children, cloneElement} from "inferno-compat";
 import * as classNames from 'classnames';
 import {
     getTransformByIndex,
@@ -7,7 +10,6 @@ import {
     getMarginStyle,
 } from './utils';
 import {ITabContent} from "./PropsType";
-import {observer} from "mobx-react";
 
 @observer
 export default class TabContent extends Component<ITabContent, any> {
@@ -33,7 +35,7 @@ export default class TabContent extends Component<ITabContent, any> {
                 destroyInactiveTabPane: props.destroyInactiveTabPane,
                 rootPrefixCls: props.prefixCls,
             }));
-        });
+        }, null);
 
         return newChildren;
     }

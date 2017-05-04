@@ -1,14 +1,14 @@
-import React, {Component, cloneElement, Children} from 'react';
-import {findDOMNode, unstable_renderSubtreeIntoContainer} from 'react-dom';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {Children, cloneElement, findDOMNode, unstable_renderSubtreeIntoContainer} from 'inferno-compat';
 import contains from '../rc-util/Dom/contains';
 import addEventListener from '../rc-util/Dom/addEventListener';
 import Popup from './Popup';
 import {getAlignFromPlacement, getPopupClassNameFromAlign} from './utils';
 import {defaultGetContainer} from '../rc-util/getContainerRenderMixin';
 import noop from "../rc-util/noop";
-import {observable} from "mobx";
 import {ITrigger} from "./PropsType";
-import {observer} from "mobx-react";
 
 function returnEmptyString() {
     return '';
@@ -101,17 +101,18 @@ export default class Trigger extends Component<ITrigger, any> {
         hideAction: [],
     };
 
-    state = ((props) => {
+    constructor(props) {
+        super(props);
         let popupVisible;
         if ('popupVisible' in props) {
             popupVisible = !!props.popupVisible;
         } else {
             popupVisible = !!props.defaultPopupVisible;
         }
-        return {
+        this.state = {
             popupVisible,
-        };
-    })(this.props);
+        }
+    }
 
     componentWillMount() {
         ALL_HANDLERS.forEach((h) => {
@@ -127,7 +128,8 @@ export default class Trigger extends Component<ITrigger, any> {
         });
     }
 
-    componentWillReceiveProps({popupVisible}) {
+    componentWillReceiveProps(nextProps) {
+        let {popupVisible} = nextProps;
         if (popupVisible !== undefined) {
             this.setState({
                 popupVisible,
@@ -135,7 +137,7 @@ export default class Trigger extends Component<ITrigger, any> {
         }
     }
 
-    renderComponent(componentArg, ready) {
+    renderComponent = (componentArg, ready) => {
         renderComponent(this, componentArg, ready);
     }
 
@@ -168,23 +170,23 @@ export default class Trigger extends Component<ITrigger, any> {
         this.clearOutsideHandler();
     }
 
-    onMouseEnter(e) {
+    onMouseEnter = (e) => {
         this.fireEvents('onMouseEnter', e);
         this.delaySetPopupVisible(true, this.props.mouseEnterDelay);
     }
 
-    onMouseLeave(e) {
+    onMouseLeave = (e) => {
         this.fireEvents('onMouseLeave', e);
         this.delaySetPopupVisible(false, this.props.mouseLeaveDelay);
     }
 
-    onPopupMouseEnter() {
+    onPopupMouseEnter = () => {
         this.clearDelayTimer();
     }
 
     _component;
 
-    onPopupMouseLeave(e) {
+    onPopupMouseLeave = (e) => {
         // https://github.com/react-component/trigger/pull/13
         // react bug?
         if (e.relatedTarget && !e.relatedTarget.setTimeout &&
@@ -197,7 +199,7 @@ export default class Trigger extends Component<ITrigger, any> {
 
     focusTime;
 
-    onFocus(e) {
+    onFocus = (e) => {
         this.fireEvents('onFocus', e);
         // incase focusin and focusout
         this.clearDelayTimer();
@@ -209,12 +211,12 @@ export default class Trigger extends Component<ITrigger, any> {
 
     preClickTime;
 
-    onMouseDown(e) {
+    onMouseDown = (e) => {
         this.fireEvents('onMouseDown', e);
         this.preClickTime = Date.now();
     }
 
-    onBlur(e) {
+    onBlur = (e) => {
         this.fireEvents('onBlur', e);
         this.clearDelayTimer();
         if (this.isBlurToHide()) {
@@ -222,7 +224,7 @@ export default class Trigger extends Component<ITrigger, any> {
         }
     }
 
-    onClick(event) {
+    onClick = (event) => {
         this.fireEvents('onClick', event);
         // focus will trigger click
         if (this.focusTime) {
@@ -243,7 +245,7 @@ export default class Trigger extends Component<ITrigger, any> {
         }
     }
 
-    onDocumentClick(event) {
+    onDocumentClick = (event) => {
         if (this.props.mask && !this.props.maskClosable) {
             return;
         }
@@ -255,7 +257,7 @@ export default class Trigger extends Component<ITrigger, any> {
         }
     }
 
-    getPopupDomNode() {
+    getPopupDomNode = () => {
         // for test
         if (this._component) {
             return this._component.isMounted() ? this._component.getPopupDomNode() : null;
@@ -263,11 +265,11 @@ export default class Trigger extends Component<ITrigger, any> {
         return null;
     }
 
-    getRootDomNode() {
+    getRootDomNode = () => {
         return findDOMNode(this);
     }
 
-    getPopupClassNameFromAlign(align) {
+    getPopupClassNameFromAlign = (align) => {
         const className = [];
         const props = this.props;
         const {popupPlacement, builtinPlacements, prefixCls} = props;
@@ -280,7 +282,7 @@ export default class Trigger extends Component<ITrigger, any> {
         return className.join(' ');
     }
 
-    getPopupAlign() {
+    getPopupAlign = () => {
         const props = this.props;
         const {popupPlacement, popupAlign, builtinPlacements} = props;
         if (popupPlacement && builtinPlacements) {
@@ -289,7 +291,7 @@ export default class Trigger extends Component<ITrigger, any> {
         return popupAlign;
     }
 
-    getComponent() {
+    getComponent = () => {
         const {props, state} = this;
         const mouseProps: any = {};
         if (this.isMouseEnterToShow()) {
@@ -323,7 +325,7 @@ export default class Trigger extends Component<ITrigger, any> {
         );
     }
 
-    setPopupVisible(popupVisible) {
+    setPopupVisible = (popupVisible) => {
         this.clearDelayTimer();
         if (this.state.popupVisible !== popupVisible) {
             if (!('popupVisible' in this.props)) {
@@ -337,7 +339,7 @@ export default class Trigger extends Component<ITrigger, any> {
 
     delayTimer;
 
-    delaySetPopupVisible(visible, delayS) {
+    delaySetPopupVisible = (visible, delayS) => {
         const delay = delayS * 1000;
         this.clearDelayTimer();
         if (delay) {
@@ -350,21 +352,21 @@ export default class Trigger extends Component<ITrigger, any> {
         }
     }
 
-    clearDelayTimer() {
+    clearDelayTimer = () => {
         if (this.delayTimer) {
             clearTimeout(this.delayTimer);
             this.delayTimer = null;
         }
     }
 
-    clearOutsideHandler() {
+    clearOutsideHandler = () => {
         if (this.clickOutsideHandler) {
             this.clickOutsideHandler.remove();
             this.clickOutsideHandler = null;
         }
     }
 
-    createTwoChains(event) {
+    createTwoChains = (event) => {
         const childPros = this.props.children.props;
         const props = this.props;
         if (childPros[event] && props[event]) {
@@ -373,45 +375,45 @@ export default class Trigger extends Component<ITrigger, any> {
         return childPros[event] || props[event];
     }
 
-    isClickToShow() {
+    isClickToShow = () => {
         const {action, showAction} = this.props;
         return action.indexOf('click') !== -1 || showAction.indexOf('click') !== -1;
     }
 
-    isClickToHide() {
+    isClickToHide = () => {
         const {action, hideAction} = this.props;
         return action.indexOf('click') !== -1 || hideAction.indexOf('click') !== -1;
     }
 
-    isMouseEnterToShow() {
+    isMouseEnterToShow = () => {
         const {action, showAction} = this.props;
         return action.indexOf('hover') !== -1 || showAction.indexOf('mouseEnter') !== -1;
     }
 
-    isMouseLeaveToHide() {
+    isMouseLeaveToHide = () => {
         const {action, hideAction} = this.props;
         return action.indexOf('hover') !== -1 || hideAction.indexOf('mouseLeave') !== -1;
     }
 
-    isFocusToShow() {
+    isFocusToShow = () => {
         const {action, showAction} = this.props;
         return action.indexOf('focus') !== -1 || showAction.indexOf('focus') !== -1;
     }
 
-    isBlurToHide() {
+    isBlurToHide = () => {
         const {action, hideAction} = this.props;
         return action.indexOf('focus') !== -1 || hideAction.indexOf('blur') !== -1;
     }
 
     popupInstance;
 
-    forcePopupAlign() {
+    forcePopupAlign = () => {
         if (this.state.popupVisible && this.popupInstance && this.popupInstance.alignInstance) {
             this.popupInstance.alignInstance.forceAlign();
         }
     }
 
-    fireEvents(type, e) {
+    fireEvents = (type, e) => {
         const childCallback = this.props.children.props[type];
         if (childCallback) {
             childCallback(e);
@@ -422,7 +424,7 @@ export default class Trigger extends Component<ITrigger, any> {
         }
     }
 
-    close() {
+    close = () => {
         this.setPopupVisible(false);
     }
 

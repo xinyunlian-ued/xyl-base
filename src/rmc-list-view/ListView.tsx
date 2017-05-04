@@ -1,5 +1,7 @@
-import React, {cloneElement, Component} from 'react';
-import {findDOMNode} from 'react-dom';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {cloneElement, findDOMNode} from "inferno-compat";
 import ListViewDataSource from './ListViewDataSource';
 import ScrollView from './ScrollView';
 import ScrollResponder from './ScrollResponder';
@@ -10,7 +12,6 @@ import autobind from 'autobind-decorator';
 import {StickyContainer, Sticky} from 'react-sticky';
 import PullUpLoadMoreMixin from './PullUpLoadMoreMixin';
 import {IListView} from "./PropsType";
-import {observer} from "mobx-react";
 import IndexedList from './Indexed';
 import RefreshControl from './RefreshControl';
 
@@ -57,6 +58,11 @@ class ListView extends Component<IListView, any> {
     scrollProperties;
     _visibleRows;
 
+    listviewscroll;
+    bindListviewscroll = (listviewscroll) => {
+        this.listviewscroll = listviewscroll;
+    }
+
     /**
      * Exports some data, e.g. for perf investigations or analytics.
      */
@@ -75,28 +81,28 @@ class ListView extends Component<IListView, any> {
      * need to check that it responds to `getScrollResponder` before calling it.
      */
     getScrollResponder() {
-        const ref: any = this.refs[SCROLLVIEW_REF];
+        const ref: any = this.bindListviewscroll;
         if (ref) {
             return ref.getScrollResponder && ref.getScrollResponder();
         }
     }
 
     scrollTo(...args) {
-        const ref: any = this.refs[SCROLLVIEW_REF];
+        const ref: any = this.bindListviewscroll;
         if (ref && ref.scrollTo) {
             ref.scrollTo(...args);
         }
     }
 
     setNativeProps(props) {
-        const ref: any = this.refs[SCROLLVIEW_REF];
+        const ref: any = this.bindListviewscroll;
         if (ref && ref.scrollTo) {
             ref.setNativeProps(props);
         }
     }
 
     getInnerViewNode() {
-        const ref: any = this.refs[SCROLLVIEW_REF];
+        const ref: any = this.bindListviewscroll;
         return ref.getInnerViewNode();
     }
 
@@ -452,7 +458,12 @@ class ListView extends Component<IListView, any> {
         //   isVertical ? 'y' : 'x'
         // ];
         let ev = e;
-        const target = findDOMNode(this.refs[SCROLLVIEW_REF]);
+        // when the ListView is destroyed,
+        // but also will trigger scroll event after `scrollEventThrottle`
+        if (!this[SCROLLVIEW_REF]) {
+            return;
+        }
+        const target = findDOMNode(this.bindListviewscroll);
         if (this.props.stickyHeader || this.props.useBodyScroll) {
             this.scrollProperties.visibleLength = window[
                 isVertical ? 'innerHeight' : 'innerWidth'
@@ -464,7 +475,7 @@ class ListView extends Component<IListView, any> {
                 isVertical ? 'scrollTop' : 'scrollLeft'
                 ];
         } else if (this.props.useZscroller) {
-            const ref: any = this.refs[SCROLLVIEW_REF];
+            const ref: any = this.bindListviewscroll;
             const domScroller = ref.domScroller;
             ev = domScroller;
             this.scrollProperties.visibleLength = domScroller.container[

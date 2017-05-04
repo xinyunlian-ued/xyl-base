@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
-import {observer} from 'mobx-react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import {IStepPropTypes} from "./PropsType";
 
@@ -9,6 +10,18 @@ function isString(str) {
 
 @observer
 export default class Step extends Component<IStepPropTypes, any> {
+
+    _main;
+    _tail;
+
+    bindRefMain = (main) => {
+        this._main = main;
+    }
+
+    bindRefTail = (tail) => {
+        this._tail = tail;
+    }
+
     render() {
         const {
             className, prefixCls, style, itemWidth,
@@ -57,7 +70,7 @@ export default class Step extends Component<IStepPropTypes, any> {
                 style={{width: itemWidth, marginRight: adjustMarginRight, ...style}}
             >
                 <div
-                    ref="tail"
+                    ref={this.bindRefTail}
                     className={`${prefixCls}-tail`}
                     style={{paddingRight: -adjustMarginRight}}
                 >
@@ -70,7 +83,7 @@ export default class Step extends Component<IStepPropTypes, any> {
                     >
                         <div className={`${prefixCls}-head-inner`}>{iconNode}</div>
                     </div>
-                    <div ref="main" className={`${prefixCls}-main`}>
+                    <div ref={this.bindRefMain} className={`${prefixCls}-main`}>
                         <div
                             className={`${prefixCls}-title`}
                             style={{background: wrapperStyle.background || wrapperStyle.backgroundColor}}

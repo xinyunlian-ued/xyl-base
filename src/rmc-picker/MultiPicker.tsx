@@ -1,21 +1,25 @@
-import React, {Children, Component} from 'react';
-import * as classNames from 'classnames';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import noop from "../rc-util/noop";
+import {VNode} from "inferno";
+import classnames from 'classnames';
 import Picker from './Picker';
 import MultiPickerProps from './MultiPickerProps';
-import {observer} from "mobx-react";
-import noop from "../rc-util/noop";
 
 @observer
 export default class MultiPicker extends Component<MultiPickerProps, any> {
 
-    static defaultProps = {
-        prefixCls: 'rmc-multi-picker',
-        pickerPrefixCls: 'rmc-picker',
-        onValueChange: noop,
-        disabled: false,
-    };
+    getDefaultProps = () => {
+        return {
+            prefixCls: 'rmc-multi-picker',
+            pickerPrefixCls: 'rmc-picker',
+            onValueChange: noop,
+            disabled: false,
+        };
+    }
 
-    getValue() {
+    getValue = () => {
         const {children, selectedValue} = this.props;
         if (selectedValue && selectedValue.length) {
             return selectedValue;
@@ -23,14 +27,14 @@ export default class MultiPicker extends Component<MultiPickerProps, any> {
             if (!children) {
                 return [];
             }
-            return Children.map(children, (c: any) => {
+            return (children as VNode[]).map(c => {
                 const cc = c.props.children;
                 return cc && cc[0] && cc[0].value;
             });
         }
     }
 
-    onValueChange(i, v) {
+    onValueChange = (i, v) => {
         const value = this.getValue().concat();
         value[i] = v;
         this.props.onValueChange(value, i);
@@ -46,7 +50,7 @@ export default class MultiPicker extends Component<MultiPickerProps, any> {
             pure, children,
         } = props;
         const selectedValue = this.getValue();
-        const colElements = Children.map(children, (col: any, i) => {
+        const colElements = (children as VNode[]).map((col, i) => {
             return (
                 <div key={col.key || i} className={`${prefixCls}-item`}>
                     <Picker
@@ -63,7 +67,7 @@ export default class MultiPicker extends Component<MultiPickerProps, any> {
             );
         });
         return (
-            <div {...rootNativeProps} className={classNames(className, prefixCls)}>
+            <div {...rootNativeProps} className={classnames(className, prefixCls)}>
                 {colElements}
             </div>
         );

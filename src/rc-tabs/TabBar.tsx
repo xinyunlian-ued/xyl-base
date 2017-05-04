@@ -1,8 +1,10 @@
-import React, {Children, Component} from 'react';
-import {observer} from "mobx-react";
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {Children} from "inferno-compat";
 import * as classNames from 'classnames';
 import {ITabBarMixinPropTypes} from "./PropsType";
-import * as waring from 'warning';
+import * as warning from 'warning';
 
 const tabBarExtraContentStyle = {
     float: 'right',
@@ -10,15 +12,25 @@ const tabBarExtraContentStyle = {
 
 @observer
 export default class TabBar extends Component<ITabBarMixinPropTypes, any> {
+
     static defaultProps = {
         styles: {}
     };
 
-    onTabClick(key) {
+    activeTab;
+    root;
+    bindActiveTab = (activeTab) => {
+        this.activeTab = activeTab;
+    }
+    bindRoot = (root) => {
+        this.root = root;
+    }
+
+    onTabClick = (key) => {
         this.props.onTabClick(key);
     }
 
-    getTabs() {
+    getTabs = () => {
         const props = this.props;
         const children = props.panels;
         const activeKey = props.activeKey;
@@ -42,7 +54,7 @@ export default class TabBar extends Component<ITabBarMixinPropTypes, any> {
             }
             const ref = {ref: undefined};
             if (activeKey === key) {
-                ref.ref = 'activeTab';
+                ref.ref = this.bindActiveTab;
             }
             warning('tab' in child.props, 'There must be `tab` property on children of Tabs.');
             rst.push(<div
@@ -56,12 +68,12 @@ export default class TabBar extends Component<ITabBarMixinPropTypes, any> {
             >
                 {child.props.tab}
             </div>);
-        });
+        }, null);
 
         return rst;
     }
 
-    getRootNode(contents) {
+    getRootNode = (contents) => {
         const {prefixCls, onKeyDown, className, extraContent, style} = this.props;
         const cls = classNames({
             [`${prefixCls}-bar`]: 1,
@@ -72,7 +84,7 @@ export default class TabBar extends Component<ITabBarMixinPropTypes, any> {
                 role="tablist"
                 className={cls}
                 tabIndex={0}
-                ref="root"
+                ref={this.bindRoot}
                 onKeyDown={onKeyDown}
                 style={style}
             >

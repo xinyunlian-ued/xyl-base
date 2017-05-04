@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import LazyRenderBox from './LazyRenderBox';
 import {IPopupInner} from "./PropsType";
-import {observer} from "mobx-react";
 
 @observer
 export default class PopupInner extends Component<IPopupInner, any> {

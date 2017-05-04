@@ -1,9 +1,8 @@
-import {CSSProperties} from 'react';
 
 export interface CheckboxPropTypes {
     prefixCls?: string;
     className?: string;
-    style?: CSSProperties;
+    style?;
     name?: string;
     type?: string;
     defaultChecked?: boolean;

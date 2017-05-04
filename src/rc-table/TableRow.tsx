@@ -1,6 +1,6 @@
-import React, {Component, CSSProperties} from 'react';
-import {observer} from "mobx-react";
-import {observable} from "mobx";
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import noop from "../rc-util/noop";
 import TableCell from './TableCell';
 import ExpandIcon from './ExpandIcon';
@@ -157,7 +157,7 @@ export default class TableRow extends Component<ITableRowPropTypes, any> {
             );
         }
         const height = this.props.height || this.state.height;
-        const style: CSSProperties = {height};
+        const style: any = {height};
         if (!visible) {
             style.display = 'none';
         }

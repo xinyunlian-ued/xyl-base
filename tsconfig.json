@@ -2,8 +2,10 @@
   "compileOnSave": false,
   "compilerOptions": {
     "module": "es2015",
-    "target": "es2017",
+    "target": "es5",
+    //    "jsx": "react",
     "jsx": "react",
+    "jsxFactory": "createElement",
     "alwaysStrict": true,
     "rootDirs": [
       "src",
@@ -17,14 +19,18 @@
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "noEmitHelpers": true,
-    "sourceMap": true,
-    "declaration": true,
+//    "sourceMap": true,
+    "types": [
+      "inferno"
+    ],
     "lib": [
       "dom",
       "es2015.promise",
       "es5",
       "es6",
-      "es2015.symbol"
+      "es2015.symbol",
+      "es2015.collection",
+      "es2017.object"
     ]
   },
   "include": [

@@ -1,122 +1,127 @@
-import './assets/index.less';
-import React, {Component} from 'react';
-import {render} from 'react-dom';
+import createElement from 'inferno-create-element';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import Checkbox from '../index';
+// import './assets/index.less';
 
 function onChange(e) {
-  console.log('checkbox checked:', (e.target.checked));
+    console.log('checkbox checked:', (e.target.checked));
 }
 
+@observer
 class Test extends Component<any, any> {
-  constructor(props) {
-    super(props);
-    this.state = { disabled: false };
-  }
-  toggle = ()=> {
-    this.setState({
-      disabled: !this.state.disabled,
-    });
-  }
-  render() {
-    return (<div style={{ margin: 20 }}>
-      <div>
-        <p>
-          <label>
-            <Checkbox
-              checked
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
+    constructor(props) {
+        super(props);
+        this.state = {disabled: false};
+    }
 
-            &nbsp; controlled checked rc-checkbox
-          </label>
-          &nbsp;&nbsp;
+    toggle = () => {
+        this.setState({
+            disabled: !this.state.disabled,
+        });
+    };
 
-        </p>
+    render() {
+        return (<div style={{margin: 20}}>
+            <div>
+                <p>
+                    <label>
+                        <Checkbox
+                            checked
+                            onChange={onChange}
+                            disabled={this.state.disabled}
+                        />
 
-        <p>
-          <label>
-            <input
-              checked
-              type="checkbox"
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
+                        &nbsp; controlled checked rc-checkbox
+                    </label>
+                    &nbsp;&nbsp;
 
-            &nbsp; controlled checked native
-          </label>
-          &nbsp;&nbsp;
-        </p>
-      </div>
+                </p>
 
-      <div>
-        <p>
-          <label>
-            <Checkbox
-              defaultChecked
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
+                <p>
+                    <label>
+                        <input
+                            checked
+                            type="checkbox"
+                            onChange={onChange}
+                            disabled={this.state.disabled}
+                        />
 
-            &nbsp; defaultChecked rc-checkbox
-          </label>
-          &nbsp;&nbsp;
+                        &nbsp; controlled checked native
+                    </label>
+                    &nbsp;&nbsp;
+                </p>
+            </div>
 
-        </p>
+            <div>
+                <p>
+                    <label>
+                        <Checkbox
+                            defaultChecked
+                            onChange={onChange}
+                            disabled={this.state.disabled}
+                        />
 
-        <p>
-          <label>
-            <input
-              type="checkbox"
-              defaultChecked
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
+                        &nbsp; defaultChecked rc-checkbox
+                    </label>
+                    &nbsp;&nbsp;
 
-            &nbsp; defaultChecked native
-          </label>
-          &nbsp;&nbsp;
-        </p>
-      </div>
+                </p>
 
-      <div>
-        <p>
-          <label>
-            <Checkbox
-              name="my-checkbox"
-              defaultChecked
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
+                <p>
+                    <label>
+                        <input
+                            type="checkbox"
+                            defaultChecked
+                            onChange={onChange}
+                            disabled={this.state.disabled}
+                        />
 
-            &nbsp; defaultChecked rc-checkbox with name
-          </label>
-          &nbsp;&nbsp;
+                        &nbsp; defaultChecked native
+                    </label>
+                    &nbsp;&nbsp;
+                </p>
+            </div>
 
-        </p>
+            <div>
+                <p>
+                    <label>
+                        <Checkbox
+                            name="my-checkbox"
+                            defaultChecked
+                            onChange={onChange}
+                            disabled={this.state.disabled}
+                        />
 
-        <p>
-          <label>
-            <input
-              name="my-checkbox"
-              type="checkbox"
-              defaultChecked
-              onChange={onChange}
-              disabled={this.state.disabled}
-            />
+                        &nbsp; defaultChecked rc-checkbox with name
+                    </label>
+                    &nbsp;&nbsp;
 
-            &nbsp; defaultChecked native with name
-          </label>
-          &nbsp;&nbsp;
-        </p>
-      </div>
+                </p>
+
+                <p>
+                    <label>
+                        <input
+                            name="my-checkbox"
+                            type="checkbox"
+                            defaultChecked
+                            onChange={onChange}
+                            disabled={this.state.disabled}
+                        />
+
+                        &nbsp; defaultChecked native with name
+                    </label>
+                    &nbsp;&nbsp;
+                </p>
+            </div>
 
 
-      <button onClick={this.toggle}>toggle disabled</button>
+            <button onClick={this.toggle}>toggle disabled</button>
 
-    </div>);
-  }
+        </div>);
+    }
 
 }
 
-render(<Test />, document.getElementById('app'));
+Inferno.render(<Test />, document.getElementById('app'));

@@ -1,9 +1,10 @@
-import React, {Children, Component} from 'react';
-import {findDOMNode} from 'react-dom';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {Children, findDOMNode} from "inferno-compat";
 import cssAnimate, {isCssAnimationSupported} from 'css-animation';
 import animUtil from './util';
 import {AnimateChildPropTypes} from "./PropsType";
-import {observer} from "mobx-react";
 
 const transitionMap = {
     enter: 'transitionEnter',
@@ -18,7 +19,7 @@ export default class AnimateChild extends Component<AnimateChildPropTypes, any> 
         this.stop();
     }
 
-    componentWillEnter(done) {
+    componentWillEnter = (done) => {
         if (animUtil.isEnterSupported(this.props)) {
             this.transition('enter', done);
         } else {
@@ -26,7 +27,7 @@ export default class AnimateChild extends Component<AnimateChildPropTypes, any> 
         }
     }
 
-    componentWillAppear(done) {
+    componentWillAppear = (done) => {
         if (animUtil.isAppearSupported(this.props)) {
             this.transition('appear', done);
         } else {
@@ -34,7 +35,7 @@ export default class AnimateChild extends Component<AnimateChildPropTypes, any> 
         }
     }
 
-    componentWillLeave(done) {
+    componentWillLeave = (done) => {
         if (animUtil.isLeaveSupported(this.props)) {
             this.transition('leave', done);
         } else {
@@ -82,6 +83,6 @@ export default class AnimateChild extends Component<AnimateChildPropTypes, any> 
     }
 
     render() {
-        return Children.only(this.props.children);
+        return Children.only(this.props.children as any);
     }
 }

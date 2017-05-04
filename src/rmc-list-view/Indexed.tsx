@@ -1,10 +1,11 @@
-import React, {cloneElement, Component} from 'react';
-import {findDOMNode} from 'react-dom';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {cloneElement, findDOMNode} from "inferno-compat";
 import * as classNames from 'classnames';
 import ListView from './ListView';
 import {getOffsetTop, _event} from './util';
 import {IIndexedList} from "./PropsType";
-import {observer} from "mobx-react";
 import noop from "../rc-util/noop";
 
 /* eslint react/prop-types: 0 */
@@ -48,6 +49,22 @@ export default class IndexedList extends Component<IIndexedList, any> {
     _timer;
     _hCache;
 
+    indexedListView;
+    quickSearchBar;
+    qsIndicator;
+
+    bindIndexedListView = (indexedListView) => {
+        this.indexedListView = indexedListView;
+    }
+
+    bindQuickSearchBar = (quickSearchBar) => {
+        this.quickSearchBar = quickSearchBar;
+    }
+
+    bindQsIndicator = (qsIndicator) => {
+        this.qsIndicator = qsIndicator;
+    }
+
     componentWillUnmount() {
         if (this._timer) {
             clearTimeout(this._timer);
@@ -59,14 +76,14 @@ export default class IndexedList extends Component<IIndexedList, any> {
         if (this.props.stickyHeader) {
             window.document.body.scrollTop = 0;
         } else {
-            const indexedListView: any = this.refs.indexedListView;
+            const indexedListView: any = this.indexedListView;
             findDOMNode(indexedListView.refs.listviewscroll).scrollTop = 0;
         }
         this.props.onQuickSearch(sectionID, topId);
     }
 
     onQuickSearch(sectionID) {
-        const indexedListView: any = this.refs.indexedListView;
+        const indexedListView: any = this.indexedListView;
         const lv = findDOMNode(indexedListView.refs.listviewscroll);
         let sec = findDOMNode(this.sectionComponents[sectionID]);
         if (this.props.stickyHeader) {
@@ -88,7 +105,7 @@ export default class IndexedList extends Component<IIndexedList, any> {
 
     onTouchStart(e) {
         this._target = e.target;
-        const quickSearchBar: any = this.refs.quickSearchBar;
+        const quickSearchBar: any = this.quickSearchBar;
         this._basePos = quickSearchBar.getBoundingClientRect();
         document.addEventListener('touchmove', this._disableParent, false);
         document.body.className = `${document.body.className} ${this.props.prefixCls}-qsb-moving`;
@@ -138,7 +155,7 @@ export default class IndexedList extends Component<IIndexedList, any> {
     }
 
     getQsInfo() {
-        const quickSearchBar: any = this.refs.quickSearchBar;
+        const quickSearchBar: any = this.quickSearchBar;
         const height = quickSearchBar.offsetHeight;
         const hCache = [];
         [].slice.call(quickSearchBar.querySelectorAll('[data-qf-target]')).forEach((d) => {
@@ -160,7 +177,7 @@ export default class IndexedList extends Component<IIndexedList, any> {
     dataChange(props) {
         // delay render more
         const rowCount = props.dataSource.getRowCount();
-        const indexedListView: any = this.refs.indexedListView;
+        const indexedListView: any = this.indexedListView;
         if (!rowCount) {
             return;
         }
@@ -186,7 +203,7 @@ export default class IndexedList extends Component<IIndexedList, any> {
             el = el.parentNode;
         }
         if (this.props.showQuickSearchIndicator) {
-            const qsIndicator: any = this.refs.qsIndicator;
+            const qsIndicator: any = this.qsIndicator;
             qsIndicator.innerText = el.innerText.trim();
             this.setState({
                 showQuickSearchIndicator: true,
@@ -226,7 +243,7 @@ export default class IndexedList extends Component<IIndexedList, any> {
         });
         return (
             <ul
-                ref="quickSearchBar"
+                ref={this.bindQuickSearchBar}
                 className={`${prefixCls}-quick-search-bar`}
                 style={quickSearchBarStyle}
                 onTouchStart={this.onTouchStart}
@@ -280,7 +297,7 @@ export default class IndexedList extends Component<IIndexedList, any> {
             {_delay && this.props.delayActivityIndicator}
             <ListView
                 {...other}
-                ref="indexedListView"
+                ref={this.bindIndexedListView}
                 className={classNames({
                     [className]: className,
                     [prefixCls]: true,
@@ -298,7 +315,7 @@ export default class IndexedList extends Component<IIndexedList, any> {
                     [`${prefixCls}-qsindicator-hide`]: !showQuickSearchIndicator
                     || !this.state.showQuickSearchIndicator,
                 })}
-                ref="qsIndicator"
+                ref={this.bindQsIndicator}
             /> : null}
         </div>);
     }

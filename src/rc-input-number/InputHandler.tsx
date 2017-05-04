@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
-import {observer} from 'mobx-react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import Touchable from '../rc-touchable/index';
 
 @observer

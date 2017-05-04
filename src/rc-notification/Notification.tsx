@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
-import {unmountComponentAtNode, render} from 'react-dom';
-import {observer} from 'mobx-react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
+import {render} from 'inferno';
+import {unmountComponentAtNode} from 'inferno-compat';
 import * as classNames from 'classnames';
 import Animate from '../rc-animate/Animate';
 import createChainedFunction from '../rc-util/createChainedFunction';

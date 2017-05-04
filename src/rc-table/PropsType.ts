@@ -1,9 +1,9 @@
-import {CSSProperties, ReactNode} from "react";
+import {VNode} from "inferno";
 
 export interface IColumnPropTypes {
     className?: string;
     colSpan?: number;
-    title?: ReactNode;
+    title?: VNode;
     dataIndex?: string;
     width?: number | string;
     fixed?: true | 'left' | 'right';
@@ -13,7 +13,7 @@ export interface IColumnPropTypes {
 }
 
 export interface IColumnGroupPropTypes {
-    title: ReactNode;
+    title: VNode;
 }
 
 export interface IExpandIconPropTypes {
@@ -85,7 +85,7 @@ export interface ITablePropTypes {
     useFixedHeader?: boolean;
     columns?: IColumnPropTypes[];
     prefixCls?: string;
-    bodyStyle?: CSSProperties;
+    bodyStyle?: any;
     style?: IColumnPropTypes;
     rowKey?: any;
     rowClassName?: (...argument) => string;
@@ -100,11 +100,11 @@ export interface ITablePropTypes {
     showHeader?: boolean;
     title?: (...argument) => void;
     footer?: (...argument) => void;
-    emptyText?: (...argument) => ReactNode | ReactNode;
+    emptyText?: (...argument) => any;
     scroll?: { x?; y? };
     rowRef?: (...argument) => any;
     getBodyWrapper?: (...argument) => void;
-    children?: ReactNode;
+    children?: VNode;
     expandedRowRender?: (...argument) => void;
     expandRowByClick?: boolean;
     className?: string;

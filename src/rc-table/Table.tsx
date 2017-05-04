@@ -1,4 +1,6 @@
-import React, {Component, CSSProperties} from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {observer} from 'inferno-mobx';
 import TableRow from './TableRow';
 import TableHeader from './TableHeader';
 import {measureScrollbar, debounce, warningOnce} from './utils';
@@ -12,6 +14,7 @@ import noop from "../rc-util/noop";
 import Column from './Column';
 import ColumnGroup from './ColumnGroup';
 
+@observer
 export default class Table extends Component<ITablePropTypes, any> {
 
     static Column = Column;
@@ -120,7 +123,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         }
     }
 
-    onExpandedRowsChange(expandedRowKeys) {
+    onExpandedRowsChange = (expandedRowKeys) => {
         if (!this.props.expandedRowKeys) {
             this.setState({expandedRowKeys});
         }
@@ -158,7 +161,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         this.onExpandedRowsChange(expandedRows);
     }
 
-    getRowKey(record, index) {
+    getRowKey = (record, index) => {
         const rowKey = this.props.rowKey;
         const key = (typeof rowKey === 'function') ?
             rowKey(record, index) : record[rowKey];
@@ -170,11 +173,11 @@ export default class Table extends Component<ITablePropTypes, any> {
         return key === undefined ? index : key;
     }
 
-    getExpandedRows() {
+    getExpandedRows = () => {
         return this.props.expandedRowKeys || this.state.expandedRowKeys;
     }
 
-    getHeader(columns, fixed) {
+    getHeader = (columns, fixed) => {
         const {showHeader, expandIconAsCell, prefixCls} = this.props;
         const rows = this.getHeaderRows(columns);
 
@@ -198,7 +201,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         ) : null;
     }
 
-    getHeaderRows(columns, currentRow = 0, rows?) {
+    getHeaderRows = (columns, currentRow = 0, rows?) => {
         rows = rows || [];
         rows[currentRow] = rows[currentRow] || [];
 
@@ -231,7 +234,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         return rows.filter((row) => row.length > 0);
     }
 
-    getExpandedRow(key, content, visible, className, fixed) {
+    getExpandedRow = (key, content, visible, className, fixed) => {
         const {prefixCls, expandIconAsCell} = this.props;
         let colCount;
         if (fixed === 'left') {
@@ -273,7 +276,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         );
     }
 
-    getRowsByData(data, visible, indent, columns, fixed) {
+    getRowsByData = (data, visible, indent, columns, fixed) => {
         const props = this.props;
         const childrenColumnName = props.childrenColumnName;
         const expandedRowRender = props.expandedRowRender;
@@ -364,11 +367,11 @@ export default class Table extends Component<ITablePropTypes, any> {
         return rst;
     }
 
-    getRows(columns, fixed) {
+    getRows = (columns, fixed) => {
         return this.getRowsByData(this.props.data, true, 0, columns, fixed);
     }
 
-    getColGroup(columns, fixed) {
+    getColGroup = (columns, fixed) => {
         let cols = [];
         if (this.props.expandIconAsCell && fixed !== 'right') {
             cols.push(
@@ -392,26 +395,26 @@ export default class Table extends Component<ITablePropTypes, any> {
         return <colgroup>{cols}</colgroup>;
     }
 
-    getLeftFixedTable() {
+    getLeftFixedTable = () => {
         return this.getTable({
             columns: this.columnManager.leftColumns(),
             fixed: 'left',
         });
     }
 
-    getRightFixedTable() {
+    getRightFixedTable = () => {
         return this.getTable({
             columns: this.columnManager.rightColumns(),
             fixed: 'right',
         });
     }
 
-    getTable(options = {columns: undefined, fixed: undefined}) {
+    getTable = (options = {columns: undefined, fixed: undefined}) => {
         const {columns, fixed} = options;
         const {prefixCls, scroll = {}, getBodyWrapper} = this.props;
         let {useFixedHeader} = this.props;
         const bodyStyle = {...this.props.bodyStyle};
-        const headStyle: CSSProperties = {};
+        const headStyle: any = {};
 
         let tableClassName = '';
         if (scroll.x || fixed) {
@@ -471,7 +474,7 @@ export default class Table extends Component<ITablePropTypes, any> {
                 <div
                     key="headTable"
                     className={`${prefixCls}-header`}
-                    ref={fixed ? null : 'headTable'}
+                    ref={fixed ? null : this.bindHeadTable}
                     style={headStyle}
                     onMouseOver={this.detectScrollTarget}
                     onTouchStart={this.detectScrollTarget}
@@ -487,7 +490,7 @@ export default class Table extends Component<ITablePropTypes, any> {
                 key="bodyTable"
                 className={`${prefixCls}-body`}
                 style={bodyStyle}
-                ref="bodyTable"
+                ref={this.bindBodyTable}
                 onMouseOver={this.detectScrollTarget}
                 onTouchStart={this.detectScrollTarget}
                 onScroll={this.handleBodyScroll}
@@ -499,9 +502,9 @@ export default class Table extends Component<ITablePropTypes, any> {
         if (fixed && columns.length) {
             let refName;
             if (columns[0].fixed === 'left' || columns[0].fixed === true) {
-                refName = 'fixedColumnsBodyLeft';
+                refName = this.bindFixedColumnsBodyLeft;
             } else if (columns[0].fixed === 'right') {
-                refName = 'fixedColumnsBodyRight';
+                refName = this.bindFixedColumnsBodyRight;
             }
             delete bodyStyle.overflowX;
             delete bodyStyle.overflowY;
@@ -527,7 +530,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         return [headTable, bodyTable];
     }
 
-    getTitle() {
+    getTitle = () => {
         const {title, prefixCls} = this.props;
         return title ? (
             <div className={`${prefixCls}-title`} key="title">
@@ -536,7 +539,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         ) : null;
     }
 
-    getFooter() {
+    getFooter = () => {
         const {footer, prefixCls} = this.props;
         return footer ? (
             <div className={`${prefixCls}-footer`} key="footer">
@@ -545,7 +548,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         ) : null;
     }
 
-    getEmptyText() {
+    getEmptyText = () => {
         const {emptyText, prefixCls, data} = this.props;
         return !data.length ? (
             <div className={`${prefixCls}-placeholder`} key="emptyText">
@@ -554,7 +557,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         ) : null;
     }
 
-    getHeaderRowStyle(columns, rows) {
+    getHeaderRowStyle = (columns, rows) => {
         const {fixedColumnsHeadRowsHeight} = this.state;
         const headerHeight = fixedColumnsHeadRowsHeight[0];
         if (headerHeight && columns) {
@@ -569,7 +572,7 @@ export default class Table extends Component<ITablePropTypes, any> {
     scrollPosition;
     tableNode;
 
-    setScrollPosition(position) {
+    setScrollPosition = (position) => {
         this.scrollPosition = position;
         if (this.tableNode) {
             const {prefixCls} = this.props;
@@ -586,8 +589,25 @@ export default class Table extends Component<ITablePropTypes, any> {
         }
     }
 
-    setScrollPositionClassName(target?) {
-        const node = target || this.refs.bodyTable;
+    bodyTable;
+    headTable;
+    fixedColumnsBodyRight;
+    fixedColumnsBodyLeft;
+    bindBodyTable = (bodyTable) => {
+        this.bodyTable = bodyTable;
+    }
+    bindHeadTable = (headTable) => {
+        this.headTable = headTable;
+    }
+    bindFixedColumnsBodyRight = (fixedColumnsBodyRight) => {
+        this.fixedColumnsBodyRight = fixedColumnsBodyRight;
+    }
+    bindFixedColumnsBodyLeft = (fixedColumnsBodyLeft) => {
+        this.fixedColumnsBodyLeft = fixedColumnsBodyLeft;
+    }
+
+    setScrollPositionClassName = (target?) => {
+        const node = target || this.bodyTable;
         const scrollToLeft = node.scrollLeft === 0;
         const scrollToRight = node.scrollLeft + 1 >=
             node.children[0].getBoundingClientRect().width -
@@ -617,17 +637,17 @@ export default class Table extends Component<ITablePropTypes, any> {
         }
         const {prefixCls} = this.props;
         const headRows = ((me) => {
-            if (me.refs.headTable) {
-                const headTable: any = me.refs.headTable;
+            if (me.headTable) {
+                const headTable: any = me.headTable;
                 return headTable.querySelectorAll('thead');
             } else {
-                const bodyTable: any = me.refs.bodyTable;
+                const bodyTable: any = me.bodyTable;
                 return bodyTable.querySelectorAll('thead');
             }
         })(this);
 
         const bodyRows = ((me) => {
-            const bodyTable: any = me.refs.bodyTable;
+            const bodyTable: any = me.bodyTable;
             return bodyTable.querySelectorAll(`.${prefixCls}-row`) || [];
         })(this);
         const fixedColumnsHeadRowsHeight = [].map.call(
@@ -646,21 +666,21 @@ export default class Table extends Component<ITablePropTypes, any> {
         });
     }
 
-    resetScrollX() {
-        if (this.refs.headTable) {
-            (this.refs.headTable as HTMLElement).scrollLeft = 0;
+    resetScrollX = () => {
+        if (this.headTable) {
+            (this.headTable as HTMLElement).scrollLeft = 0;
         }
-        if (this.refs.bodyTable) {
-            (this.refs.bodyTable as HTMLElement).scrollLeft = 0;
+        if (this.bodyTable) {
+            (this.bodyTable as HTMLElement).scrollLeft = 0;
         }
     }
 
-    findExpandedRow(record, index?) {
+    findExpandedRow = (record, index?) => {
         const rows = this.getExpandedRows().filter((i) => i === this.getRowKey(record, index));
         return rows[0];
     }
 
-    isRowExpanded(record, index) {
+    isRowExpanded = (record, index) => {
         return typeof this.findExpandedRow(record, index) !== 'undefined';
     }
 
@@ -672,7 +692,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         }
     }
 
-    hasScrollX() {
+    hasScrollX = () => {
         const {scroll = {}} = this.props;
         return 'x' in scroll;
     }
@@ -686,10 +706,10 @@ export default class Table extends Component<ITablePropTypes, any> {
             return;
         }
         const {scroll = {}} = this.props;
-        const headTable: any = this.refs.headTable;
-        const bodyTable: any = this.refs.bodyTable;
-        const fixedColumnsBodyLeft: any = this.refs.bodyTable;
-        const fixedColumnsBodyRight: any = this.refs.fixedColumnsBodyRight;
+        const headTable: any = this.headTable;
+        const bodyTable: any = this.bodyTable;
+        const fixedColumnsBodyLeft: any = this.bodyTable;
+        const fixedColumnsBodyRight: any = this.fixedColumnsBodyRight;
         if (scroll.x && e.target.scrollLeft !== this.lastScrollLeft) {
             if (e.target === bodyTable && headTable) {
                 headTable.scrollLeft = e.target.scrollLeft;

@@ -1,10 +1,9 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import React from 'react';
 import {observer} from 'inferno-mobx';
 import Touchable from '../rc-touchable/index';
 
 @observer
-export default class InputHandler extends Component<any, any> {
+export default class InputHandler extends React.Component<any, any> {
     render() {
         const {prefixCls, disabled, ...otherProps} = this.props;
         return (

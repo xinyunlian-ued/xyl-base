@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import TableRow from './TableRow';
 import TableHeader from './TableHeader';
@@ -15,7 +14,7 @@ import Column from './Column';
 import ColumnGroup from './ColumnGroup';
 
 @observer
-export default class Table extends Component<ITablePropTypes, any> {
+export default class Table extends React.Component<ITablePropTypes, any> {
 
     static Column = Column;
     static ColumnGroup = ColumnGroup;

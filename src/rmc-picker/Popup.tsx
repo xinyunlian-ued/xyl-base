@@ -1,25 +1,23 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
-import {cloneElement} from "inferno-compat";
 import Modal from '../rc-dialog';
 import {IPopupPickerProps} from './PopupPickerTypes';
 import Touchable from '../rc-touchable';
 
 @observer
-export default class PopupPicker extends Component<IPopupPickerProps, any> {
+export default class PopupPicker extends React.Component<IPopupPickerProps, any> {
     static defaultProps = {
         prefixCls: 'rmc-picker-popup',
         triggerType: 'onClick',
         WrapComponent: 'span',
-    }
+    };
 
     state = {
         pickerValue: 'value' in this.props ? this.props.value : null,
         visible: this.props.visible || false,
-    }
+    };
 
-    picker
+    picker;
 
     saveRef = (picker) => {
         this.picker = picker;
@@ -71,7 +69,7 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
 
     getRender = () => {
         const props = this.props;
-        const children = props.children;
+        const children: any = props.children;
         if (!children) {
             return this.getModal();
         }
@@ -82,7 +80,7 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
             newChildProps[props.triggerType] = this.onTriggerClick;
         }
         return (<WrapComponent style={props.wrapStyle}>
-            {cloneElement(child, newChildProps)}
+            {React.cloneElement(child, newChildProps)}
             {this.getModal()}
         </WrapComponent>);
     }
@@ -107,7 +105,7 @@ export default class PopupPicker extends Component<IPopupPickerProps, any> {
             if (pickerValue === null) {
                 pickerValue = this.props.value;
             }
-            return cloneElement(this.props.picker, ({
+            return React.cloneElement(this.props.picker, ({
                 [this.props.pickerValueProp]: pickerValue,
                 [this.props.pickerValueChangeProp]: this.onPickerChange,
                 ref: this.saveRef,

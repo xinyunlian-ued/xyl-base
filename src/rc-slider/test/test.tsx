@@ -1,4 +1,4 @@
-import createElement from 'inferno-create-element';
+import React from 'react';
 import {render} from 'inferno';
 import Tooltip from '../../rc-tooltip'
 import Slider from '../index';

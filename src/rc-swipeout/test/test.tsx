@@ -1,6 +1,6 @@
 import '../assets/index.less';
 import Swipeout from '../index';
-import createElement from 'inferno-create-element';
+import React from 'react';
 import inferno from 'inferno';
 
 inferno.render(

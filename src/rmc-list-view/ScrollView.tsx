@@ -1,7 +1,6 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
+import {findDOMNode} from "react-dom";
 import {observer} from 'inferno-mobx';
-import {cloneElement, findDOMNode} from "inferno-compat";
 import DOMScroller from 'zscroller';
 import * as assign from 'object-assign';
 import * as classNames from 'classnames';
@@ -26,7 +25,7 @@ const styles = {
 };
 
 @observer
-export default class ScrollView extends Component<IScrollView, any> {
+export default class ScrollView extends React.Component<IScrollView, any> {
 
     refreshControlRefresh;
     manuallyRefresh;
@@ -148,22 +147,27 @@ export default class ScrollView extends Component<IScrollView, any> {
             scroller.activatePullToRefresh(distanceToRefresh,
                 () => {
                     this.manuallyRefresh = true;
-                    refsRefreshControl && refsRefreshControl.setState({active: true});
+                    if (refsRefreshControl) {
+                        refsRefreshControl.setState({active: true});
+                    }
                 },
                 () => {
                     this.manuallyRefresh = false;
-                    refsRefreshControl && refsRefreshControl.setState({
-                        deactive: true,
-                        active: false,
-                        loadingState: false,
-                    });
-
+                    if (refsRefreshControl) {
+                        refsRefreshControl.setState({
+                            deactive: true,
+                            active: false,
+                            loadingState: false,
+                        });
+                    }
                 },
                 () => {
-                    refsRefreshControl && refsRefreshControl.setState({
-                        deactive: false,
-                        loadingState: true,
-                    });
+                    if (refsRefreshControl) {
+                        refsRefreshControl.setState({
+                            deactive: false,
+                            loadingState: true,
+                        });
+                    }
 
                     const finishPullToRefresh = () => {
                         scroller.finishPullToRefresh();
@@ -221,7 +225,7 @@ export default class ScrollView extends Component<IScrollView, any> {
             return (
                 <div {...containerProps}>
                     <div {...contentContainerProps}>
-                        {cloneElement(refreshControl, {ref: this.bindRefreshControl})}
+                        {React.cloneElement(refreshControl, {ref: this.bindRefreshControl})}
                         {children}
                     </div>
                 </div>

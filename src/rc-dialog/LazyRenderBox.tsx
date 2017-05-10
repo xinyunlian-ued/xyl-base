@@ -1,11 +1,10 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import assign from 'object-assign';
 import {ILazyRenderBoxPropTypes} from "./IDialogPropTypes";
 
 @observer
-export default class LazyRenderBox extends Component<ILazyRenderBoxPropTypes, any> {
+export default class LazyRenderBox extends React.Component<ILazyRenderBoxPropTypes, any> {
 
     shouldComponentUpdate(nextProps) {
         return !!nextProps.hiddenClassName || !!nextProps.visible;

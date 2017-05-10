@@ -40,7 +40,7 @@
 // export default function mixin<P extends HOCBaseProps, S extends HOCBaseState>(Comp: typeof Component): ComponentClass<HOCBaseProps> {
 //
 //     @observer
-//     class HOCBase extends Component<HOCBaseProps, HOCBaseState> {
+//     class HOCBase extends React.Component<HOCBaseProps, HOCBaseState> {
 //
 //         getValueFromEvent;
 //         autoStepTimer;

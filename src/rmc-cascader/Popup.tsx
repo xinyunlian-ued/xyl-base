@@ -1,19 +1,17 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
-import {VNode} from "inferno";
 import PopupPicker from '../rmc-picker/Popup';
 import {IPopupPickerProps} from '../rmc-picker/PopupPickerTypes';
 import {CascaderValue} from './CascaderTypes';
 
-
 export interface IPopupCascaderProps extends IPopupPickerProps {
-    cascader: VNode;
+    cascader: React.ReactElement<any>;
     onChange?: (date?: CascaderValue) => void;
 }
 
 @observer
-export default class PopupCascader extends Component<IPopupCascaderProps, any> {
+export default class PopupCascader extends React.Component<IPopupCascaderProps, any> {
+
     static defaultProps = {
         pickerValueProp: 'value',
         pickerValueChangeProp: 'onChange',
@@ -32,7 +30,7 @@ export default class PopupCascader extends Component<IPopupCascaderProps, any> {
     render() {
         return (<PopupPicker
             picker={this.props.cascader}
-            {...this.props}
+            {...this.props as any}
             onOk={this.onOk}
         />);
     }

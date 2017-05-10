@@ -1,7 +1,6 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
+import {findDOMNode} from "react-dom";
 import {observer} from 'inferno-mobx';
-import {cloneElement, findDOMNode} from "inferno-compat";
 import * as classNames from 'classnames';
 import ListView from './ListView';
 import {getOffsetTop, _event} from './util';
@@ -10,7 +9,7 @@ import noop from "../rc-util/noop";
 
 /* eslint react/prop-types: 0 */
 @observer
-export default class IndexedList extends Component<IIndexedList, any> {
+export default class IndexedList extends React.Component<IIndexedList, any> {
 
     static defaultProps = {
         prefixCls: 'rmc-indexed-list',
@@ -296,7 +295,7 @@ export default class IndexedList extends Component<IIndexedList, any> {
         return (<div className={`${prefixCls}-container`}>
             {_delay && this.props.delayActivityIndicator}
             <ListView
-                {...other}
+                {...other as any}
                 ref={this.bindIndexedListView}
                 className={classNames({
                     [className]: className,
@@ -322,7 +321,7 @@ export default class IndexedList extends Component<IIndexedList, any> {
 
     onRenderSectionHeader(renderSectionHeader, sectionHeaderClassName, prefixCls) {
         return (sectionData, sectionID) => {
-            return cloneElement(
+            return React.cloneElement(
                 renderSectionHeader(sectionData, sectionID), {
                     ref: this.sectionComponentsBySectionID(this, sectionID),
                     className: sectionHeaderClassName || `${prefixCls}-section-header`,

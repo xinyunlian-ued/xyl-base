@@ -1,11 +1,11 @@
-import createElement from 'inferno-create-element';
+import React from 'react';
 import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import {isValidElement} from 'inferno-compat';
 import classNames from 'classnames';
 
 @observer
-export default class Marks extends Component<any, any> {
+export default class Marks extends React.Component<any, any> {
     render() {
         const {className, vertical, marks, included, upperBound, lowerBound, max, min} = this.props;
         const marksKeys = Object.keys(marks);

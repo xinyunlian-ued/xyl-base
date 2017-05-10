@@ -1,15 +1,14 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
-import {findDOMNode} from "inferno-compat";
 import * as classNames from 'classnames';
 import noop from '../rc-util/noop';
 import {DrawerPropTypes} from './PropsType';
+import {findDOMNode} from "react-dom";
 
 const CANCEL_DISTANCE_ON_SCROLL = 20;
 
 @observer
-export default class Drawer extends Component<DrawerPropTypes, any> {
+export default class Drawer extends React.Component<DrawerPropTypes, any> {
 
     static defaultProps = {
         prefixCls: 'rc-drawer',

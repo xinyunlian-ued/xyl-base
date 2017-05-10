@@ -23,6 +23,12 @@ interface IDialogPropTypes {
     maskStyle?: any;
     prefixCls?: string;
     wrapClassName?: string;
+    width?;
+    height?;
+    bodyProps?;
+    wrapProps?;
+    zIndex?;
+    maskProps?;
 }
 
 export interface ILazyRenderBoxPropTypes {

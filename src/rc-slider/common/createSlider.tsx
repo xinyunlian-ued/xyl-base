@@ -1,4 +1,4 @@
-import createElement from 'inferno-create-element';
+import React from 'react';
 import {observer} from 'inferno-mobx';
 import addEventListener from '../../rc-util/Dom/addEventListener';
 import classNames from 'classnames';

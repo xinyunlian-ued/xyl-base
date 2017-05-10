@@ -1,15 +1,15 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import React from 'react';
+import {findDOMNode} from "react-dom";
 import {observer} from 'inferno-mobx';
-import {findDOMNode} from "inferno-compat";
 import Align from '../rc-align';
 import Animate from '../rc-animate';
 import PopupInner from './PopupInner';
 import LazyRenderBox from './LazyRenderBox';
 import {IPopup} from "./PropsType";
 
+
 @observer
-export default class Popup extends Component<IPopup, any> {
+export default class Popup extends React.Component<IPopup, any> {
     rootNode;
 
     componentDidMount() {

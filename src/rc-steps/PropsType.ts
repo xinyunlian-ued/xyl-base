@@ -26,5 +26,5 @@ export interface IStepPropTypes {
     stepNumber?: string;
     description?: any;
     title?: any;
-    progressDot?: (iconDot?, option?: any) => void | boolean;
+    progressDot?: (iconDot?, option?: any) => any;
 }

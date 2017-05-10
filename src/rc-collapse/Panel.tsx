@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import classNames from 'classnames';
 import PanelContent from './PanelContent';
@@ -8,7 +7,7 @@ import {CollapsePanelPropTypes} from "./PropsType";
 import noop from "../rc-util/noop";
 
 @observer
-export default class CollapsePanel extends Component<CollapsePanelPropTypes, any> {
+export default class CollapsePanel extends React.Component<CollapsePanelPropTypes, any> {
 
     static defaultProps = {
         showArrow: true,

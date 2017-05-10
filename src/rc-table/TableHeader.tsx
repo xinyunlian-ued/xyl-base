@@ -1,11 +1,10 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import shallowequal from 'shallowequal';
 import {ITableHeaderPropTypes} from "./PropsType";
 
 @observer
-export default class TableHeader extends Component<ITableHeaderPropTypes, any> {
+export default class TableHeader extends React.Component<ITableHeaderPropTypes, any> {
 
     shouldComponentUpdate(nextProps) {
         return !shallowequal(nextProps, this.props);
@@ -18,7 +17,7 @@ export default class TableHeader extends Component<ITableHeaderPropTypes, any> {
             {
                 rows.map((row, index) => (
                     <tr key={index} style={rowStyle}>
-                        {row.map((cellProps, i) => <th {...cellProps} key={i}/>)}
+                        {row.map((cellProps, i) => <th {...cellProps as any} key={i}/>)}
                     </tr>
                 ))
             }

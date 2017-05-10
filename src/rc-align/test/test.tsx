@@ -3,7 +3,7 @@
 // import assign from 'object-assign';
 // import Align from '../index';
 //
-// class Test extends Component<any, any> {
+// class Test extends React.Component<any, any> {
 //
 //     state = {
 //         monitor: true,

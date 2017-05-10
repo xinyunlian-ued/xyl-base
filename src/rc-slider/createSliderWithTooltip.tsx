@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import Tooltip from '../rc-tooltip';
 import Handle from './Handle';
@@ -7,7 +6,7 @@ import {ISliderWithTooltipProps} from "./PropTypes";
 
 export default function createSliderWithTooltip(Cmp) {
 
-    return observer(class ComponentWrapper extends Component<ISliderWithTooltipProps, any> {
+    return observer(class ComponentWrapper extends React.Component<ISliderWithTooltipProps, any> {
         static defaultProps = {
             tipFormatter(value) {
                 return value;
@@ -38,7 +37,7 @@ export default function createSliderWithTooltip(Cmp) {
                     key={index}
                 >
                     <Handle
-                        {...restProps}
+                        {...restProps as any}
                         onMouseEnter={() => this.handleTooltipVisibleChange(index, true)}
                         onMouseLeave={() => this.handleTooltipVisibleChange(index, false)}
                     />

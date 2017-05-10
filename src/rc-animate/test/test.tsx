@@ -1,11 +1,11 @@
-import createElement from 'inferno-create-element';
+import React from 'react';
 import Component from 'inferno-component';
 import {render} from 'inferno';
 import Animate from '../index';
 import '../assets/index.less';
 let seed = 0;
 
-class Alert extends Component<any, any> {
+class Alert extends React.Component<any, any> {
 
     static defaultProps = {
         onEnd() {
@@ -35,7 +35,7 @@ class Alert extends Component<any, any> {
 }
 
 
-class AlertGroup extends Component<any, any> {
+class AlertGroup extends React.Component<any, any> {
 
     state = {
         alerts: [],

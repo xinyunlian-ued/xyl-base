@@ -1,4 +1,4 @@
-import createElement from 'inferno-create-element';
+import React from 'react';
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
@@ -10,7 +10,7 @@ function onChange(e) {
 }
 
 @observer
-class Test extends Component<any, any> {
+class Test extends React.Component<any, any> {
     constructor(props) {
         super(props);
         this.state = {disabled: false};

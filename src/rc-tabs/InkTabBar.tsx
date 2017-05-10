@@ -1,28 +1,82 @@
 import * as React from 'react';
 import {observer} from 'inferno-mobx';
-import * as classNames from 'classnames';
-import * as warning from 'warning';
-import {ITabBarMixinPropTypes} from "./PropsType";
+import classnames from 'classnames';
+import warning from 'warning';
+import {componentDidUpdate} from './InkTabBarMixin';
 
-const tabBarExtraContentStyle = {
-    float: 'right',
-};
+export interface IInkTabBar {
+    inkBarAnimated?: boolean;
+    onTabClick?;
+    prefixCls?;
+    styles?;
+    panels?;
+    activeKey?;
+    onKeyDown?;
+    className?;
+    extraContent?;
+    style?;
+}
+
+// const aa = createReactClass({
+//     displayName: 'InkTabBar',
+//     mixins: [TabBarMixin, InkTabBarMixin],
+//     render() {
+//         const inkBarNode = this.getInkBarNode();
+//         const tabs = this.getTabs();
+//         return this.getRootNode([inkBarNode, tabs]);
+//     },
+// });
 
 @observer
-export default class TabBar extends React.Component<ITabBarMixinPropTypes, any> {
+export default class InkTabBar extends React.Component<IInkTabBar, any> {
 
     static defaultProps = {
-        styles: {}
+        inkBarAnimated: true,
     };
 
-    activeTab;
+    inkBar;
     root;
-    bindActiveTab = (activeTab) => {
-        this.activeTab = activeTab;
+    activeTab;
+    inkBarBind = (inkBar) => {
+        this.inkBar = inkBar;
     }
-    bindRoot = (root) => {
+    rootBind = (root) => {
         this.root = root;
     }
+    activeTabBind = (activeTab) => {
+        this.activeTab = activeTab;
+    }
+
+
+    componentDidUpdate() {
+        componentDidUpdate(this);
+    }
+
+    componentDidMount() {
+        componentDidUpdate(this, true);
+    }
+
+    getInkBarNode = () => {
+        const {prefixCls, styles, inkBarAnimated} = this.props;
+        const className = `${prefixCls}-ink-bar`;
+        const classes = classnames({
+            [className]: true,
+            [
+                inkBarAnimated ?
+                    `${className}-animated` :
+                    `${className}-no-animated`
+                ]: true,
+        });
+        return (
+            <div
+                style={styles.inkBar}
+                className={classes}
+                key="inkBar"
+                ref={this.inkBarBind}
+            />
+        );
+    }
+
 
     onTabClick = (key) => {
         this.props.onTabClick(key);
@@ -50,9 +104,9 @@ export default class TabBar extends React.Component<ITabBarMixinPropTypes, any> 
                     onClick: this.onTabClick.bind(this, key),
                 };
             }
-            const ref = {ref: undefined};
+            const ref: any = {};
             if (activeKey === key) {
-                ref.ref = this.bindActiveTab;
+                ref.ref = this.activeTabBind;
             }
             warning('tab' in child.props, 'There must be `tab` property on children of Tabs.');
             rst.push(<div
@@ -73,22 +127,24 @@ export default class TabBar extends React.Component<ITabBarMixinPropTypes, any> 
 
     getRootNode = (contents) => {
         const {prefixCls, onKeyDown, className, extraContent, style} = this.props;
-        const cls = classNames({
+        const cls = classnames({
             [`${prefixCls}-bar`]: 1,
-            [`${className}`]: !!className,
+            [className]: !!className,
         });
         return (
             <div
                 role="tablist"
                 className={cls}
                 tabIndex={0}
-                ref={this.bindRoot}
+                ref={this.rootBind}
                 onKeyDown={onKeyDown}
                 style={style}
             >
                 {extraContent ?
                     (<div
-                        style={tabBarExtraContentStyle}
+                        style={{
+                            float: 'right',
+                        }}
                         key="extra"
                     >
                         {extraContent}
@@ -97,8 +153,10 @@ export default class TabBar extends React.Component<ITabBarMixinPropTypes, any> 
             </div>);
     }
 
+
     render() {
+        const inkBarNode = this.getInkBarNode();
         const tabs = this.getTabs();
-        return this.getRootNode(tabs);
+        return this.getRootNode([inkBarNode, tabs]);
     }
-}
+};

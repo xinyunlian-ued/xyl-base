@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import {IStepPropTypes} from "./PropsType";
@@ -9,7 +8,7 @@ function isString(str) {
 }
 
 @observer
-export default class Step extends Component<IStepPropTypes, any> {
+export default class Step extends React.Component<IStepPropTypes, any> {
 
     _main;
     _tail;
@@ -65,7 +64,7 @@ export default class Step extends Component<IStepPropTypes, any> {
         });
         return (
             <div
-                {...restProps}
+                {...restProps as any}
                 className={classString}
                 style={{width: itemWidth, marginRight: adjustMarginRight, ...style}}
             >

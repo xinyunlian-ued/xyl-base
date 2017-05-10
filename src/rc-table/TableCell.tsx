@@ -1,12 +1,11 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import {isValidElement} from 'inferno-compat';
 import get from 'lodash.get';
 import {ITableCellPropTypes} from "./PropsType";
 
 @observer
-export default class TableCell extends Component<ITableCellPropTypes, any> {
+export default class TableCell extends React.Component<ITableCellPropTypes, any> {
 
     isInvalidRenderCellText(text) {
         return text && !isValidElement(text) &&

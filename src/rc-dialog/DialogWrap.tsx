@@ -1,13 +1,12 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
+import {unmountComponentAtNode, unstable_renderSubtreeIntoContainer} from "react-dom";
 import {observer} from 'inferno-mobx';
-import {unmountComponentAtNode, unstable_renderSubtreeIntoContainer} from 'inferno-compat';
 import Dialog from './Dialog';
 import IDialogPropTypes from './IDialogPropTypes';
 import noop from "../rc-util/noop";
 
 @observer
-export default class DialogWrap extends Component<IDialogPropTypes, any> {
+export default class DialogWrap extends React.Component<IDialogPropTypes, any> {
 
     static defaultProps = {
         visible: false

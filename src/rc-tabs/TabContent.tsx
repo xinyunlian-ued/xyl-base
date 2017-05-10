@@ -1,7 +1,5 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
-import {Children, cloneElement} from "inferno-compat";
 import * as classNames from 'classnames';
 import {
     getTransformByIndex,
@@ -12,7 +10,7 @@ import {
 import {ITabContent} from "./PropsType";
 
 @observer
-export default class TabContent extends Component<ITabContent, any> {
+export default class TabContent extends React.Component<ITabContent, any> {
 
     static defaultProps = {
         animated: true,
@@ -24,18 +22,18 @@ export default class TabContent extends Component<ITabContent, any> {
         const children = props.children;
         const newChildren = [];
 
-        Children.forEach(children, (child: any) => {
+        React.Children.forEach(children, (child: any) => {
             if (!child) {
                 return;
             }
             const key = child.key;
             const active = activeKey === key;
-            newChildren.push(cloneElement(child, {
+            newChildren.push(React.cloneElement(child, {
                 active,
                 destroyInactiveTabPane: props.destroyInactiveTabPane,
                 rootPrefixCls: props.prefixCls,
             }));
-        }, null);
+        });
 
         return newChildren;
     }

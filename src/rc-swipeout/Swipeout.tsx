@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import omit from 'object.omit';
 import splitObject from './util/splitObject';
@@ -8,7 +7,7 @@ import noop from "../rc-util/noop";
 const Hammer = require('react-hammerjs/src/Hammer');
 
 @observer
-export default class Swipeout extends Component<ISwipeoutPropTypes, any> {
+export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
 
     static defaultProps: ISwipeoutPropTypes = {
         prefixCls: 'rc-swipeout',

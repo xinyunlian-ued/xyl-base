@@ -1,4 +1,4 @@
-import {findDOMNode} from 'inferno-compat';
+import {findDOMNode} from 'react-dom';
 import warning from 'fbjs/lib/warning';
 
 /**

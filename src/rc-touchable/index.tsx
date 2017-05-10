@@ -1,9 +1,7 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
-import {cloneVNode} from 'inferno';
-import {Children, findDOMNode} from 'inferno-compat';
 import * as assign from 'object-assign';
+import {findDOMNode} from "react-dom";
 
 function keyMirror(obj) {
     Object.keys(obj).forEach((k) => obj[k] = k);
@@ -205,7 +203,7 @@ function isAllowPress() {
 }
 
 @observer
-export default class Touchable extends Component<ITouchable, any> {
+export default class Touchable extends React.Component<ITouchable, any> {
 
     static defaultProps = {
         fixClickPenetration: false,
@@ -660,7 +658,7 @@ export default class Touchable extends Component<ITouchable, any> {
                 'onTouchCancel',
                 'onMouseDown',
             ]);
-        const child = Children.only(children as any);
+        const child = React.Children.only(children as any);
         if (!disabled && this.state.active) {
             let {style, className} = child.props;
             if (activeStyle) {
@@ -673,12 +671,12 @@ export default class Touchable extends Component<ITouchable, any> {
                     className = activeClassName;
                 }
             }
-            return cloneVNode(child, assign({
+            return React.cloneElement(child, assign({
                 className,
                 style,
             }, events));
         }
-        return cloneVNode(child, events);
+        return React.cloneElement(child, events) as React.ReactElement<any>;
     }
 }
 

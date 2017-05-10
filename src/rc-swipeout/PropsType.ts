@@ -2,9 +2,10 @@ export interface ISwipeoutPropTypes {
     prefixCls?: string;
     autoClose?: boolean;
     disabled?: boolean;
-    left?: ObjectConstructor[];
-    right?: ObjectConstructor[];
-    onOpen?: () => void;
-    onClose?: () => void;
-    children?: () => void;
+    left?: any;
+    right?: any;
+    onOpen?: any;
+    onClose?: any;
+    children?: any;
+    [key: string]: any;
 }

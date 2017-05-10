@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import classNames from 'classnames';
 import Track from './common/Track';
@@ -8,7 +7,7 @@ import * as utils from './utils';
 import {IRangeProps} from "./PropTypes";
 
 @observer
-class Range extends Component<IRangeProps, any> {
+class Range extends React.Component<IRangeProps, any> {
 
     static displayName = 'Range';
 
@@ -39,11 +38,15 @@ class Range extends Component<IRangeProps, any> {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
+        if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) {
+            return;
+        }
         const {bounds} = this.state;
         const value = nextProps.value || bounds;
         const nextBounds = value.map(v => this.trimAlignValue(v, nextProps));
-        if (nextBounds.length === bounds.length && nextBounds.every((v, i) => v === bounds[i])) return;
+        if (nextBounds.length === bounds.length && nextBounds.every((v, i) => v === bounds[i])) {
+            return;
+        }
 
         this.setState({bounds: nextBounds});
         if (bounds.some(v => utils.isValueOutOfRange(v, nextProps))) {
@@ -89,7 +92,9 @@ class Range extends Component<IRangeProps, any> {
         });
 
         const prevValue = bounds[boundNeedMoving];
-        if (value === prevValue) return;
+        if (value === prevValue) {
+            return;
+        }
 
         const nextBounds = [...state.bounds];
         nextBounds[boundNeedMoving] = value;
@@ -109,7 +114,9 @@ class Range extends Component<IRangeProps, any> {
 
         const value = this.calcValueByPos(position);
         const oldValue = state.bounds[state.handle];
-        if (value === oldValue) return;
+        if (value === oldValue) {
+            return;
+        }
 
         const nextBounds = [...state.bounds];
         nextBounds[state.handle] = value;
@@ -326,7 +333,7 @@ class Range extends Component<IRangeProps, any> {
             );
         });
 
-        return {tracks, handles};
+        return {tracks, handles} as any;
     }
 }
 

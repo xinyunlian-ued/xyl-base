@@ -1,4 +1,4 @@
-import createElement from 'inferno-create-element';
+import React from 'react';
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
@@ -6,7 +6,7 @@ import './assets/index.less';
 import InputNumber from '../index';
 
 @observer
-class App extends Component<any, any> {
+class App extends React.Component<any, any> {
     state = {
         disabled: false,
         readOnly: false,

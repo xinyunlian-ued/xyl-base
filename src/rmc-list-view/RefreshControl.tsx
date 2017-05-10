@@ -1,11 +1,10 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import {IRefreshControl} from "./PropsType";
 
 @observer
-export default class RefreshControl extends Component<IRefreshControl, any> {
+export default class RefreshControl extends React.Component<IRefreshControl, any> {
 
     static defaultProps = {
         prefixCls: 'list-view-refresh-control',

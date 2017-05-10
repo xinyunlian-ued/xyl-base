@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import classNames from 'classnames';
 import ZScroller from 'zscroller';
@@ -8,7 +7,7 @@ import isChildrenEqual from './isChildrenEqual';
 import noop from "../rc-util/noop";
 
 @observer
-export default class Picker extends Component<IPickerProps, any> {
+export default class Picker extends React.Component<IPickerProps, any> {
 
     static defaultProps = {
         prefixCls: 'rmc-picker',

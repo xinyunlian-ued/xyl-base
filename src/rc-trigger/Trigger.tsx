@@ -1,7 +1,5 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
-import {Children, cloneElement, findDOMNode, unstable_renderSubtreeIntoContainer} from 'inferno-compat';
 import contains from '../rc-util/Dom/contains';
 import addEventListener from '../rc-util/Dom/addEventListener';
 import Popup from './Popup';
@@ -9,6 +7,7 @@ import {getAlignFromPlacement, getPopupClassNameFromAlign} from './utils';
 import {defaultGetContainer} from '../rc-util/getContainerRenderMixin';
 import noop from "../rc-util/noop";
 import {ITrigger} from "./PropsType";
+import {findDOMNode, unstable_renderSubtreeIntoContainer} from "react-dom";
 
 function returnEmptyString() {
     return '';
@@ -76,7 +75,7 @@ function renderComponent(instance, componentArg?, ready?) {
 }
 
 @observer
-export default class Trigger extends Component<ITrigger, any> {
+export default class Trigger extends React.Component<ITrigger, any> {
 
     static defaultProps = {
         prefixCls: 'rc-trigger-popup',
@@ -111,7 +110,7 @@ export default class Trigger extends Component<ITrigger, any> {
         }
         this.state = {
             popupVisible,
-        }
+        };
     }
 
     componentWillMount() {
@@ -431,7 +430,7 @@ export default class Trigger extends Component<ITrigger, any> {
     render() {
         const props = this.props;
         const children = props.children;
-        const child = Children.only(children);
+        const child = React.Children.only(children);
         const newChildProps: any = {};
         if (this.isClickToHide() || this.isClickToShow()) {
             newChildProps.onClick = this.onClick;
@@ -458,6 +457,6 @@ export default class Trigger extends Component<ITrigger, any> {
             newChildProps.onBlur = this.createTwoChains('onBlur');
         }
 
-        return cloneElement(child, newChildProps);
+        return React.cloneElement(child, newChildProps);
     }
 }

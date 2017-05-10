@@ -1,11 +1,10 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import classnames from 'classnames';
 import {PanelContentPropTypes} from "./PropsType";
 
 @observer
-export default class PanelContent extends Component<PanelContentPropTypes, any> {
+export default class PanelContent extends React.Component<PanelContentPropTypes, any> {
 
     _isActived;
 

@@ -1,11 +1,10 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import * as shallowequal from 'shallowequal';
 import {IExpandIconPropTypes} from "./PropsType";
 
 @observer
-export default class ExpandIcon extends Component<IExpandIconPropTypes, any> {
+export default class ExpandIcon extends React.Component<IExpandIconPropTypes, any> {
 
     shouldComponentUpdate(nextProps) {
         return !shallowequal(nextProps, this.props);

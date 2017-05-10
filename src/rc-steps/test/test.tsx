@@ -1,6 +1,6 @@
 import '../assets/index.less';
 import '../assets/iconfont.less';
-import createElement from 'inferno-create-element';
+import React from 'react';
 import inferno from 'inferno';
 import Steps, {Step} from '../index';
 

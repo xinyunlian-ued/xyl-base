@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import noop from '../rc-util/noop';
@@ -31,7 +30,7 @@ export interface State {
 }
 
 @observer
-export default class InputNumber extends Component<InputNumberPropTypes, State> {
+export default class InputNumber extends React.Component<InputNumberPropTypes, State> {
 
     start;
     end;

@@ -1,4 +1,3 @@
-
 export interface CheckboxPropTypes {
     prefixCls?: string;
     className?: string;
@@ -14,6 +13,7 @@ export interface CheckboxPropTypes {
     onClick?: any;
     tabIndex?: number;
     readOnly?: boolean;
+    [key: string]: any;
 }
 
 export interface State {

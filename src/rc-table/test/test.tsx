@@ -1,4 +1,4 @@
-import createElement from 'inferno-create-element';
+import React from 'react';
 import inferno from 'inferno';
 import Table from '../index';
 import '../assets/index.less';

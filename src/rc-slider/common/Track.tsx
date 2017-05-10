@@ -1,9 +1,9 @@
-import createElement from 'inferno-create-element';
+import React from 'react';
 import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 
 @observer
-export default class Track extends Component<any, any> {
+export default class Track extends React.Component<any, any> {
     render() {
         const {className, included, vertical, offset, length, minimumTrackStyle} = this.props;
         const style: any = {

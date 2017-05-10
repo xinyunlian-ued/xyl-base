@@ -1,4 +1,4 @@
-import {Children, isValidElement} from 'inferno-compat';
+import * as React from 'react';
 
 export default class ColumnManager {
     _cached = {};
@@ -109,8 +109,8 @@ export default class ColumnManager {
 
     normalize(elements) {
         const columns = [];
-        Children.forEach(elements, (element) => {
-            if (!isValidElement(element)) {
+        React.Children.forEach(elements, (element) => {
+            if (!React.isValidElement(element)) {
                 return;
             }
             const column: any = {...element.props};
@@ -118,12 +118,12 @@ export default class ColumnManager {
                 column.key = element.key;
             }
             if (typeof element.type !== 'string') {
-                if (element.props.type.isTableColumnGroup) {
+                if ((element.props as any).type.isTableColumnGroup) {
                     column.children = this.normalize(column.children);
                 }
             }
             columns.push(column);
-        }, null);
+        });
         return columns;
     }
 

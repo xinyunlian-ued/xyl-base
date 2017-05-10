@@ -1,4 +1,4 @@
-import createElement from 'inferno-create-element';
+import React from 'react';
 import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import {render} from "inferno";
@@ -6,7 +6,7 @@ import Dialog from '../DialogWrap';
 import '../assets/index.less';
 
 @observer
-class MyControl extends Component<any, any> {
+class MyControl extends React.Component<any, any> {
     state = {
         visible: false,
         width: 600,
@@ -123,7 +123,7 @@ class MyControl extends Component<any, any> {
 }
 
 @observer
-class App extends Component<any, any> {
+class App extends React.Component<any, any> {
     render() {
         return (
             <div>

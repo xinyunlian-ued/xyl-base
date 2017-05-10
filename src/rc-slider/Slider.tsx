@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
@@ -7,7 +6,7 @@ import * as utils from './utils';
 import {ISliderProps} from "./PropTypes";
 
 @observer
-class Slider extends Component<ISliderProps, any> {
+class Slider extends React.Component<ISliderProps, any> {
 
     static displayName = 'Slider';
 
@@ -144,7 +143,7 @@ class Slider extends Component<ISliderProps, any> {
             />
         );
 
-        return {tracks: track, handles: handle};
+        return {tracks: track, handles: handle} as any;
     }
 }
 

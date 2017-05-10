@@ -98,8 +98,8 @@ export interface ITablePropTypes {
     onRowDoubleClick?: (...argument) => void;
     expandIconColumnIndex?: number;
     showHeader?: boolean;
-    title?: (...argument) => void;
-    footer?: (...argument) => void;
+    title?: (...argument) => any;
+    footer?: (...argument) => any;
     emptyText?: (...argument) => any;
     scroll?: { x?; y? };
     rowRef?: (...argument) => any;

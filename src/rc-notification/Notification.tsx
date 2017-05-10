@@ -1,13 +1,12 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
+import ReactDom from 'react-dom';
 import {observer} from 'inferno-mobx';
-import {render} from 'inferno';
-import {unmountComponentAtNode} from 'inferno-compat';
 import * as classNames from 'classnames';
 import Animate from '../rc-animate/Animate';
 import createChainedFunction from '../rc-util/createChainedFunction';
 import Notice from './Notice';
 import {NotificationPropTypes} from './PropsType';
+import {unmountComponentAtNode} from "react-dom";
 
 let seed = 0;
 const now = Date.now();
@@ -17,7 +16,7 @@ function getUuid() {
 }
 
 @observer
-export default class Notification extends Component<NotificationPropTypes, any> {
+export default class Notification extends React.Component<NotificationPropTypes, any> {
 
     static defaultProps = {
         prefixCls: 'rc-notification',
@@ -37,7 +36,7 @@ export default class Notification extends Component<NotificationPropTypes, any> 
             div = document.createElement('div');
             document.body.appendChild(div);
         }
-        const notification: any = render(<Notification {...props} />, div);
+        const notification: any = ReactDom.render(<Notification {...props} />, div);
         return {
             notice(noticeProps) {
                 notification.add(noticeProps);
@@ -212,7 +211,7 @@ export default class Notification extends Component<NotificationPropTypes, any> 
 
 
 // @observer
-// export default class Notification extends Component<NotificationPropTypes, { notices: Notice[] }> {
+// export default class Notification extends React.Component<NotificationPropTypes, { notices: Notice[] }> {
 //
 //     static defaultProps: NotificationPropTypes = {
 //         prefixCls: 'rc-notification',

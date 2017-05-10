@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import MultiPicker from '../rmc-picker/MultiPicker';
 import IDatePickerProps from './IDatePickerProps';
@@ -26,7 +25,7 @@ const MONTH = 'month';
 const YEAR = 'year';
 
 @observer
-export default class DatePicker extends Component<IDatePickerProps, any> {
+export default class DatePicker extends React.Component<IDatePickerProps, any> {
     static defaultProps = {
         prefixCls: 'rmc-date-picker',
         pickerPrefixCls: 'rmc-picker',

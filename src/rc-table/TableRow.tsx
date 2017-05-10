@@ -1,5 +1,4 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import noop from "../rc-util/noop";
 import TableCell from './TableCell';
@@ -7,7 +6,7 @@ import ExpandIcon from './ExpandIcon';
 import {ITableRowPropTypes} from "./PropsType";
 
 @observer
-export default class TableRow extends Component<ITableRowPropTypes, any> {
+export default class TableRow extends React.Component<ITableRowPropTypes, any> {
 
     static defaultProps = {
         onRowClick: noop,

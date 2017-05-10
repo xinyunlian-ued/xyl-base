@@ -1,13 +1,12 @@
-import {Children} from "inferno-compat";
-
+import * as React from 'react';
 export function toArray(children) {
     // allow [c,[a,b]]
     const c = [];
-    Children.forEach(children, (child) => {
+    React.Children.forEach(children, (child) => {
         if (child) {
             c.push(child);
         }
-    }, null);
+    });
     return c;
 }
 

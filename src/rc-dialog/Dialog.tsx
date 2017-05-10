@@ -1,7 +1,5 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
-import {findDOMNode} from "inferno";
 import KeyCode from '../rc-util/KeyCode';
 import Animate from '../rc-animate';
 import LazyRenderBox from './LazyRenderBox';
@@ -9,13 +7,13 @@ import getScrollBarSize from '../rc-util/getScrollBarSize';
 import IDialogPropTypes from './IDialogPropTypes';
 import assign from 'object-assign';
 import noop from "../rc-util/noop";
-
+import {findDOMNode} from "react-dom";
 
 let uuid = 0;
 let openCount = 0;
 
 @observer
-export default class Dialog extends Component<IDialogPropTypes, any> {
+export default class Dialog extends React.Component<IDialogPropTypes, any> {
 
     static defaultProps = {
         afterClose: noop,
@@ -27,7 +25,7 @@ export default class Dialog extends Component<IDialogPropTypes, any> {
         maskClosable: true,
         prefixCls: 'rc-dialog',
         onClose: noop,
-    }
+    };
 
     inTransition;
     titleId;

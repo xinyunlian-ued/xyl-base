@@ -8,6 +8,5 @@ export interface IAlign {
     monitorBufferTime?: number;
     monitorWindowResize?: boolean;
     disabled?: boolean;
-    children?: ReactChildren;
     xVisible?: boolean;
 }

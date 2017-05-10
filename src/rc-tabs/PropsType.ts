@@ -1,23 +1,23 @@
-import {CSSProperties, ReactChildren, ReactNode} from 'react';
+import {VNode} from "inferno";
 
 export interface ITabBarMixinPropTypes {
     onTabClick?: (key?: string) => void;
-    panels?: ReactChildren;
+    panels?: VNode[];
     activeKey?: string;
     prefixCls?: string;
-    onKeyDown: (event: any) => void;
+    onKeyDown?: (event: any) => void;
     className?: any;
-    extraContent?: ReactNode;
-    style?: CSSProperties;
+    extraContent?: VNode;
+    style?: any;
 }
 
 export interface ITabContent {
     animated?: boolean;
     animatedWithMargin?: boolean;
     prefixCls?: string;
-    children?: ReactChildren;
+    children?: VNode[];
     activeKey?: string;
-    style?: CSSProperties;
+    style?: VNode[];
     tabBarPosition?: string;
     destroyInactiveTabPane?;
 }
@@ -25,11 +25,12 @@ export interface ITabContent {
 export interface ITabPane {
     className?: string;
     active?: boolean;
-    style?: CSSProperties;
+    style?: any;
     destroyInactiveTabPane?: boolean;
     forceRender?: boolean;
-    placeholder?: ReactNode;
+    placeholder?;
     rootPrefixCls?: string;
+    tab?;
 }
 
 export interface ITabs {
@@ -37,18 +38,26 @@ export interface ITabs {
     renderTabBar: (...argument) => void;
     renderTabContent: () => any;
     onChange?: (event: any) => void;
-    children?: ReactChildren;
     prefixCls?: string;
     className?: string;
     tabBarPosition?: string;
-    style?: CSSProperties;
+    style?: any;
     activeKey?: string;
     defaultActiveKey?: string;
 }
 
 export interface IInkTabBarMixin {
     prefixCls?: string;
-    styles?: CSSProperties;
+    styles?: any;
     inkBarAnimated?: boolean;
     onKeyDown: (event: any) => void;
+}
+
+export interface ISwipeableTabContent {
+    tabBarPosition?: string;
+    onChange?: Function;
+    children?;
+    hammerOptions?;
+    animated?: boolean;
+    activeKey?: string;
 }

@@ -7409,7 +7409,7 @@ componentHooks.add('onComponentWillUpdate');
 componentHooks.add('onComponentDidUpdate');
 /**
  * Creates virtual node
- * @param {string|Function|Component<any, any>} type Type of node
+ * @param {string|Function|React.Component<any, any>} type Type of node
  * @param {object=} props Optional props for virtual node
  * @param {...{object}=} _children Optional children for virtual node
  * @returns {VNode} new virtual ndoe

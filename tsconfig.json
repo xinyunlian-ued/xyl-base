@@ -2,10 +2,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "module": "es2015",
-    "target": "es5",
-    //    "jsx": "react",
+    "target": "es2017",
     "jsx": "react",
-    "jsxFactory": "createElement",
     "alwaysStrict": true,
     "rootDirs": [
       "src",
@@ -19,7 +17,8 @@
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "noEmitHelpers": true,
-//    "sourceMap": true,
+    "declaration": false,
+    "sourceMap": true,
     "types": [
       "inferno"
     ],

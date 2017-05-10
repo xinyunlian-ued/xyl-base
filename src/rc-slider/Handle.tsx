@@ -1,10 +1,9 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import {IHandleProps} from "./PropTypes";
 
 @observer
-export default class Handle extends Component<IHandleProps, any> {
+export default class Handle extends React.Component<IHandleProps, any> {
     render() {
         const {
             className, vertical, offset, handleStyle, ...restProps,

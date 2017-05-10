@@ -1,14 +1,12 @@
-import createElement from 'inferno-create-element';
-import Component from 'inferno-component';
+import * as React from 'react';
 import {observer} from 'inferno-mobx';
 import noop from "../rc-util/noop";
-import {VNode} from "inferno";
 import classnames from 'classnames';
 import Picker from './Picker';
 import MultiPickerProps from './MultiPickerProps';
 
 @observer
-export default class MultiPicker extends Component<MultiPickerProps, any> {
+export default class MultiPicker extends React.Component<MultiPickerProps, any> {
 
     getDefaultProps = () => {
         return {
@@ -27,7 +25,7 @@ export default class MultiPicker extends Component<MultiPickerProps, any> {
             if (!children) {
                 return [];
             }
-            return (children as VNode[]).map(c => {
+            return (children as any).map(c => {
                 const cc = c.props.children;
                 return cc && cc[0] && cc[0].value;
             });
@@ -50,7 +48,7 @@ export default class MultiPicker extends Component<MultiPickerProps, any> {
             pure, children,
         } = props;
         const selectedValue = this.getValue();
-        const colElements = (children as VNode[]).map((col, i) => {
+        const colElements = (children as any).map((col, i) => {
             return (
                 <div key={col.key || i} className={`${prefixCls}-item`}>
                     <Picker

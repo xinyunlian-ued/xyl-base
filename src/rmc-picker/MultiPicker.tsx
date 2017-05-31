@@ -1,21 +1,21 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {Children} from 'inferno-compat';
 import {observer} from 'inferno-mobx';
-import noop from "../rc-util/noop";
 import classnames from 'classnames';
 import Picker from './Picker';
 import MultiPickerProps from './MultiPickerProps';
 
 @observer
-export default class MultiPicker extends React.Component<MultiPickerProps, any> {
+export default class MultiPicker extends Component<MultiPickerProps, any> {
 
-    getDefaultProps = () => {
-        return {
-            prefixCls: 'rmc-multi-picker',
-            pickerPrefixCls: 'rmc-picker',
-            onValueChange: noop,
-            disabled: false,
-        };
-    }
+    static defaultProps = {
+        prefixCls: 'xyl-base/lib/rmc-multi-picker',
+        pickerPrefixCls: 'xyl-base/lib/rmc-picker',
+        onValueChange() {
+        },
+        disabled: false,
+    };
 
     getValue = () => {
         const {children, selectedValue} = this.props;
@@ -25,10 +25,10 @@ export default class MultiPicker extends React.Component<MultiPickerProps, any> 
             if (!children) {
                 return [];
             }
-            return (children as any).map(c => {
+            return Children.map(children as any, (c) => {
                 const cc = c.props.children;
                 return cc && cc[0] && cc[0].value;
-            });
+            }, null);
         }
     }
 
@@ -48,7 +48,7 @@ export default class MultiPicker extends React.Component<MultiPickerProps, any> 
             pure, children,
         } = props;
         const selectedValue = this.getValue();
-        const colElements = (children as any).map((col, i) => {
+        const colElements = Children.map(children as any, (col, i) => {
             return (
                 <div key={col.key || i} className={`${prefixCls}-item`}>
                     <Picker
@@ -59,15 +59,15 @@ export default class MultiPicker extends React.Component<MultiPickerProps, any> 
                         prefixCls={pickerPrefixCls}
                         selectedValue={selectedValue[i]}
                         onValueChange={this.onValueChange.bind(this, i)}
-                        {...col.props}
+                        {...col.props as any}
                     />
                 </div>
             );
-        });
+        }, null);
         return (
-            <div {...rootNativeProps} className={classnames(className, prefixCls)}>
+            <div {...rootNativeProps as any} className={classnames(className, prefixCls)}>
                 {colElements}
             </div>
         );
     }
-}
+};

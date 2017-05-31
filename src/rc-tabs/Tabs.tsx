@@ -1,5 +1,7 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
+import {Children, cloneElement} from "inferno-compat";
 import KeyCode from './KeyCode';
 import TabPane from './TabPane';
 import * as classNames from 'classnames';
@@ -9,16 +11,16 @@ import noop from "../rc-util/noop";
 
 function getDefaultActiveKey(props) {
     let activeKey;
-    React.Children.forEach(props.children, (child: any) => {
+    Children.forEach(props.children, (child: any) => {
         if (child && !activeKey && !child.props.disabled) {
             activeKey = child.key;
         }
-    });
+    }, null);
     return activeKey;
 }
 
 @observer
-export default class Tabs extends React.Component<ITabs, any> {
+export default class Tabs extends Component<ITabs, any> {
 
     static TabPane = TabPane;
 
@@ -91,7 +93,7 @@ export default class Tabs extends React.Component<ITabs, any> {
     getNextActiveKey = (next) => {
         const activeKey = this.state.activeKey;
         const children = [];
-        React.Children.forEach(this.props.children, (c: any) => {
+        Children.forEach(this.props.children as any, (c: any) => {
             if (c && !c.props.disabled) {
                 if (next) {
                     children.push(c);
@@ -99,7 +101,7 @@ export default class Tabs extends React.Component<ITabs, any> {
                     children.unshift(c);
                 }
             }
-        });
+        }, null);
         const length = children.length;
         let ret = length && children[0].key;
         children.forEach((child, i) => {
@@ -130,7 +132,7 @@ export default class Tabs extends React.Component<ITabs, any> {
 
         this.tabBar = renderTabBar();
         const contents = [
-            React.cloneElement(this.tabBar, {
+            cloneElement(this.tabBar, {
                 prefixCls,
                 key: 'tabBar',
                 onKeyDown: this.onNavKeyDown,
@@ -139,7 +141,7 @@ export default class Tabs extends React.Component<ITabs, any> {
                 panels: props.children,
                 activeKey: this.state.activeKey,
             }),
-            React.cloneElement(renderTabContent(), {
+            cloneElement(renderTabContent(), {
                 prefixCls,
                 tabBarPosition,
                 activeKey: this.state.activeKey,

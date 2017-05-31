@@ -1,4 +1,5 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import PureRenderMixin from '../rc-util/PureRenderMixin';
@@ -6,7 +7,7 @@ import noop from '../rc-util/noop';
 import {CheckboxPropTypes, State} from './PropsType';
 
 @observer
-export default class Checkbox extends React.Component<CheckboxPropTypes, State> {
+export default class Checkbox extends Component<CheckboxPropTypes, State> {
 
     static defaultProps = {
         prefixCls: 'rc-checkbox',

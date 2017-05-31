@@ -1,4 +1,3 @@
-import {CSSProperties, ReactElement} from "react";
 import ListViewDataSource from './ListViewDataSource';
 export interface IStaticRenderer {
     shouldUpdate: boolean;
@@ -8,7 +7,7 @@ export interface IStaticRenderer {
 export interface IRefreshControl {
     prefixCls?: string;
     className?: string;
-    style?: CSSProperties;
+    style?: any;
     icon?: any;
     loading?: any;
     distanceToRefresh?: number;
@@ -22,8 +21,8 @@ export interface IScrollView {
     prefixCls?: string;
     listPrefixCls?: string;
     listViewPrefixCls?: string;
-    style?: CSSProperties;
-    contentContainerStyle?: CSSProperties;
+    style?: any;
+    contentContainerStyle?: any;
     onScroll?: (...argument) => void;
     scrollEventThrottle?: number;
     removeClippedSubviews?: boolean; // offscreen views are removed
@@ -43,18 +42,18 @@ export interface IListView extends IScrollView {
     onEndReached?: (...argument) => void;
     onEndReachedThreshold?: number;
     pageSize?: number;
-    renderFooter?: (...argument) =>  ReactElement<{}>;
-    renderHeader?: (...argument) =>  ReactElement<{}>;
-    renderSectionHeader?: (...argument) =>  ReactElement<any>;
-    renderScrollComponent?: (...argument) =>  ReactElement<any>;
+    renderFooter?: (...argument) => any;
+    renderHeader?: (...argument) => any;
+    renderSectionHeader?: (...argument) => any;
+    renderScrollComponent?: (...argument) => any;
     scrollRenderAheadDistance?: number;
     onChangeVisibleRows?: (...argument) => void;
     scrollEventThrottle?: number;
     // removeClippedSubviews: React.PropTypes.bool,
     // stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
     // another added
-    renderBodyComponent?: (...argument) => ReactElement<{}>;
-    renderSectionBodyWrapper?: (...argument) => ReactElement<any>;
+    renderBodyComponent?: (...argument) => any;
+    renderSectionBodyWrapper?: (...argument) => any;
     sectionBodyClassName?: string;
     useZscroller?: boolean; // for web
     useBodyScroll?: boolean;  // for web

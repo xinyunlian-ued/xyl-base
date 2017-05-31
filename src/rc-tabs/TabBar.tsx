@@ -1,4 +1,6 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {Children} from "inferno-compat";
 import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import * as warning from 'warning';
@@ -9,7 +11,7 @@ const tabBarExtraContentStyle = {
 };
 
 @observer
-export default class TabBar extends React.Component<ITabBarMixinPropTypes, any> {
+export default class TabBar extends Component<ITabBarMixinPropTypes, any> {
 
     static defaultProps = {
         styles: {}
@@ -35,7 +37,7 @@ export default class TabBar extends React.Component<ITabBarMixinPropTypes, any> 
         const rst = [];
         const prefixCls = props.prefixCls;
 
-        React.Children.forEach(children, (child: any) => {
+        Children.forEach(children, (child: any) => {
             if (!child) {
                 return;
             }
@@ -66,7 +68,7 @@ export default class TabBar extends React.Component<ITabBarMixinPropTypes, any> 
             >
                 {child.props.tab}
             </div>);
-        });
+        }, null);
 
         return rst;
     }

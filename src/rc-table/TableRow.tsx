@@ -1,28 +1,33 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
-import noop from "../rc-util/noop";
 import TableCell from './TableCell';
 import ExpandIcon from './ExpandIcon';
 import {ITableRowPropTypes} from "./PropsType";
 
 @observer
-export default class TableRow extends React.Component<ITableRowPropTypes, any> {
+export default class TableRow extends Component<ITableRowPropTypes, any> {
 
     static defaultProps = {
-        onRowClick: noop,
-        onRowDoubleClick: noop,
-        onDestroy: noop,
+        onRowClick() {
+        },
+        onRowDoubleClick() {
+        },
+        onDestroy() {
+        },
         expandIconColumnIndex: 0,
         expandRowByClick: false,
-        onHover: noop,
-    };
+        onHover() {
+        },
+    }
 
     state = {
         hovered: false,
         height: null,
-    };
+    }
 
     unsubscribe;
+    trRef;
 
     componentDidMount() {
         const {store} = this.props;
@@ -63,14 +68,16 @@ export default class TableRow extends React.Component<ITableRowPropTypes, any> {
         onRowDoubleClick(record, index, event);
     }
 
-    onMouseEnter = () => {
-        const {onHover, hoverKey} = this.props;
+    onMouseEnter = (event) => {
+        const {record, index, onRowMouseEnter, onHover, hoverKey} = this.props;
         onHover(true, hoverKey);
+        onRowMouseEnter(record, index, event);
     }
 
-    onMouseLeave = () => {
-        const {onHover, hoverKey} = this.props;
+    onMouseLeave = (event) => {
+        const {record, index, onRowMouseLeave, onHover, hoverKey} = this.props;
         onHover(false, hoverKey);
+        onRowMouseLeave(record, index, event);
     }
 
     setHover() {
@@ -83,6 +90,7 @@ export default class TableRow extends React.Component<ITableRowPropTypes, any> {
         }
     }
 
+
     pullHeight() {
         const {store, expandedRow, fixed, rowKey} = this.props;
         const {expandedRowsHeight} = store.getState();
@@ -90,8 +98,6 @@ export default class TableRow extends React.Component<ITableRowPropTypes, any> {
             this.setState({height: expandedRowsHeight[rowKey]});
         }
     }
-
-    trRef;
 
     pushHeight() {
         const {store, expandedRow, fixed, rowKey} = this.props;
@@ -156,14 +162,14 @@ export default class TableRow extends React.Component<ITableRowPropTypes, any> {
             );
         }
         const height = this.props.height || this.state.height;
-        const style: any = {height};
+        const style = {height, display: undefined};
         if (!visible) {
             style.display = 'none';
         }
 
         return (
             <tr
-                ref={this.setTrRef(this)}
+                ref={(node) => (this.trRef = node)}
                 onClick={this.onRowClick}
                 onDoubleClick={this.onRowDoubleClick}
                 onMouseEnter={this.onMouseEnter}
@@ -174,11 +180,5 @@ export default class TableRow extends React.Component<ITableRowPropTypes, any> {
                 {cells}
             </tr>
         );
-    }
-
-    setTrRef(me) {
-        return (node) => {
-            me.trRef = node;
-        };
     }
 }

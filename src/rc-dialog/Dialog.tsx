@@ -1,4 +1,6 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import {findDOMNode} from 'inferno-compat';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import KeyCode from '../rc-util/KeyCode';
 import Animate from '../rc-animate';
@@ -7,14 +9,46 @@ import getScrollBarSize from '../rc-util/getScrollBarSize';
 import IDialogPropTypes from './IDialogPropTypes';
 import assign from 'object-assign';
 import noop from "../rc-util/noop";
-import {findDOMNode} from "react-dom";
 
 let uuid = 0;
 let openCount = 0;
 
-@observer
-export default class Dialog extends React.Component<IDialogPropTypes, any> {
+function getScroll(w, top?: boolean) {
+    let ret = w[`page${top ? 'Y' : 'X'}Offset`];
+    const method = `scroll${top ? 'Top' : 'Left'}`;
+    if (typeof ret !== 'number') {
+        const d = w.document;
+        ret = d.documentElement[method];
+        if (typeof ret !== 'number') {
+            ret = d.body[method];
+        }
+    }
+    return ret;
+}
 
+function setTransformOrigin(node, value) {
+    const style = node.style;
+    ['Webkit', 'Moz', 'Ms', 'ms'].forEach((prefix) => {
+        style[`${prefix}TransformOrigin`] = value;
+    });
+    style[`transformOrigin`] = value;
+}
+
+function offset(el) {
+    const rect = el.getBoundingClientRect();
+    const pos = {
+        left: rect.left,
+        top: rect.top,
+    };
+    const doc = el.ownerDocument;
+    const w = doc.defaultView || doc.parentWindow;
+    pos.left += getScroll(w);
+    pos.top += getScroll(w, true);
+    return pos;
+}
+
+@observer
+export default class Dialog extends Component<IDialogPropTypes, any> {
     static defaultProps = {
         afterClose: noop,
         className: '',
@@ -23,48 +57,15 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
         keyboard: true,
         closable: true,
         maskClosable: true,
-        prefixCls: 'rc-dialog',
+        prefixCls: 'xyl-base/lib/rc-dialog',
         onClose: noop,
     };
-
-    inTransition;
-    titleId;
-    openTime;
+    inTransition: boolean;
+    titleId: string;
+    openTime: number;
     lastOutSideFocusNode;
-    bodyIsOverflowing;
-    scrollbarWidth;
-
-    warp;
-    dialog;
-    sentinel;
-    body;
-    footer;
-    header;
-
-    warpBind = (warp) => {
-        this.warp = warp;
-    }
-
-    dialogBind = (dialog) => {
-        this.dialog = dialog;
-    }
-
-    sentinelBind = (sentinel) => {
-        this.sentinel = sentinel;
-    }
-
-    bodyBind = (body) => {
-        this.body = body;
-    }
-
-    footerBind = (footer) => {
-        this.footer = footer;
-    }
-
-    headerBind = (header) => {
-        this.header = header;
-    }
-
+    bodyIsOverflowing: boolean;
+    scrollbarWidth: number;
 
     componentWillMount() {
         this.inTransition = false;
@@ -84,7 +85,7 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
                 this.openTime = Date.now();
                 this.lastOutSideFocusNode = document.activeElement;
                 this.addScrollingEffect();
-                this.warp.focus();
+                this.wrap.focus();
                 const dialogNode = findDOMNode(this.dialog);
                 if (mousePosition) {
                     const elOffset = offset(dialogNode);
@@ -116,14 +117,13 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
     onAnimateLeave = () => {
         // need demo?
         // https://github.com/react-component/dialog/pull/28
-        if (this.warp) {
-            this.warp.style.display = 'none';
+        if (this.wrap) {
+            this.wrap.style.display = 'none';
         }
         this.inTransition = false;
         this.removeScrollingEffect();
         this.props.afterClose();
     }
-
     onMaskClick = (e) => {
         // android trigger click on open (fastclick??)
         if (Date.now() - this.openTime < 300) {
@@ -133,7 +133,6 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
             this.close(e);
         }
     }
-
     onKeyDown = (e) => {
         const props = this.props;
         if (props.keyboard && e.keyCode === KeyCode.ESC) {
@@ -143,7 +142,7 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
         if (props.visible) {
             if (e.keyCode === KeyCode.TAB) {
                 const activeElement = document.activeElement;
-                const dialogRoot = this.warp;
+                const dialogRoot = this.wrap;
                 const sentinel = this.sentinel;
                 if (e.shiftKey) {
                     if (activeElement === dialogRoot) {
@@ -155,7 +154,6 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
             }
         }
     }
-
     getDialogElement = () => {
         const props = this.props;
         const closable = props.closable;
@@ -218,7 +216,7 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
                         className={`${prefixCls}-body`}
                         style={props.bodyStyle}
                         ref={this.bodyBind}
-                        {...props.bodyProps}
+                        {...props.bodyProps as any}
                     >
                         {props.children}
                     </div>
@@ -242,7 +240,6 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
             </Animate>
         );
     }
-
     getZIndexStyle = () => {
         const style: any = {};
         const props = this.props;
@@ -251,15 +248,12 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
         }
         return style;
     }
-
     getWrapStyle = (): any => {
         return assign({}, this.getZIndexStyle(), this.props.wrapStyle);
     }
-
     getMaskStyle = () => {
         return assign({}, this.getZIndexStyle(), this.props.maskStyle);
     }
-
     getMaskElement = () => {
         const props = this.props;
         let maskElement;
@@ -272,7 +266,7 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
                     className={`${props.prefixCls}-mask`}
                     hiddenClassName={`${props.prefixCls}-mask-hidden`}
                     visible={props.visible}
-                    {...props.maskProps}
+                    {...props.maskProps as any}
                 />
             );
             if (maskTransition) {
@@ -291,8 +285,6 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
         }
         return maskElement;
     }
-
-
     getMaskTransitionName = () => {
         const props = this.props;
         let transitionName = props.maskTransitionName;
@@ -302,7 +294,6 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
         }
         return transitionName;
     }
-
     getTransitionName = () => {
         const props = this.props;
         let transitionName = props.transitionName;
@@ -312,17 +303,14 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
         }
         return transitionName;
     }
-
     getElement = (part) => {
         return this[part];
     }
-
     setScrollbar = () => {
         if (this.bodyIsOverflowing && this.scrollbarWidth !== undefined) {
             document.body.style.paddingRight = `${this.scrollbarWidth}px`;
         }
     }
-
     addScrollingEffect = () => {
         openCount++;
         if (openCount !== 1) {
@@ -333,7 +321,6 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
         document.body.style.overflow = 'hidden';
         // this.adjustDialog();
     }
-
     removeScrollingEffect = () => {
         openCount--;
         if (openCount !== 0) {
@@ -343,11 +330,9 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
         this.resetScrollbar();
         // this.resetAdjustments();
     }
-
     close = (e) => {
         this.props.onClose(e);
     }
-
     checkScrollbar = () => {
         let fullWindowWidth = window.innerWidth;
         if (!fullWindowWidth) { // workaround for missing window.innerWidth in IE8
@@ -359,26 +344,48 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
             this.scrollbarWidth = getScrollBarSize();
         }
     }
-
     resetScrollbar = () => {
         document.body.style.paddingRight = '';
     }
-
     adjustDialog = () => {
-        if (this.warp && this.scrollbarWidth !== undefined) {
+        if (this.wrap && this.scrollbarWidth !== undefined) {
             const modalIsOverflowing =
-                this.warp.scrollHeight > document.documentElement.clientHeight;
-            this.warp.style.paddingLeft =
+                this.wrap.scrollHeight > document.documentElement.clientHeight;
+            this.wrap.style.paddingLeft =
                 `${!this.bodyIsOverflowing && modalIsOverflowing ? this.scrollbarWidth : ''}px`;
-            this.warp.style.paddingRight =
+            this.wrap.style.paddingRight =
                 `${this.bodyIsOverflowing && !modalIsOverflowing ? this.scrollbarWidth : ''}px`;
         }
     }
-
     resetAdjustments = () => {
-        if (this.warp) {
-            this.warp.style.paddingLeft = this.warp.style.paddingLeft = '';
+        if (this.wrap) {
+            this.wrap.style.paddingLeft = this.wrap.style.paddingLeft = '';
         }
+    }
+
+    footer;
+    footerBind = (footer) => {
+        this.footer = footer;
+    }
+    header;
+    headerBind = (header) => {
+        this.header = header;
+    }
+    dialog;
+    dialogBind = (dialog) => {
+        this.dialog = dialog;
+    }
+    body;
+    bodyBind = (body) => {
+        this.body = body;
+    }
+    sentinel;
+    sentinelBind = (sentinel) => {
+        this.sentinel = sentinel;
+    }
+    wrap;
+    wrapBind = (wrap) => {
+        this.wrap = wrap;
     }
 
     render() {
@@ -397,51 +404,16 @@ export default class Dialog extends React.Component<IDialogPropTypes, any> {
                     tabIndex={-1}
                     onKeyDown={this.onKeyDown}
                     className={`${prefixCls}-wrap ${props.wrapClassName || ''}`}
-                    ref={this.warpBind}
+                    ref={this.wrapBind}
                     onClick={maskClosable ? this.onMaskClick : undefined}
-                    role={this.dialogBind}
+                    role="dialog"
                     aria-labelledby={props.title ? this.titleId : null}
                     style={style}
-                    {...props.wrapProps}
+                    {...props.wrapProps as any}
                 >
                     {this.getDialogElement()}
                 </div>
             </div>
         );
     }
-
-}
-
-function getScroll(w, top?: boolean) {
-    let ret = w[`page${top ? 'Y' : 'X'}Offset`];
-    const method = `scroll${top ? 'Top' : 'Left'}`;
-    if (typeof ret !== 'number') {
-        const d = w.document;
-        ret = d.documentElement[method];
-        if (typeof ret !== 'number') {
-            ret = d.body[method];
-        }
-    }
-    return ret;
-}
-
-function setTransformOrigin(node, value) {
-    const style = node.style;
-    ['Webkit', 'Moz', 'Ms', 'ms'].forEach((prefix) => {
-        style[`${prefix}TransformOrigin`] = value;
-    });
-    style[`transformOrigin`] = value;
-}
-
-function offset(el) {
-    const rect = el.getBoundingClientRect();
-    const pos = {
-        left: rect.left,
-        top: rect.top,
-    };
-    const doc = el.ownerDocument;
-    const w = doc.defaultView || doc.parentWindow;
-    pos.left += getScroll(w);
-    pos.top += getScroll(w, true);
-    return pos;
 }

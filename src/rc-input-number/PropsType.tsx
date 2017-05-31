@@ -1,5 +1,3 @@
-import {ReactElement} from "react";
-
 export interface InputNumberPropTypes {
     focusOnUpDown?: boolean;
     prefixCls?: string;
@@ -11,8 +9,8 @@ export interface InputNumberPropTypes {
     maxLength?: number;
     min?: number;
     step?: number | string;
-    upHandler?: ReactElement<any>;
-    downHandler?:  ReactElement<any>;
+    upHandler?: any;
+    downHandler?: any;
     useTouch?: boolean;
     formatter?: any;
     parser?: any;
@@ -24,6 +22,7 @@ export interface InputNumberPropTypes {
     onClick?: any;
     onChange?: any;
     onMouseOut?: any;
+    precision: number;
     onKeyUp?: any;
     onKeyDown?: any;
     onMouseLeave?: any;

@@ -1,10 +1,12 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
-import * as shallowequal from 'shallowequal';
-import {IExpandIconPropTypes} from "./PropsType";
+import shallowequal from 'shallowequal';
+import {IExpandIconPropTypes} from "xyl-base/lib/rc-table/PropsType";
 
 @observer
-export default class ExpandIcon extends React.Component<IExpandIconPropTypes, any> {
+export default class ExpandIcon extends Component<IExpandIconPropTypes, any> {
+
 
     shouldComponentUpdate(nextProps) {
         return !shallowequal(nextProps, this.props);
@@ -17,18 +19,12 @@ export default class ExpandIcon extends React.Component<IExpandIconPropTypes, an
             return (
                 <span
                     className={`${prefixCls}-expand-icon ${prefixCls}-${expandClassName}`}
-                    onClick={this.onClick(onExpand, expanded, record)}
+                    onClick={(e) => onExpand(!expanded, record, e)}
                 />
             );
         } else if (needIndentSpaced) {
             return <span className={`${prefixCls}-expand-icon ${prefixCls}-spaced`}/>;
         }
         return null;
-    }
-
-    onClick(onExpand, expanded, record) {
-        return (e) => {
-            onExpand(!expanded, record, e);
-        };
     }
 }

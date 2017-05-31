@@ -1,4 +1,5 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import classNames from 'classnames';
 import PanelContent from './PanelContent';
@@ -7,7 +8,7 @@ import {CollapsePanelPropTypes} from "./PropsType";
 import noop from "../rc-util/noop";
 
 @observer
-export default class CollapsePanel extends React.Component<CollapsePanelPropTypes, any> {
+export default class CollapsePanel extends Component<CollapsePanelPropTypes, any> {
 
     static defaultProps = {
         showArrow: true,
@@ -17,8 +18,10 @@ export default class CollapsePanel extends React.Component<CollapsePanelPropType
     };
 
     handleItemClick = () => {
-        this.props.onItemClick();
-    }
+        if (this.props.onItemClick) {
+            this.props.onItemClick();
+        }
+    };
 
     render() {
         const {
@@ -31,6 +34,7 @@ export default class CollapsePanel extends React.Component<CollapsePanelPropType
             isActive,
             showArrow,
             destroyInactivePanel,
+            disabled,
         } = this.props;
         const headerCls = classNames(`${prefixCls}-header`, {
             [headerClass]: headerClass,
@@ -38,6 +42,7 @@ export default class CollapsePanel extends React.Component<CollapsePanelPropType
         const itemCls = classNames({
             [`${prefixCls}-item`]: true,
             [`${prefixCls}-item-active`]: isActive,
+            [`${prefixCls}-item-disabled`]: disabled,
         }, className);
         return (
             <div className={itemCls} style={style}>

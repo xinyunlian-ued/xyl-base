@@ -1,10 +1,11 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import {ITabPane} from "./PropsType";
 
 @observer
-export default class TabPane extends React.Component<ITabPane, any> {
+export default class TabPane extends Component<ITabPane, any> {
 
     static defaultProps = {placeholder: null};
     _isActived;

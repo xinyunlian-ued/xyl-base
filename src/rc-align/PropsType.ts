@@ -1,5 +1,3 @@
-import {ReactChildren} from 'react';
-
 export interface IAlign {
     childrenProps?: any;
     align: any;

@@ -1,5 +1,6 @@
-import React from 'react';
-import {findDOMNode} from "react-dom";
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {findDOMNode} from "inferno-compat";
 import {observer} from 'inferno-mobx';
 import Align from '../rc-align';
 import Animate from '../rc-animate';
@@ -9,7 +10,7 @@ import {IPopup} from "./PropsType";
 
 
 @observer
-export default class Popup extends React.Component<IPopup, any> {
+export default class Popup extends Component<IPopup, any> {
     rootNode;
 
     componentDidMount() {

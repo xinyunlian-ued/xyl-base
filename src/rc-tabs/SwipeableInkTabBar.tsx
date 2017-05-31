@@ -1,7 +1,8 @@
-import * as React from 'react';
-import {findDOMNode} from "react-dom";
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {Children, findDOMNode} from "inferno-compat";
 import {observer} from 'inferno-mobx';
-import Hammer from 'react-hammerjs';
+import Hammer from '../rc-hammerjs';
 import classnames from 'classnames';
 import * as warning from 'warning';
 import {isVertical, getStyle, setPxStyle} from './utils';
@@ -9,7 +10,7 @@ import {componentDidUpdate} from './InkTabBarMixin';
 
 
 @observer
-export default class SwipeableInkTabBar extends React.Component<any, any> {
+export default class SwipeableInkTabBar extends Component<any, any> {
 
     static defaultProps = {
         hammerOptions: {},
@@ -249,7 +250,7 @@ export default class SwipeableInkTabBar extends React.Component<any, any> {
         const activeKey = props.activeKey;
         const rst = [];
         const prefixCls = props.prefixCls;
-        React.Children.forEach(children, (child:any) => {
+        Children.forEach(children, (child: any) => {
             if (!child) {
                 return;
             }
@@ -280,7 +281,7 @@ export default class SwipeableInkTabBar extends React.Component<any, any> {
             >
                 {child.props.tab}
             </div>);
-        });
+        }, null);
         return rst;
     }
 
@@ -325,7 +326,7 @@ export default class SwipeableInkTabBar extends React.Component<any, any> {
             flex: `0 0 ${1 / props.pageSize * 100}%`,
         };
 
-        React.Children.forEach(children, (child: any) => {
+        Children.forEach(children, (child: any) => {
             if (!child) {
                 return;
             }
@@ -356,7 +357,7 @@ export default class SwipeableInkTabBar extends React.Component<any, any> {
             >
                 {child.props.tab}
             </div>);
-        });
+        }, null);
 
         return rst;
     }

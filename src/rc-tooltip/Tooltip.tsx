@@ -1,11 +1,12 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import {placements} from './placements';
 import Trigger from '../rc-trigger';
 import {ITooltip} from './PropsType';
 
 @observer
-export default class Tooltip extends React.Component<ITooltip, any> {
+export default class Tooltip extends Component<ITooltip, any> {
 
     static defaultProps = {
         prefixCls: 'rc-tooltip',

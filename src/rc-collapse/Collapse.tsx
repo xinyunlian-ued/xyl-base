@@ -1,4 +1,6 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import {isValidElement, cloneElement, Children} from 'inferno-compat';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import CollapsePanel from './Panel';
 import openAnimationFactory from './openAnimationFactory';
@@ -15,7 +17,7 @@ function toArray(activeKey) {
 }
 
 @observer
-export default class Collapse extends React.Component<CollapsePropTypes, any> {
+export default class Collapse extends Component<CollapsePropTypes, any> {
 
     static defaultProps = {
         prefixCls: 'rc-collapse',
@@ -55,23 +57,21 @@ export default class Collapse extends React.Component<CollapsePropTypes, any> {
     }
 
     onClickItem = (key) => {
-        return () => {
-            let activeKey = this.state.activeKey;
-            if (this.props.accordion) {
-                activeKey = activeKey[0] === key ? [] : [key];
+        let activeKey = this.state.activeKey;
+        if (this.props.accordion) {
+            activeKey = activeKey[0] === key ? [] : [key];
+        } else {
+            activeKey = [...activeKey];
+            const index = activeKey.indexOf(key);
+            const isActive = index > -1;
+            if (isActive) {
+                // remove active state
+                activeKey.splice(index, 1);
             } else {
-                activeKey = [...activeKey];
-                const index = activeKey.indexOf(key);
-                const isActive = index > -1;
-                if (isActive) {
-                    // remove active state
-                    activeKey.splice(index, 1);
-                } else {
-                    activeKey.push(key);
-                }
+                activeKey.push(key);
             }
-            this.setActiveKey(activeKey);
-        };
+        }
+        this.setActiveKey(activeKey);
     }
 
     getItems = () => {
@@ -79,14 +79,13 @@ export default class Collapse extends React.Component<CollapsePropTypes, any> {
         const {prefixCls, accordion, destroyInactivePanel} = this.props;
         const newChildren = [];
 
-        React.Children.forEach(this.props.children as any, (child: any, index) => {
+        Children.forEach(this.props.children as any, (child: any, index) => {
             if (!child) {
                 return;
             }
             // If there is no key provide, use the panel order as default key
             const key = child.key || String(index);
-            const headerClass = child.props.headerClass;
-            const header = child.props.header;
+            const {header, headerClass, disabled} = child.props;
             let isActive = false;
             if (accordion) {
                 isActive = activeKey[0] === key;
@@ -103,11 +102,11 @@ export default class Collapse extends React.Component<CollapsePropTypes, any> {
                 destroyInactivePanel,
                 openAnimation: this.state.openAnimation,
                 children: child.props.children,
-                onItemClick: this.onClickItem(key).bind(this),
+                onItemClick: disabled ? null : () => this.onClickItem(key),
             };
 
-            newChildren.push(React.cloneElement(child, props));
-        });
+            newChildren.push(cloneElement(child, props));
+        }, null);
 
         return newChildren;
     }

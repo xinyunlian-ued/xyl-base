@@ -1,8 +1,9 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {findDOMNode} from "inferno";
 import {observer} from 'inferno-mobx';
 import TabContent from './TabContent';
-import Hammer from 'react-hammerjs';
-import ReactDOM from 'react-dom';
+import Hammer from '../rc-hammerjs';
 import {
     isVertical,
     getActiveIndex,
@@ -37,7 +38,7 @@ function getIndexByDelta(e) {
 }
 
 @observer
-export default class SwipeableTabContent extends React.Component<ISwipeableTabContent, any> {
+export default class SwipeableTabContent extends Component<ISwipeableTabContent, any> {
 
     static defaultProps = {
         animated: true
@@ -53,7 +54,7 @@ export default class SwipeableTabContent extends React.Component<ISwipeableTabCo
     viewSize;
 
     componentDidMount() {
-        this.rootNode = ReactDOM.findDOMNode(this);
+        this.rootNode = findDOMNode(this);
     }
 
     onPanStart = () => {

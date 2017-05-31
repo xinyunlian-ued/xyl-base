@@ -1,16 +1,17 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
+import Hammer from '../rc-hammerjs';
 import omit from 'object.omit';
 import splitObject from './util/splitObject';
-import {ISwipeoutPropTypes} from "./PropsType";
+import {ISwipeoutPropTypes} from "xyl-base/lib/rc-swipeout/PropsType";
 import noop from "../rc-util/noop";
-const Hammer = require('react-hammerjs/src/Hammer');
 
 @observer
-export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
+class Swipeout extends Component<ISwipeoutPropTypes, any> {
 
-    static defaultProps: ISwipeoutPropTypes = {
-        prefixCls: 'rc-swipeout',
+    static defaultProps = {
+        prefixCls: 'xyl-base/lib/rc-swipeout',
         autoClose: false,
         disabled: false,
         left: [],
@@ -19,8 +20,14 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
         onClose: noop,
     };
 
-    openedLeft;
-    openedRight;
+    openedLeft: boolean;
+    openedRight: boolean;
+    contentWidth: number;
+    btnsLeftWidth: number;
+    btnsRightWidth: number;
+    panStartX: number;
+    left;
+    right;
 
     constructor(props) {
         super(props);
@@ -33,37 +40,12 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
         this.openedRight = false;
     }
 
-    _content;
-    _cover;
-    _left;
-    _right;
-
-    bindRefContent = (content) => {
-        this._content = content;
-    }
-
-    bindRefCover = (cover) => {
-        this._cover = cover;
-    }
-
-    bindRefLeft = (left) => {
-        this._left = left;
-    }
-
-    bindRefRight = (right) => {
-        this._right = right;
-    }
-
     componentDidMount() {
-
         const {left, right} = this.props;
-        const content = this._content as HTMLElement;
-        const cover = this._cover as HTMLElement;
+        const width = this.content.offsetWidth;
 
-        const width = content.offsetWidth;
-
-        if (cover) {
-            cover.style.width = `${width}px`;
+        if (this.cover) {
+            this.cover.style.width = `${width}px`;
         }
 
         this.contentWidth = width;
@@ -77,9 +59,9 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
         document.body.removeEventListener('touchstart', this.onCloseSwipe.bind(this));
     }
 
-    onCloseSwipe = (ev) => {
+    onCloseSwipe(ev) {
         if (this.openedLeft || this.openedRight) {
-            const pNode = ((node) => {
+            const pNode = (node => {
                 while (node.parentNode && node.parentNode !== document.body) {
                     if (node.className.indexOf(`${this.props.prefixCls}-actions`) > -1) {
                         return node;
@@ -94,16 +76,14 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
         }
     }
 
-    panStartX;
-
-    onPanStart = (e) => {
+    onPanStart(e) {
         if (this.props.disabled) {
             return;
         }
         this.panStartX = e.deltaX;
     }
 
-    onPan = (e) => {
+    onPan(e) {
         if (this.props.disabled) {
             return;
         }
@@ -116,11 +96,7 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
         }
     }
 
-    contentWidth;
-    btnsLeftWidth;
-    btnsRightWidth;
-
-    onPanEnd = (e) => {
+    onPanEnd(e) {
         if (this.props.disabled) {
             return;
         }
@@ -144,7 +120,7 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
     }
 
     // left & right button click
-    onBtnClick = (ev, btn) => {
+    onBtnClick(ev, btn) {
         const onPress = btn.onPress;
         if (onPress) {
             onPress(ev);
@@ -154,7 +130,7 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
         }
     }
 
-    _getContentEasing = (value, limit) => {
+    _getContentEasing(value, limit) {
         // limit content style left when value > actions width
         if (value < 0 && value < limit) {
             return limit - Math.pow(limit - value, 0.85);
@@ -165,28 +141,24 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
     }
 
     // set content & actions style
-    _setStyle = (value) => {
+    _setStyle(value) {
         const {left, right} = this.props;
         const limit = value > 0 ? this.btnsLeftWidth : -this.btnsRightWidth;
         const contentLeft = this._getContentEasing(value, limit);
-        const content = this._content as HTMLElement;
-        const cover = this._cover as HTMLElement;
-        content.style.left = `${contentLeft}px`;
-        cover.style.display = Math.abs(value) > 0 ? 'block' : 'none';
-        cover.style.left = `${contentLeft}px`;
+        this.content.style.left = `${contentLeft}px`;
+        this.cover.style.display = Math.abs(value) > 0 ? 'block' : 'none';
+        this.cover.style.left = `${contentLeft}px`;
         if (left.length) {
-            const refsLeft = this._left as HTMLElement;
             const leftWidth = Math.max(Math.min(value, Math.abs(limit)), 0);
-            refsLeft.style.width = `${leftWidth}px`;
+            this.left.style.width = `${leftWidth}px`;
         }
         if (right.length) {
-            const refsRight = this._right as HTMLElement;
             const rightWidth = Math.max(Math.min(-value, Math.abs(limit)), 0);
-            refsRight.style.width = `${rightWidth}px`;
+            this.right.style.width = `${rightWidth}px`;
         }
     }
 
-    open = (value, openedLeft, openedRight) => {
+    open(value, openedLeft, openedRight) {
         if (!this.openedLeft && !this.openedRight) {
             this.props.onOpen();
         }
@@ -196,7 +168,7 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
         this._setStyle(value);
     }
 
-    close = () => {
+    close() {
         if (this.openedLeft || this.openedRight) {
             this.props.onClose();
         }
@@ -205,18 +177,20 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
         this.openedRight = false;
     }
 
-    renderButtons = (buttons, ref) => {
+    renderButtons(buttons, ref) {
         const prefixCls = this.props.prefixCls;
 
         return (buttons && buttons.length) ? (
-            <div className={`${prefixCls}-actions ${prefixCls}-actions-${ref}`} ref={ref}>
+            <div className={`${prefixCls}-actions ${prefixCls}-actions-${ref}`} ref={(_ref) => {
+                this[ref] = _ref
+            }}>
                 {buttons.map((btn, i) => {
                     return (
-                        <div
-                            key={i}
-                            className={`${prefixCls}-btn ${btn.hasOwnProperty('className') ? btn.className : ''}`}
-                            style={btn.style}
-                            onClick={this.onClick(this, btn)}
+                        <div key={i}
+                             className={`${prefixCls}-btn ${btn.hasOwnProperty('className') ? btn.className : ''}`}
+                             style={btn.style}
+                             role="button"
+                             onClick={(e) => this.onBtnClick(e, btn)}
                         >
                             <div className={`${prefixCls}-text`}>{btn.text || 'Click'}</div>
                         </div>
@@ -226,10 +200,13 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
         ) : null;
     }
 
-    onClick(me, btn) {
-        return (e) => {
-            me.onBtnClick(e, btn);
-        };
+    cover;
+    coverBind = (cover) => {
+        this.cover = cover;
+    }
+    content;
+    contentBind = (content) => {
+        this.content = content;
     }
 
     render() {
@@ -245,24 +222,26 @@ export default class Swipeout extends React.Component<ISwipeoutPropTypes, any> {
         ]);
 
         return (left.length || right.length) ? (
-            <div className={`${prefixCls}`} {...divProps}>s
+            <div className={`${prefixCls}`} {...divProps as any}>
                 {/* 保证 body touchStart 后不触发 pan */}
-                <div className={`${prefixCls}-cover`} ref={this.bindRefCover}/>
-                {this.renderButtons(left, this.bindRefLeft)}
-                {this.renderButtons(right, this.bindRefRight)}
+                <div className={`${prefixCls}-cover`} ref={this.coverBind}/>
+                { this.renderButtons(left, 'left') }
+                { this.renderButtons(right, 'right') }
                 <Hammer
                     direction="DIRECTION_HORIZONTAL"
                     onPanStart={this.onPanStart}
                     onPan={this.onPan}
                     onPanEnd={this.onPanEnd}
                 >
-                    <div className={`${prefixCls}-content`} ref={this.bindRefContent}>
+                    <div className={`${prefixCls}-content`} ref={this.contentBind}>
                         {children}
                     </div>
                 </Hammer>
             </div>
         ) : (
-            <div ref={this.bindRefContent} {...divProps}>{children}</div>
+            <div ref={this.contentBind} {...divProps as any}>{children}</div>
         );
     }
 }
+
+export default Swipeout;

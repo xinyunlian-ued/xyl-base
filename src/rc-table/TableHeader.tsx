@@ -1,10 +1,11 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import shallowequal from 'shallowequal';
 import {ITableHeaderPropTypes} from "./PropsType";
 
 @observer
-export default class TableHeader extends React.Component<ITableHeaderPropTypes, any> {
+export default class TableHeader extends Component<ITableHeaderPropTypes, any> {
 
     shouldComponentUpdate(nextProps) {
         return !shallowequal(nextProps, this.props);

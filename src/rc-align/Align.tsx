@@ -1,12 +1,12 @@
-import * as React from 'react';
-import {findDOMNode} from "react-dom";
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {findDOMNode, Children, cloneElement} from 'inferno-compat';
 import {observer} from 'inferno-mobx';
 import align from 'dom-align';
 import addEventListener from '../rc-util/Dom/addEventListener';
 import isWindow from './isWindow';
 import {IAlign} from "./PropsType";
 import noop from "../rc-util/noop";
-
 
 function buffer(fn, ms) {
     let timer;
@@ -29,7 +29,7 @@ function buffer(fn, ms) {
 }
 
 @observer
-export default class Align extends React.Component<IAlign, any> {
+export default class Align extends Component<IAlign, any> {
 
     static defaultProps = {
         target: () => window,
@@ -109,7 +109,7 @@ export default class Align extends React.Component<IAlign, any> {
 
     render() {
         const {childrenProps, children} = this.props;
-        const child = React.Children.only(children);
+        const child = Children.only(children as any);
         if (childrenProps) {
             const newProps = {};
             for (const prop in childrenProps) {
@@ -117,7 +117,7 @@ export default class Align extends React.Component<IAlign, any> {
                     newProps[prop] = this.props[childrenProps[prop]];
                 }
             }
-            return React.cloneElement(child, newProps);
+            return cloneElement(child, newProps);
         }
         return child;
     }

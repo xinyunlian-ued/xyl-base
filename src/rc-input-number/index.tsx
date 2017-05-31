@@ -1,4 +1,5 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import noop from '../rc-util/noop';
@@ -30,7 +31,7 @@ export interface State {
 }
 
 @observer
-export default class InputNumber extends React.Component<InputNumberPropTypes, State> {
+export default class InputNumber extends Component<InputNumberPropTypes, State> {
 
     start;
     end;
@@ -146,6 +147,9 @@ export default class InputNumber extends React.Component<InputNumberPropTypes, S
     }
 
     getPrecision = (value) => {
+        if ('precision' in this.props) {
+            return this.props.precision;
+        }
         const valueString = value.toString();
         if (valueString.indexOf('e-') >= 0) {
             return parseInt(valueString.slice(valueString.indexOf('e-') + 2), 10);
@@ -162,6 +166,9 @@ export default class InputNumber extends React.Component<InputNumberPropTypes, S
     // then value should be 2.51, rather than 2.5
     // https://github.com/react-component/input-number/issues/39
     getMaxPrecision = (currentValue, ratio = 1) => {
+        if ('precision' in this.props) {
+            return this.props.precision;
+        }
         const {step} = this.props;
         const ratioPrecision = this.getPrecision(ratio);
         const stepPrecision = this.getPrecision(step);
@@ -202,6 +209,9 @@ export default class InputNumber extends React.Component<InputNumberPropTypes, S
         if (this.isNotCompleteNumber(num)) {
             return num;
         }
+        if ('precision' in this.props) {
+            return Number(Number(num).toFixed(this.props.precision));
+        }
         return Number(num);
     }
 
@@ -221,8 +231,10 @@ export default class InputNumber extends React.Component<InputNumberPropTypes, S
         let result;
         if (typeof val === 'number') {
             result =
-                ((precisionFactor * val + precisionFactor * parseFloat(step as string) * rat)
-                / precisionFactor).toFixed(precision);
+                // ((precisionFactor * val + precisionFactor * parseFloat(step as string) * rat)
+                // / precisionFactor).toFixed(precision);
+                ((precisionFactor * val + precisionFactor * parseFloat(step as string) * rat) /
+                precisionFactor).toFixed(precision);
         } else {
             result = min === -Infinity ? step : min;
         }
@@ -236,8 +248,11 @@ export default class InputNumber extends React.Component<InputNumberPropTypes, S
         let result;
         if (typeof val === 'number') {
             result =
-                ((precisionFactor * val - precisionFactor * parseFloat(step as string) * rat)
-                / precisionFactor).toFixed(precision);
+                // ((precisionFactor * val - precisionFactor * parseFloat(step as string) * rat)
+                // / precisionFactor).toFixed(precision);
+                ((precisionFactor * val - precisionFactor * parseFloat(step as string) * rat) /
+                precisionFactor).toFixed(precision);
+
         } else {
             result = min === -Infinity ? -step : min;
         }

@@ -1,4 +1,6 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import {isValidElement, cloneElement, Children} from 'inferno-compat';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import {
     toArrayChildren,
@@ -16,9 +18,9 @@ const defaultKey = `rc_animate_${Date.now()}`;
 
 function getChildrenFromProps(props) {
     const children: any = props.children;
-    if (React.isValidElement(children)) {
+    if (isValidElement(children)) {
         if (!children.key) {
-            return React.cloneElement(children as any, {
+            return cloneElement(children as any, {
                 key: defaultKey,
             });
         }
@@ -27,7 +29,7 @@ function getChildrenFromProps(props) {
 }
 
 @observer
-export default class Animate extends React.Component<AnimatePropTypes, any> {
+export default class Animate extends Component<AnimatePropTypes, any> {
 
     static defaultProps = {
         animation: {},
@@ -102,7 +104,7 @@ export default class Animate extends React.Component<AnimatePropTypes, any> {
                 const nextChild = currentChild && findChildInChildrenByKey(nextChildren, currentChild.key);
                 let newChild;
                 if ((!nextChild || !nextChild.props[showProp]) && currentChild.props[showProp]) {
-                    newChild = React.cloneElement(nextChild || currentChild, {
+                    newChild = cloneElement(nextChild || currentChild, {
                         [showProp]: true,
                     });
                 } else {
@@ -322,6 +324,6 @@ export default class Animate extends React.Component<AnimatePropTypes, any> {
             }
             return <Component {...passedProps} />;
         }
-        return React.Children.only(children[0] || null);
+        return Children.only(children[0] || null);
     }
 }

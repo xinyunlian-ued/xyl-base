@@ -1,4 +1,4 @@
-import {findDOMNode} from 'react-dom';
+import {findDOMNode} from 'inferno-compat';
 import warning from 'fbjs/lib/warning';
 
 /**
@@ -496,6 +496,7 @@ const ScrollResponderMixin = {
         }
     },
 
+
     scrollResponderKeyboardDidShow: (e) => {
         // TODO(7693961): The event for DidShow is not available on iOS yet.
         // Use the one from WillShow and do not assign.
@@ -516,7 +517,9 @@ const ScrollResponderMixin = {
 
 };
 
-export default  {
+let ScrollResponder = {
     Mixin: ScrollResponderMixin,
 };
 
+// module.exports = ScrollResponder;
+export default ScrollResponder;

@@ -1,21 +1,27 @@
-import * as React from 'react';
-
 export interface IPopupPickerProps {
     picker?: any;
     value?: any;
     triggerType?: string;
     WrapComponent?: any;
-    dismissText?: string | React.ReactElement<any>; // React.ReactElement only for web
-    okText?: string |  React.ReactElement<any>; // React.ReactElement only for web
-    title?: string |  React.ReactElement<any>; // React.ReactElement only for web
+    dismissText?: any; // React.ReactElement only for web
+    okText?: any; // React.ReactElement only for web
+    title?: any; // React.ReactElement only for web
     visible?: boolean;
     disabled?: boolean;
-    onOk?: (...argument) => void;
+    onOk?: (value?: any) => void;
     style?: any;
     onVisibleChange?: (visible: boolean) => void;
-    content?: React.ReactElement<any> | string;
+    content?: any;
     onDismiss?: () => void;
+    /** react-native only */
+    styles?: any;
+    /** react-native only */
+    actionTextUnderlayColor?: string;
+    /** react-native only */
+    actionTextActiveOpacity?: number;
+    /** web only */
     wrapStyle?: any;
+    /** web only */
     prefixCls?: string;
     className?: string;
     pickerValueProp?: string;
@@ -24,5 +30,4 @@ export interface IPopupPickerProps {
     transitionName?: string;
     /** web only */
     maskTransitionName?: string;
-    popupTransitionName?;
 }

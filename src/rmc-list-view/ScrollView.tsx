@@ -1,14 +1,20 @@
-import * as React from 'react';
-import {findDOMNode} from "react-dom";
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {cloneElement, findDOMNode} from "inferno-compat";
 import {observer} from 'inferno-mobx';
 import DOMScroller from 'zscroller';
-import * as assign from 'object-assign';
-import * as classNames from 'classnames';
+import assign from 'object-assign';
+import classNames from 'classnames';
 import {throttle} from './util';
-import {IScrollView} from "./PropsType";
+import {IScrollView} from "xyl-base/lib/rmc-list-view/PropsType";
 
 const SCROLLVIEW = 'ScrollView';
 const INNERVIEW = 'InnerScrollView';
+
+// https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollView/ScrollView.js
+// https://facebook.github.io/react-native/docs/refreshcontrol.html
+
+/* eslint react/prop-types: 0, react/sort-comp: 0, no-unused-expressions: 0 */
 
 const styles = {
     base: {
@@ -25,13 +31,18 @@ const styles = {
 };
 
 @observer
-export default class ScrollView extends React.Component<IScrollView, any> {
+export default class ScrollView extends Component<IScrollView, any> {
 
     refreshControlRefresh;
     manuallyRefresh;
     domScroller;
+    tsExec;
+    onLayout;
+    refreshControl;
+    overDistanceThenRelease;
 
     componentDidUpdate(prevProps) {
+        // console.log('componentDidUpdate');
         if (prevProps.refreshControl && this.props.refreshControl) {
             const preRefreshing = prevProps.refreshControl.props.refreshing;
             const nowRefreshing = this.props.refreshControl.props.refreshing;
@@ -41,24 +52,6 @@ export default class ScrollView extends React.Component<IScrollView, any> {
                 this.domScroller.scroller.triggerPullToRefresh();
             }
         }
-    }
-
-    tsExec;
-    onLayout;
-
-    ScrollView;
-    InnerScrollView;
-    refreshControl;
-    bindScrollView = (ScrollView) => {
-        this.ScrollView = ScrollView;
-    }
-
-    bindInnerScrollView = (InnerScrollView) => {
-        this.InnerScrollView = InnerScrollView;
-    }
-
-    bindRefreshControl = (refreshControl) => {
-        this.refreshControl = refreshControl;
     }
 
     componentDidMount() {
@@ -78,7 +71,7 @@ export default class ScrollView extends React.Component<IScrollView, any> {
         } else {
             // todo
             // ele.addEventListener('resize', this.onLayout);
-            // findDOMNode(this.refs[INNERVIEW])
+            // findDOMNode(this[INNERVIEW])
             // .addEventListener('resize', this.onContentSizeChange);
             if (this.props.useZscroller) {
                 this.renderZscroller();
@@ -99,9 +92,9 @@ export default class ScrollView extends React.Component<IScrollView, any> {
         }
     }
 
-    scrollTo = (...args) => {
+    scrollTo(...args) {
         if (this.props.stickyHeader || this.props.useBodyScroll) {
-            window.scrollTo(args[0], args[1]);
+            (window as any).scrollTo(...(args));
         } else if (this.props.useZscroller) {
             this.domScroller.scroller.scrollTo(...args);
         } else {
@@ -112,29 +105,27 @@ export default class ScrollView extends React.Component<IScrollView, any> {
     }
 
     throttleScroll = () => {
-        let handleScroll: any;
-        const props = this.props;
-        if (props.scrollEventThrottle && props.onScroll) {
-            handleScroll = throttle((e) => {
-                if (props.onScroll) {
-                    props.onScroll(e);
-                }
-            }, props.scrollEventThrottle);
+        let handleScroll = (e) => {
+        };
+        if (this.props.scrollEventThrottle && this.props.onScroll) {
+            handleScroll = throttle(e => {
+                this.props.onScroll && this.props.onScroll(e);
+            }, this.props.scrollEventThrottle);
         }
         return handleScroll;
     }
 
     scrollingComplete = () => {
-        const refreshControl: any = this.props.refreshControl;
+        // console.log('scrolling complete');
         if (this.props.refreshControl &&
             this.refreshControl && this.refreshControl.state.deactive) {
-            refreshControl.setState({deactive: false});
+            this.refreshControl.setState({deactive: false});
         }
     }
 
-    renderZscroller = () => {
+    renderZscroller() {
         const {scrollerOptions, refreshControl} = this.props;
-
+        // console.log('onRefresh will not change', refreshControl.props.onRefresh.toString());
         this.domScroller = new DOMScroller(findDOMNode(this[INNERVIEW]), assign({}, {
             scrollingX: false,
             onScroll: this.tsExec,
@@ -143,43 +134,40 @@ export default class ScrollView extends React.Component<IScrollView, any> {
         if (refreshControl) {
             const scroller = this.domScroller.scroller;
             const {distanceToRefresh, onRefresh} = refreshControl.props;
-            const refsRefreshControl: any = this.refreshControl;
             scroller.activatePullToRefresh(distanceToRefresh,
                 () => {
+                    // console.log('first reach the distance');
                     this.manuallyRefresh = true;
-                    if (refsRefreshControl) {
-                        refsRefreshControl.setState({active: true});
-                    }
+                    this.overDistanceThenRelease = false;
+                    this.refreshControl && this.refreshControl.setState({active: true});
                 },
                 () => {
+                    // console.log('back to the distance', this.overDistanceThenRelease);
                     this.manuallyRefresh = false;
-                    if (refsRefreshControl) {
-                        refsRefreshControl.setState({
-                            deactive: true,
-                            active: false,
-                            loadingState: false,
-                        });
-                    }
+                    this.refreshControl && this.refreshControl.setState({
+                        deactive: this.overDistanceThenRelease,
+                        active: false,
+                        loadingState: false,
+                    });
                 },
                 () => {
-                    if (refsRefreshControl) {
-                        refsRefreshControl.setState({
-                            deactive: false,
-                            loadingState: true,
-                        });
-                    }
-
+                    // console.log('Over distance and release to loading');
+                    this.overDistanceThenRelease = true;
+                    this.refreshControl && this.refreshControl.setState({
+                        deactive: false,
+                        loadingState: true,
+                    });
                     const finishPullToRefresh = () => {
                         scroller.finishPullToRefresh();
                         this.refreshControlRefresh = null;
                     };
                     Promise.all([
-                        new Promise((resolve) => {
+                        new Promise(resolve => {
                             onRefresh();
                             this.refreshControlRefresh = resolve;
                         }),
                         // at lease 1s for ux
-                        new Promise((resolve) => setTimeout(resolve, 1000)),
+                        new Promise(resolve => setTimeout(resolve, 1000)),
                     ]).then(finishPullToRefresh, finishPullToRefresh);
                 });
             if (refreshControl.props.refreshing) {
@@ -190,7 +178,7 @@ export default class ScrollView extends React.Component<IScrollView, any> {
 
     render() {
         const {
-            children, className, prefixCls = '', listPrefixCls = '', listViewPrefixCls = 'rmc-list-view',
+            children, className, prefixCls = '', listPrefixCls = '', listViewPrefixCls = 'xyl-base/lib/rmc-list-view',
             style = {}, contentContainerStyle,
             useZscroller, refreshControl, stickyHeader, useBodyScroll,
         } = this.props;
@@ -205,7 +193,7 @@ export default class ScrollView extends React.Component<IScrollView, any> {
         const preCls = prefixCls || listViewPrefixCls || '';
 
         const containerProps = {
-            ref: this.bindScrollView,
+            ref: SCROLLVIEW,
             style: assign({}, styleBase, style),
             className: classNames({
                 [className]: !!className,
@@ -213,7 +201,7 @@ export default class ScrollView extends React.Component<IScrollView, any> {
             }),
         };
         const contentContainerProps = {
-            ref: this.bindInnerScrollView,
+            ref: INNERVIEW,
             style: assign({}, {position: 'absolute', minWidth: '100%'}, contentContainerStyle),
             className: classNames({
                 [`${preCls}-scrollview-content`]: true,
@@ -223,9 +211,9 @@ export default class ScrollView extends React.Component<IScrollView, any> {
 
         if (refreshControl) {
             return (
-                <div {...containerProps}>
-                    <div {...contentContainerProps}>
-                        {React.cloneElement(refreshControl, {ref: this.bindRefreshControl})}
+                <div {...containerProps as any}>
+                    <div {...contentContainerProps as any}>
+                        {cloneElement(refreshControl, {ref: 'refreshControl'})}
                         {children}
                     </div>
                 </div>
@@ -234,14 +222,14 @@ export default class ScrollView extends React.Component<IScrollView, any> {
 
         if (stickyHeader || useBodyScroll) {
             return (
-                <div {...containerProps}>
+                <div {...containerProps as any}>
                     {children}
                 </div>
             );
         }
         return (
-            <div {...containerProps}>
-                <div {...contentContainerProps}>{children}</div>
+            <div {...containerProps as any}>
+                <div {...contentContainerProps as any}>{children}</div>
             </div>
         );
     }

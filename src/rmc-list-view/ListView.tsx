@@ -1,5 +1,6 @@
-import * as React from 'react';
-import {findDOMNode} from "react-dom";
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {cloneElement, findDOMNode} from "inferno-compat";
 import {observer} from 'inferno-mobx';
 import ListViewDataSource from './ListViewDataSource';
 import ScrollView from './ScrollView';
@@ -26,7 +27,7 @@ const SCROLLVIEW_REF = 'listviewscroll';
 /* eslint react/prop-types: 0, react/sort-comp: 0, no-unused-expressions: 0 */
 
 @observer
-class ListView extends React.Component<IListView, any> {
+class ListView extends Component<IListView, any> {
     static DataSource = ListViewDataSource;
     static IndexedList = IndexedList;
     static RefreshControl = RefreshControl;
@@ -253,7 +254,7 @@ class ListView extends React.Component<IListView, any> {
                     break;
                 }
             }
-            bodyComponents.push(React.cloneElement(this.props.renderSectionBodyWrapper(sectionID), {
+            bodyComponents.push(cloneElement(this.props.renderSectionBodyWrapper(sectionID), {
                 className: this.props.sectionBodyClassName,
             }, sectionBody));
             if (rowCount >= this.state.curRenderedRowsCount) {
@@ -266,14 +267,14 @@ class ListView extends React.Component<IListView, any> {
             ...props,
         } = this.props;
 
-        bodyComponents = React.cloneElement(props.renderBodyComponent(), {}, bodyComponents);
+        bodyComponents = cloneElement(props.renderBodyComponent(), {}, bodyComponents);
         if (props.stickyHeader) {
             bodyComponents = (<StickyContainer {...props.stickyContainerProps}>
                 {bodyComponents}
             </StickyContainer>);
         }
 
-        this._sc = React.cloneElement(renderScrollComponent({...props, onScroll: this._onScroll}), {
+        this._sc = cloneElement(renderScrollComponent({...props, onScroll: this._onScroll}), {
             ref: SCROLLVIEW_REF,
             onContentSizeChange: this._onContentSizeChange,
             onLayout: this._onLayout,
@@ -297,7 +298,7 @@ class ListView extends React.Component<IListView, any> {
         // every platform
         // RCTScrollViewManager && RCTScrollViewManager.calculateChildFrames &&
         //   RCTScrollViewManager.calculateChildFrames(
-        //     React.findNodeHandle(scrollComponent),
+        //     findNodeHandle(scrollComponent),
         //     this._updateVisibleRows,
         //   );
     }

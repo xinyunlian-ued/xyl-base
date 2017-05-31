@@ -1,11 +1,12 @@
-import * as React from 'react';
-import {observer} from 'inferno-mobx';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {isValidElement} from 'inferno-compat';
+import {observer} from 'inferno-mobx';
 import get from 'lodash.get';
 import {ITableCellPropTypes} from "./PropsType";
 
 @observer
-export default class TableCell extends React.Component<ITableCellPropTypes, any> {
+export default class TableCell extends Component<ITableCellPropTypes, any> {
 
     isInvalidRenderCellText(text) {
         return text && !isValidElement(text) &&
@@ -68,7 +69,7 @@ export default class TableCell extends React.Component<ITableCellPropTypes, any>
         return (
             <td
                 className={className}
-                {...tdProps}
+                {...tdProps as any}
                 onClick={this.handleClick}
             >
                 {indentText}

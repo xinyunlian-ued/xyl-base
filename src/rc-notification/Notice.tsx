@@ -1,11 +1,12 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import noop from '../rc-util/noop';
 import {NoticePropTypes} from './PropsType';
 
 @observer
-export default class Notice extends React.Component<NoticePropTypes, any> {
+export default class Notice extends Component<NoticePropTypes, any> {
 
     closeTimer;
     key;

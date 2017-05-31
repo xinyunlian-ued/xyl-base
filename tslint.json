@@ -28,7 +28,7 @@
     "max-line-length": 200,
     "no-console": false,
     "no-var-requires": false,
-    "max-classes-per-file": false,
+    "max-classes-per-file": [false],
     "no-consecutive-blank-lines": [
       false
     ],

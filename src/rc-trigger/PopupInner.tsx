@@ -1,10 +1,11 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import LazyRenderBox from './LazyRenderBox';
 import {IPopupInner} from "./PropsType";
 
 @observer
-export default class PopupInner extends React.Component<IPopupInner, any> {
+export default class PopupInner extends Component<IPopupInner, any> {
     render() {
         const props = this.props;
         let className = props.className;

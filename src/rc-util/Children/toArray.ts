@@ -1,9 +1,9 @@
-import * as React from 'react';
+import {Children} from "inferno-compat";
 
 export default function toArray(children) {
     const ret = [];
-    React.Children.forEach(children, (c) => {
+    Children.forEach(children, (c) => {
         ret.push(c);
-    });
+    }, null);
     return ret;
 }

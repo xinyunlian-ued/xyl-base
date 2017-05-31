@@ -1,4 +1,4 @@
-import {unmountComponentAtNode, unstable_renderSubtreeIntoContainer} from 'react-dom';
+import {unmountComponentAtNode, unstable_renderSubtreeIntoContainer} from 'inferno-compat';
 
 export function defaultGetContainer(instance?) {
     const container = document.createElement('div');

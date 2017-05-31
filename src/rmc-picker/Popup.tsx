@@ -1,13 +1,15 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {cloneElement} from 'inferno-compat';
 import {observer} from 'inferno-mobx';
-import Modal from '../rc-dialog';
+import Modal from 'xyl-base/lib/rc-dialog';
 import {IPopupPickerProps} from './PopupPickerTypes';
-import Touchable from '../rc-touchable';
+import Touchable from 'xyl-base/lib/rc-touchable';
 
 @observer
-export default class PopupPicker extends React.Component<IPopupPickerProps, any> {
+export default class PopupPicker extends Component<IPopupPickerProps, any> {
     static defaultProps = {
-        prefixCls: 'rmc-picker-popup',
+        prefixCls: 'xyl-base/lib/rmc-picker-popup',
         triggerType: 'onClick',
         WrapComponent: 'span',
     };
@@ -16,13 +18,6 @@ export default class PopupPicker extends React.Component<IPopupPickerProps, any>
         pickerValue: 'value' in this.props ? this.props.value : null,
         visible: this.props.visible || false,
     };
-
-    picker;
-
-    saveRef = (picker) => {
-        this.picker = picker;
-    }
-
 
     componentWillReceiveProps(nextProps) {
         if ('value' in nextProps) {
@@ -47,6 +42,12 @@ export default class PopupPicker extends React.Component<IPopupPickerProps, any>
         }
     }
 
+    picker;
+
+    saveRef = (picker) => {
+        this.picker = picker;
+    }
+
     setVisibleState = (visible) => {
         this.setState({
             visible,
@@ -69,7 +70,7 @@ export default class PopupPicker extends React.Component<IPopupPickerProps, any>
 
     getRender = () => {
         const props = this.props;
-        const children: any = props.children;
+        const children = props.children;
         if (!children) {
             return this.getModal();
         }
@@ -80,13 +81,13 @@ export default class PopupPicker extends React.Component<IPopupPickerProps, any>
             newChildProps[props.triggerType] = this.onTriggerClick;
         }
         return (<WrapComponent style={props.wrapStyle}>
-            {React.cloneElement(child, newChildProps)}
+            {cloneElement(child, newChildProps)}
             {this.getModal()}
         </WrapComponent>);
     }
 
     onTriggerClick = (e) => {
-        const child = this.props.children as any;
+        const child: any = this.props.children;
         const childProps = child.props || {};
         if (childProps[this.props.triggerType]) {
             childProps[this.props.triggerType](e);
@@ -105,7 +106,7 @@ export default class PopupPicker extends React.Component<IPopupPickerProps, any>
             if (pickerValue === null) {
                 pickerValue = this.props.value;
             }
-            return React.cloneElement(this.props.picker, ({
+            return cloneElement(this.props.picker, ({
                 [this.props.pickerValueProp]: pickerValue,
                 [this.props.pickerValueChangeProp]: this.onPickerChange,
                 ref: this.saveRef,
@@ -123,7 +124,6 @@ export default class PopupPicker extends React.Component<IPopupPickerProps, any>
     hide = () => {
         this.fireVisibleChange(false);
     }
-
 
     getModal = () => {
         const props = this.props;
@@ -165,5 +165,4 @@ export default class PopupPicker extends React.Component<IPopupPickerProps, any>
     render() {
         return this.getRender();
     }
-
 }

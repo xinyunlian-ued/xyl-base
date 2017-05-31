@@ -20,6 +20,7 @@ export interface CollapsePanelPropTypes {
     key?: string;
     destroyInactivePanel?;
     headerClass?: string;
+    disabled?: boolean;
 }
 
 export type ChildrenType = ReactElement<CollapsePanelPropTypes>;

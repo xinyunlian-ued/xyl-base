@@ -1,11 +1,12 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import arrayTreeFilter from 'array-tree-filter';
 import MultiPicker from '../rmc-picker/MultiPicker';
 import {ICascaderProps} from './CascaderTypes';
 
 @observer
-export default class Cascader extends React.Component<ICascaderProps, any> {
+export default class Cascader extends Component<ICascaderProps, any> {
 
     static defaultProps = {
         cols: 3,

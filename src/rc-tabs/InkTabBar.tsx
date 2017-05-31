@@ -1,4 +1,6 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
+import {Children} from 'inferno-compat';
 import {observer} from 'inferno-mobx';
 import classnames from 'classnames';
 import warning from 'warning';
@@ -28,7 +30,7 @@ export interface IInkTabBar {
 // });
 
 @observer
-export default class InkTabBar extends React.Component<IInkTabBar, any> {
+export default class InkTabBar extends Component<IInkTabBar, any> {
 
     static defaultProps = {
         inkBarAnimated: true,
@@ -89,7 +91,7 @@ export default class InkTabBar extends React.Component<IInkTabBar, any> {
         const rst = [];
         const prefixCls = props.prefixCls;
 
-        React.Children.forEach(children, (child: any) => {
+        Children.forEach(children, (child: any) => {
             if (!child) {
                 return;
             }
@@ -120,7 +122,7 @@ export default class InkTabBar extends React.Component<IInkTabBar, any> {
             >
                 {child.props.tab}
             </div>);
-        });
+        }, null);
 
         return rst;
     }

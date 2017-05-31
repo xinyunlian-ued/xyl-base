@@ -1,12 +1,12 @@
-import * as React from 'react';
-import ReactDom from 'react-dom';
+import createElement from 'inferno-create-element';
+import {unmountComponentAtNode, render} from "inferno-compat";
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import Animate from '../rc-animate/Animate';
 import createChainedFunction from '../rc-util/createChainedFunction';
 import Notice from './Notice';
 import {NotificationPropTypes} from './PropsType';
-import {unmountComponentAtNode} from "react-dom";
 
 let seed = 0;
 const now = Date.now();
@@ -16,7 +16,7 @@ function getUuid() {
 }
 
 @observer
-export default class Notification extends React.Component<NotificationPropTypes, any> {
+export default class Notification extends Component<NotificationPropTypes, any> {
 
     static defaultProps = {
         prefixCls: 'rc-notification',
@@ -36,7 +36,7 @@ export default class Notification extends React.Component<NotificationPropTypes,
             div = document.createElement('div');
             document.body.appendChild(div);
         }
-        const notification: any = ReactDom.render(<Notification {...props} />, div);
+        const notification: any = render(<Notification {...props} />, div);
         return {
             notice(noticeProps) {
                 notification.add(noticeProps);
@@ -85,6 +85,7 @@ export default class Notification extends React.Component<NotificationPropTypes,
         });
     }
 
+
     render() {
         const props = this.props;
         const noticeNodes = this.state.notices.map((notice) => {
@@ -101,9 +102,15 @@ export default class Notification extends React.Component<NotificationPropTypes,
             [props.prefixCls]: 1,
             [props.className]: !!props.className,
         };
+        const animateProps = {
+            component: undefined
+        };
+        if (this.state.notices.length <= 1) {
+            animateProps.component = '';
+        }
         return (
             <div className={classNames(className)} style={props.style}>
-                <Animate transitionName={this.getTransitionName()}>{noticeNodes}</Animate>
+                <Animate transitionName={this.getTransitionName()} {...animateProps}>{noticeNodes}</Animate>
             </div>
         );
     }

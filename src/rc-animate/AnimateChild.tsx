@@ -1,5 +1,6 @@
-import * as React from 'react';
-import {findDOMNode} from "react-dom";
+import createElement from 'inferno-create-element';
+import {findDOMNode, Children} from 'inferno-compat';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import cssAnimate, {isCssAnimationSupported} from 'css-animation';
 import animUtil from './util';
@@ -12,7 +13,7 @@ const transitionMap = {
 };
 
 @observer
-export default class AnimateChild extends React.Component<AnimateChildPropTypes, any> {
+export default class AnimateChild extends Component<AnimateChildPropTypes, any> {
 
     componentWillUnmount() {
         this.stop();
@@ -82,6 +83,6 @@ export default class AnimateChild extends React.Component<AnimateChildPropTypes,
     }
 
     render() {
-        return React.Children.only(this.props.children as any);
+        return Children.only(this.props.children as any);
     }
 }

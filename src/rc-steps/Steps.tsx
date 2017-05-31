@@ -1,6 +1,7 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import {findDOMNode, Children, cloneElement} from 'inferno-compat';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
-import {Children, findDOMNode, cloneElement} from "inferno-compat";
 import * as classNames from 'classnames';
 import debounce from 'lodash.debounce';
 
@@ -8,9 +9,8 @@ import {IStepsPropTypes} from "./PropsType";
 import Step from './Step';
 
 
-
 @observer
-export default class Steps extends React.Component<IStepsPropTypes, { lastStepOffsetWidth: number }> {
+export default class Steps extends Component<IStepsPropTypes, { lastStepOffsetWidth: number }> {
 
     constructor(props) {
         super(props);

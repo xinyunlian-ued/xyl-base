@@ -41,11 +41,13 @@
     "object-assign": "^4.1.1",
     "object.omit": "^2.0.1",
     "omit.js": "^0.1.0",
+    "raf": "^3.3.2",
     "react-mixin": "^3.0.5",
     "react-sticky": "^6.0.1",
     "react-timer-mixin": "^0.13.3",
     "shallowequal": "^1.0.1",
     "tslib": "^1.7.1",
+    "tween-functions": "^1.2.0",
     "warning": "^3.0.0",
     "zscroller": "^0.3.0"
   },

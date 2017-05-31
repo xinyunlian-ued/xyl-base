@@ -1,5 +1,4 @@
 import createElement from 'inferno-create-element';
-import {findDOMNode} from 'inferno-compat';
 import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import assign from 'object-assign';

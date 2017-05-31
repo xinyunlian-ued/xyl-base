@@ -2,9 +2,9 @@ import createElement from 'inferno-create-element';
 import Component from 'inferno-component';
 import {cloneElement} from 'inferno-compat';
 import {observer} from 'inferno-mobx';
-import Modal from 'xyl-base/lib/rc-dialog';
+import Modal from '../rc-dialog';
 import {IPopupPickerProps} from './PopupPickerTypes';
-import Touchable from 'xyl-base/lib/rc-touchable';
+import Touchable from '../rc-touchable';
 
 @observer
 export default class PopupPicker extends Component<IPopupPickerProps, any> {

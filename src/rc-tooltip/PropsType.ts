@@ -1,5 +1,3 @@
-import {CSSProperties} from 'react';
-
 export interface ITooltip {
     trigger?: any;
     children?: any;
@@ -11,7 +9,7 @@ export interface ITooltip {
     onVisibleChange?: () => void;
     afterVisibleChange?: () => void;
     overlay: any;
-    overlayStyle?: CSSProperties;
+    overlayStyle?: any;
     overlayClassName?: string;
     prefixCls?: string;
     mouseEnterDelay?: number;

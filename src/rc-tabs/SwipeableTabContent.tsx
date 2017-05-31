@@ -13,7 +13,7 @@ import {
     toArray,
     setTransition,
 } from './utils';
-import {ISwipeableTabContent} from "xyl-base/lib/rc-tabs/PropsType";
+import {ISwipeableTabContent} from "./PropsType";
 
 const RESISTANCE_COEF = 0.6;
 

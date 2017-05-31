@@ -5,6 +5,7 @@ import {observer} from 'inferno-mobx';
 import classnames from 'classnames';
 import Picker from './Picker';
 import MultiPickerProps from './MultiPickerProps';
+import noop from "../rc-util/noop";
 
 @observer
 export default class MultiPicker extends Component<MultiPickerProps, any> {
@@ -12,8 +13,7 @@ export default class MultiPicker extends Component<MultiPickerProps, any> {
     static defaultProps = {
         prefixCls: 'xyl-base/lib/rmc-multi-picker',
         pickerPrefixCls: 'xyl-base/lib/rmc-picker',
-        onValueChange() {
-        },
+        onValueChange: noop,
         disabled: false,
     };
 
@@ -70,4 +70,4 @@ export default class MultiPicker extends Component<MultiPickerProps, any> {
             </div>
         );
     }
-};
+}

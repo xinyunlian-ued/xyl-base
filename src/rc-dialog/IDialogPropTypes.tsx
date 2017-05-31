@@ -1,4 +1,3 @@
-import {ReactNode} from 'react';
 
 interface IDialogPropTypes {
     className?: string;
@@ -12,8 +11,8 @@ interface IDialogPropTypes {
     maskClosable?: boolean;
     visible?: boolean;
     mousePosition?: any;
-    title?: ReactNode;
-    footer?: ReactNode;
+    title?: any;
+    footer?: any;
     transitionName?: string;
     maskTransitionName?: string;
     animation?: any;

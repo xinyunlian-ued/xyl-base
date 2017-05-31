@@ -6,15 +6,15 @@ import classNames from 'classnames';
 import ZScroller from 'zscroller';
 import {IPickerProps} from './PickerTypes';
 import isChildrenEqual from './isChildrenEqual';
+import noop from "../rc-util/noop";
 
 @observer
 export default class Picker extends Component<IPickerProps, any> {
     static defaultProps = {
         prefixCls: 'xyl-base/lib/rmc-picker',
         pure: true,
-        onValueChange() {
-        }
-    }
+        onValueChange: noop
+    };
 
     state = (() => {
         let selectedValueState;
@@ -173,7 +173,7 @@ export default class Picker extends Component<IPickerProps, any> {
                     {item.label}
                 </div>
             );
-        }, null)
+        }, null);
         const pickerCls = {
             [className]: !!className,
             [prefixCls]: true,

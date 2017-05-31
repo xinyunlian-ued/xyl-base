@@ -21,7 +21,7 @@ export default class CollapsePanel extends Component<CollapsePanelPropTypes, any
         if (this.props.onItemClick) {
             this.props.onItemClick();
         }
-    };
+    }
 
     render() {
         const {

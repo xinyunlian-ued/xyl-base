@@ -24,7 +24,7 @@ export default class SwipeableInkTabBar extends Component<any, any> {
         this.state = {
             hasPrevPage,
             hasNextPage,
-        }
+        };
     }
 
     displayName = 'SwipeableInkTabBar';

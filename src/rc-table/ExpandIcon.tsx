@@ -2,7 +2,7 @@ import createElement from 'inferno-create-element';
 import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import shallowequal from 'shallowequal';
-import {IExpandIconPropTypes} from "xyl-base/lib/rc-table/PropsType";
+import {IExpandIconPropTypes} from "./PropsType";
 
 @observer
 export default class ExpandIcon extends Component<IExpandIconPropTypes, any> {

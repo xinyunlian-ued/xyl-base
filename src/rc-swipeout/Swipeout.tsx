@@ -4,7 +4,7 @@ import {observer} from 'inferno-mobx';
 import Hammer from '../rc-hammerjs';
 import omit from 'object.omit';
 import splitObject from './util/splitObject';
-import {ISwipeoutPropTypes} from "xyl-base/lib/rc-swipeout/PropsType";
+import {ISwipeoutPropTypes} from "./PropsType";
 import noop from "../rc-util/noop";
 
 @observer
@@ -182,7 +182,7 @@ class Swipeout extends Component<ISwipeoutPropTypes, any> {
 
         return (buttons && buttons.length) ? (
             <div className={`${prefixCls}-actions ${prefixCls}-actions-${ref}`} ref={(_ref) => {
-                this[ref] = _ref
+                this[ref] = _ref;
             }}>
                 {buttons.map((btn, i) => {
                     return (

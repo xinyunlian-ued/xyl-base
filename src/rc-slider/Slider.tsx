@@ -1,4 +1,5 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
@@ -6,7 +7,7 @@ import * as utils from './utils';
 import {ISliderProps} from "./PropTypes";
 
 @observer
-class Slider extends React.Component<ISliderProps, any> {
+class Slider extends Component<ISliderProps, any> {
 
     static displayName = 'Slider';
 
@@ -33,7 +34,9 @@ class Slider extends React.Component<ISliderProps, any> {
         const value = nextProps.value !== undefined ?
             nextProps.value : prevValue;
         const nextValue = this.trimAlignValue(value, nextProps);
-        if (nextValue === prevValue) return;
+        if (nextValue === prevValue) {
+            return;
+        }
 
         this.setState({value: nextValue});
         if (utils.isValueOutOfRange(value, nextProps)) {
@@ -66,7 +69,9 @@ class Slider extends React.Component<ISliderProps, any> {
         this.startValue = value;
         this.startPosition = position;
 
-        if (value === prevValue) return;
+        if (value === prevValue) {
+            return;
+        }
 
         this.onChange({value});
     }
@@ -84,7 +89,9 @@ class Slider extends React.Component<ISliderProps, any> {
         const state = this.state;
         const value = this.calcValueByPos(position);
         const oldValue = state.value;
-        if (value === oldValue) return;
+        if (value === oldValue) {
+            return;
+        }
 
         this.onChange({value});
     }

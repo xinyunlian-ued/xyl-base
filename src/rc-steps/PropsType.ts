@@ -1,4 +1,3 @@
-import {CSSProperties, ReactNode} from "react";
 export interface IStepsPropTypes {
     prefixCls?: string;
     iconPrefix?: string;
@@ -8,7 +7,7 @@ export interface IStepsPropTypes {
     status?: string;
     size?: string;
     progressDot?: () => void | boolean;
-    style?: CSSProperties;
+    style?: any;
     className?: string;
     current?;
 }
@@ -16,12 +15,12 @@ export interface IStepsPropTypes {
 export interface IStepPropTypes {
     className?: string;
     prefixCls?: string;
-    style?: CSSProperties;
-    wrapperStyle?: CSSProperties;
+    style?: any;
+    wrapperStyle?: any;
     itemWidth?: number | string;
     status?: string;
     iconPrefix?: string;
-    icon?: ReactNode;
+    icon?: any;
     adjustMarginRight?: number | string;
     stepNumber?: string;
     description?: any;

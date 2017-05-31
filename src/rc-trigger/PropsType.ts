@@ -1,16 +1,15 @@
-import {CSSProperties, ReactNode} from 'react';
 
 export interface ILazyRenderBox {
     children?: any;
     className?: string;
     visible?: boolean;
     hiddenClassName?: string;
-    style?: CSSProperties;
+    style?: any;
 }
 
 export interface IPopup {
     visible?: boolean;
-    style?: CSSProperties;
+    style?: any;
     getClassNameFromAlign?: (...argument) => void;
     onAlign?: (...argument) => void;
     getRootDomNode?: (...argument) => void;
@@ -36,7 +35,7 @@ export interface IPopupInner {
     onMouseEnter?: (...argument) => void;
     onMouseLeave?: (...argument) => void;
     children?: any;
-    style?: CSSProperties;
+    style?: any;
     visible?: boolean;
 }
 
@@ -48,8 +47,8 @@ export interface ITrigger {
     getPopupClassNameFromAlign?: any;
     onPopupVisibleChange?: (...argument) => void;
     afterPopupVisibleChange?: (...argument) => void;
-    popup: (...argument) => void | ReactNode;
-    popupStyle?: CSSProperties;
+    popup: (...argument) => void | any;
+    popupStyle?: any;
     prefixCls?: string;
     popupClassName?: string;
     popupPlacement?: string;

@@ -161,4 +161,4 @@ export default class InkTabBar extends Component<IInkTabBar, any> {
         const tabs = this.getTabs();
         return this.getRootNode([inkBarNode, tabs]);
     }
-};
+}

@@ -1,5 +1,5 @@
 import createElement from 'inferno-create-element';
-import {isValidElement, cloneElement, Children} from 'inferno-compat';
+import {Children, cloneElement} from 'inferno-compat';
 import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import CollapsePanel from './Panel';
@@ -86,12 +86,7 @@ export default class Collapse extends Component<CollapsePropTypes, any> {
             // If there is no key provide, use the panel order as default key
             const key = child.key || String(index);
             const {header, headerClass, disabled} = child.props;
-            let isActive = false;
-            if (accordion) {
-                isActive = activeKey[0] === key;
-            } else {
-                isActive = activeKey.indexOf(key) > -1;
-            }
+            let isActive = accordion ? activeKey[0] === key : activeKey.indexOf(key) > -1;
 
             const props = {
                 key,

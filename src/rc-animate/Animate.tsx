@@ -53,7 +53,7 @@ export default class Animate extends Component<AnimatePropTypes, any> {
     bindRef = (key) => {
         return (ref) => {
             this._refs[key] = ref;
-        }
+        };
     }
 
     constructor(props) {

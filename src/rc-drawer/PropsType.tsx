@@ -1,17 +1,15 @@
-import {ReactChild, CSSProperties, ReactNode} from 'react';
-
 export interface DrawerPropTypes {
     prefixCls?: string;
     className?: string;
-    children: ReactChild;
-    style?: CSSProperties;
-    sidebarStyle?: CSSProperties;
-    contentStyle?: CSSProperties;
-    overlayStyle?: CSSProperties;
-    dragHandleStyle?: CSSProperties;
+    children: any;
+    style?: any;
+    sidebarStyle?: any;
+    contentStyle?: any;
+    overlayStyle?: any;
+    dragHandleStyle?: any;
 
     // sidebar content to render
-    sidebar: ReactNode;
+    sidebar: any;
 
     // boolean if sidebar should be docked
     docked?: boolean;

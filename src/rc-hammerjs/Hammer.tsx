@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 // https://github.com/JedWatson/react-hammerjs/issues/14
 // wait to see if we need the condition require hack for ssr
 import Hammer from 'hammerjs';
-import {HammerComponentPropTypes} from "xyl-base/lib/rc-hammerjs/PropTypes";
+import {HammerComponentPropTypes} from "./PropTypes";
 
 const privateProps = {
     children: true,
@@ -132,7 +132,7 @@ export default class HammerComponent extends Component<HammerComponentPropTypes,
     render() {
         let props = {};
 
-        Object.keys(this.props).forEach(function (i) {
+        Object.keys(this.props).forEach((i) => {
             if (!privateProps[i]) {
                 props[i] = this.props[i];
             }

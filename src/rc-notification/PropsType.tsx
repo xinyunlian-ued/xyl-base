@@ -1,13 +1,11 @@
-import {CSSProperties, ReactChildren} from 'react';
-
 export interface NoticePropTypes {
     duration?: number;
     onClose?: (event?: any) => {};
-    children?: ReactChildren;
+    children?: any;
     prefixCls?: string;
     className?: string;
     closable?: string;
-    style?: CSSProperties;
+    style?: any;
 }
 
 export interface NotificationPropTypes {

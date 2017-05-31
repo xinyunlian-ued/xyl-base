@@ -1,6 +1,6 @@
 import createElement from 'inferno-create-element';
-import {unmountComponentAtNode, render} from "inferno-compat";
 import Component from 'inferno-component';
+import {unmountComponentAtNode, render} from "inferno-compat";
 import {observer} from 'inferno-mobx';
 import * as classNames from 'classnames';
 import Animate from '../rc-animate/Animate';

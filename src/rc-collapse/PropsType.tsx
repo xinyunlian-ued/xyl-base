@@ -1,9 +1,7 @@
-import {ReactChild, ReactNode, ReactElement, CSSProperties} from 'react';
-
 export interface PanelContentPropTypes {
     prefixCls?: string;
     isActive?: boolean;
-    children?: ReactChild;
+    children?: any;
     destroyInactivePanel?;
 }
 
@@ -12,7 +10,7 @@ export interface CollapsePanelPropTypes {
     children?: any;
     openAnimation?: ObjectConstructor;
     prefixCls?: string;
-    header?: string | number | ReactNode;
+    header?: string | number | any;
     showArrow?: boolean;
     isActive?: boolean;
     onItemClick?: (event?: any) => void;
@@ -23,7 +21,7 @@ export interface CollapsePanelPropTypes {
     disabled?: boolean;
 }
 
-export type ChildrenType = ReactElement<CollapsePanelPropTypes>;
+export type ChildrenType = any;
 
 export interface CollapsePropTypes {
     prefixCls?: string;
@@ -33,7 +31,7 @@ export interface CollapsePropTypes {
     onChange?: (event?: any) => void;
     accordion?: boolean;
     className?: string;
-    style?: CSSProperties;
+    style?: any;
     [key: string]: any;
 }
 

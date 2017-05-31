@@ -6,7 +6,7 @@ import DOMScroller from 'zscroller';
 import assign from 'object-assign';
 import classNames from 'classnames';
 import {throttle} from './util';
-import {IScrollView} from "xyl-base/lib/rmc-list-view/PropsType";
+import {IScrollView} from "./PropsType";
 
 const SCROLLVIEW = 'ScrollView';
 const INNERVIEW = 'InnerScrollView';
@@ -105,11 +105,12 @@ export default class ScrollView extends Component<IScrollView, any> {
     }
 
     throttleScroll = () => {
-        let handleScroll = (e) => {
-        };
+        let handleScroll;
         if (this.props.scrollEventThrottle && this.props.onScroll) {
-            handleScroll = throttle(e => {
-                this.props.onScroll && this.props.onScroll(e);
+            handleScroll = throttle((e) => {
+                if (this.props.onScroll) {
+                    this.props.onScroll(e);
+                }
             }, this.props.scrollEventThrottle);
         }
         return handleScroll;
@@ -139,24 +140,30 @@ export default class ScrollView extends Component<IScrollView, any> {
                     // console.log('first reach the distance');
                     this.manuallyRefresh = true;
                     this.overDistanceThenRelease = false;
-                    this.refreshControl && this.refreshControl.setState({active: true});
+                    if (this.refreshControl) {
+                        this.refreshControl.setState({active: true});
+                    }
                 },
                 () => {
                     // console.log('back to the distance', this.overDistanceThenRelease);
                     this.manuallyRefresh = false;
-                    this.refreshControl && this.refreshControl.setState({
-                        deactive: this.overDistanceThenRelease,
-                        active: false,
-                        loadingState: false,
-                    });
+                    if (this.refreshControl) {
+                        this.refreshControl.setState({
+                            deactive: this.overDistanceThenRelease,
+                            active: false,
+                            loadingState: false,
+                        });
+                    }
                 },
                 () => {
                     // console.log('Over distance and release to loading');
                     this.overDistanceThenRelease = true;
-                    this.refreshControl && this.refreshControl.setState({
-                        deactive: false,
-                        loadingState: true,
-                    });
+                    if (this.refreshControl) {
+                        this.refreshControl.setState({
+                            deactive: false,
+                            loadingState: true,
+                        });
+                    }
                     const finishPullToRefresh = () => {
                         scroller.finishPullToRefresh();
                         this.refreshControlRefresh = null;

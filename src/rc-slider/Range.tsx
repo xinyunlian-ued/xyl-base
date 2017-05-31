@@ -1,4 +1,5 @@
-import * as React from 'react';
+import createElement from 'inferno-create-element';
+import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import classNames from 'classnames';
 import Track from './common/Track';
@@ -7,7 +8,7 @@ import * as utils from './utils';
 import {IRangeProps} from "./PropTypes";
 
 @observer
-class Range extends React.Component<IRangeProps, any> {
+class Range extends Component<IRangeProps, any> {
 
     static displayName = 'Range';
 

@@ -8,7 +8,7 @@ import {ITableCellPropTypes} from "./PropsType";
 @observer
 export default class TableCell extends Component<ITableCellPropTypes, any> {
 
-    isInvalidRenderCellText(text) {
+    isInvalidRenderCellText = (text) => {
         return text && !isValidElement(text) &&
             Object.prototype.toString.call(text) === '[object Object]';
     }

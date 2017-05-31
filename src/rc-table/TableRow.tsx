@@ -4,27 +4,24 @@ import {observer} from 'inferno-mobx';
 import TableCell from './TableCell';
 import ExpandIcon from './ExpandIcon';
 import {ITableRowPropTypes} from "./PropsType";
+import noop from "../rc-util/noop";
 
 @observer
 export default class TableRow extends Component<ITableRowPropTypes, any> {
 
     static defaultProps = {
-        onRowClick() {
-        },
-        onRowDoubleClick() {
-        },
-        onDestroy() {
-        },
+        onRowClick: noop,
+        onRowDoubleClick: noop,
+        onDestroy: noop,
         expandIconColumnIndex: 0,
         expandRowByClick: false,
-        onHover() {
-        },
-    }
+        onHover: noop,
+    };
 
     state = {
         hovered: false,
         height: null,
-    }
+    };
 
     unsubscribe;
     trRef;

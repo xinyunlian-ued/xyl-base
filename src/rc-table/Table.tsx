@@ -11,8 +11,6 @@ import createStore from './createStore';
 import classes from 'component-classes';
 import {ITablePropTypes} from "./PropsType";
 import noop from "../rc-util/noop";
-import Column from './Column';
-import ColumnGroup from './ColumnGroup';
 
 @observer
 export default class Table extends Component<ITablePropTypes, any> {
@@ -26,18 +24,12 @@ export default class Table extends Component<ITablePropTypes, any> {
         rowKey: 'key',
         rowClassName: () => '',
         expandedRowClassName: () => '',
-        onExpand() {
-        },
-        onExpandedRowsChange() {
-        },
-        onRowClick() {
-        },
-        onRowDoubleClick() {
-        },
-        onRowMouseEnter() {
-        },
-        onRowMouseLeave() {
-        },
+        onExpand: noop,
+        onExpandedRowsChange: noop,
+        onRowClick: noop,
+        onRowDoubleClick: noop,
+        onRowMouseEnter: noop,
+        onRowMouseLeave: noop,
         prefixCls: 'rc-table',
         bodyStyle: {},
         style: {},
@@ -49,7 +41,7 @@ export default class Table extends Component<ITablePropTypes, any> {
         rowRef: () => null,
         getBodyWrapper: body => body,
         emptyText: () => 'No Data',
-    }
+    };
 
     columnManager;
     store;
@@ -533,7 +525,7 @@ export default class Table extends Component<ITablePropTypes, any> {
                         className={`${prefixCls}-body-inner`}
                         style={innerBodyStyle}
                         ref={(_ref) => {
-                            this[refName] = _ref
+                            this[refName] = _ref;
                         }}
                         onMouseOver={this.detectScrollTarget}
                         onTouchStart={this.detectScrollTarget}

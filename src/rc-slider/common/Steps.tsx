@@ -1,4 +1,4 @@
-import React from 'react';
+import createElement from 'inferno-create-element';
 import Component from 'inferno-component';
 import {observer} from 'inferno-mobx';
 import classNames from 'classnames';
@@ -22,7 +22,7 @@ const calcPoints = (vertical, marks, dots, step, min, max) => {
 };
 
 @observer
-export default class Steps extends React.Component<any, any> {
+export default class Steps extends Component<any, any> {
     render() {
         const {prefixCls, vertical, marks, dots, step, included, lowerBound, upperBound, max, min} = this.props;
         const range = max - min;

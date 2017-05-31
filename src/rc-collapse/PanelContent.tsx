@@ -30,7 +30,8 @@ export default class PanelContent extends Component<PanelContentPropTypes, any> 
             <div
                 className={contentCls}
                 role="tabpanel"
-            >{child}</div>
+            >{child}
+            </div>
         );
     }
 }

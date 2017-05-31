@@ -15,7 +15,8 @@ gulp.task("tslint", () => {
     const tslint = require("gulp-tslint");
     gulp.src(["src/**/*.ts", "src/**/*.tsx"])
         .pipe(tslint({
-            formatter: "verbose"
+            formatter: "verbose",
+            configuration: "tslint.json"
         }))
         .pipe(tslint.report())
 });

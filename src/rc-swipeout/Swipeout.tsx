@@ -181,16 +181,21 @@ class Swipeout extends Component<ISwipeoutPropTypes, any> {
         const prefixCls = this.props.prefixCls;
 
         return (buttons && buttons.length) ? (
-            <div className={`${prefixCls}-actions ${prefixCls}-actions-${ref}`} ref={(_ref) => {
-                this[ref] = _ref;
-            }}>
+            <div
+                className={`${prefixCls}-actions
+                ${prefixCls}-actions-${ref}`}
+                ref={(_ref) => {
+                    this[ref] = _ref;
+                }}
+            >
                 {buttons.map((btn, i) => {
                     return (
-                        <div key={i}
-                             className={`${prefixCls}-btn ${btn.hasOwnProperty('className') ? btn.className : ''}`}
-                             style={btn.style}
-                             role="button"
-                             onClick={(e) => this.onBtnClick(e, btn)}
+                        <div
+                            key={i}
+                            className={`${prefixCls}-btn ${btn.hasOwnProperty('className') ? btn.className : ''}`}
+                            style={btn.style}
+                            role="button"
+                            onClick={(e) => this.onBtnClick(e, btn)}
                         >
                             <div className={`${prefixCls}-text`}>{btn.text || 'Click'}</div>
                         </div>
@@ -225,8 +230,8 @@ class Swipeout extends Component<ISwipeoutPropTypes, any> {
             <div className={`${prefixCls}`} {...divProps as any}>
                 {/* 保证 body touchStart 后不触发 pan */}
                 <div className={`${prefixCls}-cover`} ref={this.coverBind}/>
-                { this.renderButtons(left, 'left') }
-                { this.renderButtons(right, 'right') }
+                {this.renderButtons(left, 'left')}
+                {this.renderButtons(right, 'right')}
                 <Hammer
                     direction="DIRECTION_HORIZONTAL"
                     onPanStart={this.onPanStart}

@@ -1,4 +1,4 @@
-import React from 'react';
+import createElement from 'inferno-create-element';
 import {observer} from 'inferno-mobx';
 import addEventListener from '../../rc-util/Dom/addEventListener';
 import classNames from 'classnames';
@@ -59,7 +59,9 @@ export default function createSlider(Cmp) {
         // }
 
         componentWillUnmount() {
-            if (super.componentWillUnmount) super.componentWillUnmount();
+            if (super.componentWillUnmount) {
+                super.componentWillUnmount();
+            }
             this.removeDocumentEvents();
         }
 
@@ -83,7 +85,9 @@ export default function createSlider(Cmp) {
         }
 
         onTouchStart = (e) => {
-            if (utils.isNotTouchEvent(e)) return;
+            if (utils.isNotTouchEvent(e)) {
+                return;
+            }
 
             const isVertical = this.props.vertical;
             let position = utils.getTouchPosition(isVertical, e);
@@ -110,14 +114,20 @@ export default function createSlider(Cmp) {
             this.onMouseUpListener = addEventListener(document, 'mouseup', this.onEnd);
         }
 
-        removeDocumentEvents() {
+        removeDocumentEvents = () => {
             /* eslint-disable no-unused-expressions */
-            this.onTouchMoveListener && this.onTouchMoveListener.remove();
-            this.onTouchUpListener && this.onTouchUpListener.remove();
-
-            this.onMouseMoveListener && this.onMouseMoveListener.remove();
-            this.onMouseUpListener && this.onMouseUpListener.remove();
-            /* eslint-enable no-unused-expressions */
+            if (this.onTouchMoveListener) {
+                this.onTouchMoveListener.remove();
+            }
+            if (this.onTouchUpListener) {
+                this.onTouchUpListener.remove();
+            }
+            if (this.onMouseMoveListener) {
+                this.onMouseMoveListener.remove();
+            }
+            if (this.onMouseUpListener) {
+                this.onMouseUpListener.remove();
+            }
         }
 
         onMouseMove = (e) => {

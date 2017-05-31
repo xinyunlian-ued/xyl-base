@@ -28,7 +28,9 @@ class Slider extends Component<ISliderProps, any> {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
+        if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) {
+            return;
+        }
 
         const prevValue = this.state.value;
         const value = nextProps.value !== undefined ?

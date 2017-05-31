@@ -262,7 +262,7 @@ export default class IndexedList extends Component<IIndexedList, any> {
                         <li
                             key={i.value}
                             data-qf-target={i.value}
-                            onClick={this.sectionKvClick.bind(this, i) }
+                            onClick={this.sectionKvClick.bind(this, i)}
                         >
                             {i.label}
                         </li>

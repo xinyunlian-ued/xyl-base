@@ -1,7 +1,6 @@
 import createElement from 'inferno-create-element';
 import {findDOMNode, cloneElement, Children} from 'inferno-compat';
 import Component from 'inferno-component';
-import PropTypes from 'prop-types';
 
 // https://github.com/hammerjs/hammer.js/issues/930
 // https://github.com/JedWatson/react-hammerjs/issues/14
@@ -103,10 +102,6 @@ function updateHammer(hammer, props) {
 
 export default class HammerComponent extends Component<HammerComponentPropTypes, any> {
     static displayName = 'Hammer';
-
-    static propTypes = {
-        className: PropTypes.string,
-    };
 
     hammer;
 
